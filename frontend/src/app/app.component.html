@@ -1,0 +1,4 @@
+<div class="container" *ngIf="!isLoggedIn()">
+    Please Log In to continue
+</div>
+<app-dashboard *ngIf="isLoggedIn()"></app-dashboard>
