@@ -6,12 +6,19 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
+// modules 
+import { HomeModule } from '../home/home.module';
+import { FileUploadModule } from '../file-upload/file-upload.module';
+import { CustomerModule } from '../customer/customer.module';
 
 
 @NgModule({
     imports: [
         CommonModule,
-        GeneralRoutingModule
+        HomeModule,
+        GeneralRoutingModule,
+        FileUploadModule,
+        CustomerModule
     ],
     declarations: [
         DashboardComponent,

@@ -1,0 +1,31 @@
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Upload File
+        </h1>
+        <ol class="breadcrumb">
+            <li><a [routerLink]="['/']"><i class="fa fa-dashboard"></i> InvoiceApp</a></li>
+            <li class="active">Upload Data File</li>
+        </ol>
+        <br>
+    </section>
+    <section class="content">
+        <!--  Page Content Here -->
+        <h4>Customer Data File (.csv) </h4>
+        <div class="col-md-12">
+            <div class="col-md-3">
+                <div class="alert alert-success" role="alert" *ngIf="isFileRead">Customers Data Successfully Inserted Into Database</div>
+                <form [formGroup]="fileUploadForm">
+                    <div class="form-group">
+                        <label for="fileInput">File input</label>
+                        <input type="file" id="fileInput" placeholder="Upload File" accept=".csv" (change)="getFile($event)">
+                        <p class="help-block">* Uploading this file will rewrite your database of customers.</p>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+        </div>
+    </section>
+</div>

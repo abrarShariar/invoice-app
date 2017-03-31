@@ -1,28 +1,20 @@
 /*
-*   all API routes are defined here
-*/
-import { Router, Request, Response } from 'express';
-import { HomeController } from '../controllers/home.controller';
-
-const router: Router = Router();
-// instantiating controllers
-
-/*
 * API endpoints are defined here 
 * all routes start with /api
 */
+import * as express from 'express';
+import { Router, Request, Response } from 'express';
+import { CustomerController } from '../controllers/customer.controller';
+
+const router: Router = Router();
+
 router.get('/', (req: Request, res: Response) => {
     res.send("Welcome to API routes");
 });
 
-router.get('/home', (req: Request, res: Response) => {
-    HomeController.getHome(req, res);
+//customer file upload
+router.post('/customer/create', (req: Request, res: Response) => {
+    CustomerController.createNewCustomer(res,req.body);
 });
-
-router.get('/home/person/all',(req:Request, res:Response) => {
-    HomeController.getAllPerson(req,res);
-});
-
-
 
 export const ApiRoute: Router = router;

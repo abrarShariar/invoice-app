@@ -8,6 +8,7 @@ import { GeneralModule } from "./general/general.module";
 import { AppRoutingModule } from './app-routing.module';
 // services
 import { AuthService } from './auth.service';
+import { CustomHttpService } from "./custom-http.service";
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AuthService } from './auth.service';
     GeneralModule
   ],
   providers: [
-    AuthService
+    AuthService,
+    CustomHttpService
   ],
   bootstrap: [AppComponent]
 })
