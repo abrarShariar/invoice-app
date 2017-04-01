@@ -1,7 +1,7 @@
-<div class="content-wrapper">
+<div class="content-wrapper" style="height: 1500px;">
     <section class="content-header">
         <h1>
-            Customer List
+            All Customers
         </h1>
         <ol class="breadcrumb">
             <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> InvoiceApp</a></li>
@@ -11,67 +11,78 @@
     </section>
     <section class="content">
         <!--  Page Content Here -->
-        <div>List of all customers of Cyber Solutions BD</div>
-
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Responsive Hover Table</h3>
-
+                    <h3 class="box-title">List Of All Customers</h3>
+                    <br>
                     <div class="box-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-                            <div class="input-group-btn">
-                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        <div class="row">
+                            <div class="col-lg-6" style="float:right">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter By <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Username</a></li>
+                                            <li><a href="#">Email</a></li>
+                                            <li><a href="#">Area</a></li>
+                                            <li><a href="#">City</a></li>
+                                        </ul>
+                                    </div>
+                                    <!-- /btn-group -->
+                                    <input type="text" class="form-control" aria-label="..." placeholder="Search Customers List">
+                                </div>
+                                <!-- /input-group -->
                             </div>
                         </div>
+                        <br><br>
+                        <!-- /.row -->
+                        <!-- /.row -->
                     </div>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
-                        <tr>
-                            <th>ID</th>
-                            <th>User</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Reason</th>
-                        </tr>
-                        <tr>
-                            <td>183</td>
-                            <td>John Doe</td>
-                            <td>11-7-2014</td>
-                            <td><span class="label label-success">Approved</span></td>
-                            <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                            <td>219</td>
-                            <td>Alexander Pierce</td>
-                            <td>11-7-2014</td>
-                            <td><span class="label label-warning">Pending</span></td>
-                            <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                            <td>657</td>
-                            <td>Bob Doe</td>
-                            <td>11-7-2014</td>
-                            <td><span class="label label-primary">Approved</span></td>
-                            <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
-                        <tr>
-                            <td>175</td>
-                            <td>Mike Doe</td>
-                            <td>11-7-2014</td>
-                            <td><span class="label label-danger">Denied</span></td>
-                            <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Fullname</th>
+                                <th>Mobile</th>
+                                <th>Location</th>
+                                <th>Area</th>
+                                <th>City</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr *ngFor="let customer of customers | paginate: { itemsPerPage: 30, currentPage: p }">
+                                <td>{{ customer.username }}</td>
+                                <td>{{ customer.email }}</td>
+                                <td>{{ customer.fullname }}</td>
+                                <td>{{ customer.mobile_primary }}</td>
+                                <td>{{ customer.location }}</td>
+                                <td>{{ customer.area }}</td>
+                                <td>{{ customer.city }}</td>
+                                <td *ngIf="customer.status">
+                                    <button type="button" class="btn btn-success btn-xs" (click)="makeInactive(statusText)" #statusText> Active</button>
+                                </td>
+                                <td *ngIf="!customer.status">
+                                    <button type="button" class="btn btn-danger btn-xs"> Inactive</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-xs"> Details</button>
+                                </td>
+                            </tr>
+                        </tbody>
+
                     </table>
                 </div>
                 <!-- /.box-body -->
             </div>
             <!-- /.box -->
+            <div class="col-md-offset-4">
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </div>
         </div>
-
     </section>
 </div>

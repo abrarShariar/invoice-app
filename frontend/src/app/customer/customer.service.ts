@@ -5,14 +5,16 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 @Injectable()
-export class FileUploadService {
+export class CustomerService {
+
   private customerUrl = environment.api_server + 'customer/';
 
   constructor(private http: CustomHttpService) { }
 
-  createNewCustomer(data:any){
-    let url = this.customerUrl + 'create/';
-    return this.http.post(url,data).map((res) => res);
+  getAllCustomers(){
+    let url = this.customerUrl + 'all/';
+    return this.http.get(url).map((res)=>res.json());
   }
+
 
 }

@@ -4,8 +4,8 @@ import { Component, OnInit, Directive } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgClass, NgStyle } from '@angular/common';
 import * as _ from 'underscore';
-import { Customer } from '../customer';
 import { FileUploadService } from '../file-upload.service';
+import { Customer } from '../../customer/customer';
 
 
 @Component({

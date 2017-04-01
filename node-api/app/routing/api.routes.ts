@@ -14,7 +14,12 @@ router.get('/', (req: Request, res: Response) => {
 
 //customer file upload
 router.post('/customer/create', (req: Request, res: Response) => {
-    CustomerController.createNewCustomer(res,req.body);
+    CustomerController.createNewCustomer(res, req.body);
+});
+
+//all customers
+router.get('/customer/all', (req: Request, res: Response) => {
+    CustomerController.getAllCustomers(res);
 });
 
 export const ApiRoute: Router = router;

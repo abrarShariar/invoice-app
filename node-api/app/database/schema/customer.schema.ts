@@ -14,5 +14,6 @@ export let customerSchema = new Schema({
     location: String,
     area: String,
     city: String,
-    postal_code: String
+    postal_code: String,
+    status:Boolean
 });
