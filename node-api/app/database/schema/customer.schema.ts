@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose';
 let Schema = mongoose.Schema;
 
 export let customerSchema = new Schema({
+    id: String,
     username: String,
     email: String,
     fullname: String,

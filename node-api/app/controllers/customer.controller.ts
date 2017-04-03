@@ -41,7 +41,7 @@ export class CustomerController {
     //get all customers
     static getAllCustomers(res: Response) {
         CustomerModel.find({}, (err, customers) => {
-            let allCustomers: Customer[] = [];
+            let allCustomers = [];
             if (!err) {
                 _.each(customers, (item) => {
                     if (item.username != 'user_name') {
@@ -52,4 +52,56 @@ export class CustomerController {
             }
         })
     }
+
+
+    //changing status - active/inactive
+    static changeStatus(res: Response, data: any) {
+        CustomerModel.update({ _id: data.id }, { $set: { status: data.status } }, function (err) {
+            if (err) {
+                res.send({ status: false });
+            } else {
+                res.send({ status: true });
+            }
+        });
+    }
+
+
+    //get details of a customer by id
+    static getCustomerDetails(res: Response, id) {
+        CustomerModel.findById(id, function (err, data) {
+            if (!err) {
+                res.send(data);
+            }
+        })
+    }
+
+
+    //update customer details data
+    static updateCustomerDetails(res: Response, data: any) {
+        CustomerModel.update({ _id: data.id }, {
+            $set: {
+                username: data.username,
+                email: data.email,
+                fullname: data.fullname,
+                customer_currency: data.customer_currency,
+                mobile_primary: data.mobile_primary,
+                mobile_secondary: data.mobile_secondary,
+                website: data.website,
+                country: data.country,
+                location: data.location,
+                area: data.area,
+                city: data.city,
+                postal_code: data.postal_code,
+                status: data.status
+            }
+        }, function (err) {
+            if (err) {
+                res.send({ status: false });
+            } else {
+                res.send({ status: true });
+            }
+        })
+    }
+
+    
 }

@@ -22,4 +22,22 @@ router.get('/customer/all', (req: Request, res: Response) => {
     CustomerController.getAllCustomers(res);
 });
 
+//set active/inactive status
+router.put('/customer/status_change',(req: Request, res: Response)=>{
+    CustomerController.changeStatus(res,req.body);
+});
+
+//get details of specific customer by id
+router.get('/customer/details/:id',(req:Request,res:Response)=>{
+    CustomerController.getCustomerDetails(res,req.params.id);
+});
+
+//update customer details
+router.put('/customer/details/update',(req:Request,res:Response)=>{
+    CustomerController.updateCustomerDetails(res,req.body);
+})
+
+
+
+
 export const ApiRoute: Router = router;
