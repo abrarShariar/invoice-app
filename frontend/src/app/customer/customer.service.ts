@@ -16,5 +16,20 @@ export class CustomerService {
     return this.http.get(url).map((res)=>res.json());
   }
 
+  setStatus(data:any){
+     let url = this.customerUrl + 'status_change/';
+     return this.http.put(url,data).map((res)=>res.json());
+  }
+
+  getCustomerDetails(id){
+    let url = this.customerUrl + 'details/' + id;
+    return this.http.get(url).map((res)=>res.json());
+  }
+
+  updateCustomer(data:any){
+      let url = this.customerUrl + 'details/update';
+      return this.http.put(url,data).map((res)=>res.json());
+  }
+
 
 }

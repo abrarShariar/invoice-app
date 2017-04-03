@@ -1,4 +1,5 @@
 export class Customer {
+    id?:string;
     username:string;
     email:string;
     fullname:string;

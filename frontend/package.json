@@ -25,6 +25,7 @@
     "core-js": "^2.4.1",
     "ng2-file-upload": "^1.2.0",
     "ng2-pagination": "^2.0.1",
+    "primeng": "^2.0.4",
     "rxjs": "^5.1.0",
     "underscore": "^1.8.3",
     "zone.js": "^0.7.6"

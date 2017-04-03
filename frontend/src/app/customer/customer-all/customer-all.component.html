@@ -11,6 +11,7 @@
     </section>
     <section class="content">
         <!--  Page Content Here -->
+
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
@@ -21,12 +22,12 @@
                             <div class="col-lg-6" style="float:right">
                                 <div class="input-group">
                                     <div class="input-group-btn">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter By <span class="caret"></span></button>
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter By {{ filterByTitle }} <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
-                                            <li><a href="#">Username</a></li>
-                                            <li><a href="#">Email</a></li>
-                                            <li><a href="#">Area</a></li>
-                                            <li><a href="#">City</a></li>
+                                            <li><a (click)="setFilter($event)"> Username </a></li>
+                                            <li><a (click)="setFilter($event)">Email</a></li>
+                                            <li><a (click)="setFilter($event)">Area</a></li>
+                                            <li><a (click)="setFilter($event)">City</a></li>
                                         </ul>
                                     </div>
                                     <!-- /btn-group -->
@@ -64,13 +65,13 @@
                                 <td>{{ customer.area }}</td>
                                 <td>{{ customer.city }}</td>
                                 <td *ngIf="customer.status">
-                                    <button type="button" class="btn btn-success btn-xs" (click)="makeInactive(statusText)" #statusText> Active</button>
+                                    <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(customer._id,customer.status)"> Active</button>
                                 </td>
                                 <td *ngIf="!customer.status">
-                                    <button type="button" class="btn btn-danger btn-xs"> Inactive</button>
+                                    <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(customer._id,customer.status)"> Inactive</button>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-xs"> Details</button>
+                                    <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/customer/detail',customer._id]"> Details</a>
                                 </td>
                             </tr>
                         </tbody>

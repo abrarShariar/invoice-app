@@ -5,16 +5,23 @@ import { CustomerAllComponent } from './customer-all/customer-all.component';
 import { CustomerService } from './customer.service';
 
 import {Ng2PaginationModule} from 'ng2-pagination';
+import {DialogModule} from 'primeng/primeng';
+import { CustomerDetailComponent } from './customer-detail/customer-detail.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
     imports: [
         CommonModule,
         CustomerRoutingModule,
-        Ng2PaginationModule
+        Ng2PaginationModule,
+        DialogModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     declarations: [
-        CustomerAllComponent
+        CustomerAllComponent,
+        CustomerDetailComponent
     ],
     exports: [
 

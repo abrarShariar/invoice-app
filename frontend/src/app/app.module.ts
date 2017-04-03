@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthService } from './auth.service';
 import { CustomHttpService } from "./custom-http.service";
 
+
 @NgModule({
   declarations: [
     AppComponent
@@ -21,7 +22,7 @@ import { CustomHttpService } from "./custom-http.service";
     //routing module
     AppRoutingModule,
     //user defines modules
-    GeneralModule
+    GeneralModule,
   ],
   providers: [
     AuthService,
