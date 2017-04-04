@@ -3,5 +3,6 @@ export class Product {
     name:string;
     rate:number;
     description:string;
+    status:boolean
 }
 

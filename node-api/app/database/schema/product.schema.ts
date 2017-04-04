@@ -6,5 +6,6 @@ export let productSchema = new Schema({
     id: String,
     name: String,
     rate: String,
-    description: String
+    description: String,
+    status: Boolean
 });

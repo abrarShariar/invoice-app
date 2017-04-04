@@ -6,7 +6,7 @@ import { ExcelFileUploaderComponent } from '../file-upload/excel-file-uploader/e
 import { CustomerAllComponent } from '../customer/customer-all/customer-all.component';
 import { CustomerDetailComponent } from '../customer/customer-detail/customer-detail.component';
 import { ProductCreateComponent } from '../product/product-create/product-create.component';
-
+import { CustomerCreateComponent } from '../customer/customer-create/customer-create.component';
 
 const generalRoutes = [
     {
@@ -29,6 +29,10 @@ const generalRoutes = [
     {
         path: 'customer/detail/:id',
         component: CustomerDetailComponent
+    },
+    {
+        path: 'customer/create',
+        component: CustomerCreateComponent
     },
     {
         path: 'product',

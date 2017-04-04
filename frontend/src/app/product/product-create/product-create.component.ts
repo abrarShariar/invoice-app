@@ -27,7 +27,8 @@ export class ProductCreateComponent implements OnInit {
     this.productCreateForm = this.fb.group({
       name: ['', Validators.required],
       rate: ['', Validators.required],
-      description: ['']
+      description: [''],
+      status: [true]
     });
   }
 
@@ -35,7 +36,8 @@ export class ProductCreateComponent implements OnInit {
     let data = {
       name: this.productCreateForm.value.name,
       rate: this.productCreateForm.value.rate,
-      description: this.productCreateForm.value.description
+      description: this.productCreateForm.value.description,
+      status: true
     }
 
     this.productService.createProduct(data)
@@ -44,6 +46,7 @@ export class ProductCreateComponent implements OnInit {
         if (res.status) {
           this.getAllProduct();
           this.showSuccess = true;
+          this.productCreateForm.reset();
         } else {
           this.showError = true;
         }
@@ -65,6 +68,10 @@ export class ProductCreateComponent implements OnInit {
         console.log("Error in getAllProduct");
       }
       )
+  }
+
+  statusChanged(event:any) {
+      this.getAllProduct();
   }
 
 }

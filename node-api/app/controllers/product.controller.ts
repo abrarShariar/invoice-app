@@ -13,7 +13,8 @@ export class ProductController {
         let product = new ProductModel({
             name: data.name,
             rate: data.rate,
-            description: data.description
+            description: data.description,
+            status: data.status
         });
 
         product.save(function (err) {
@@ -27,18 +28,25 @@ export class ProductController {
 
 
     //get all product
-    static getAllProduct(res:Response) {
+    static getAllProduct(res: Response) {
         ProductModel.find({}, (err, products) => {
             let allProducts = [];
             if (!err) {
-                _.each(products, (item) => {
-                    if (item.username != 'user_name') {
-                        allProducts.push(item);
-                    }
-                });
-                res.send(allProducts);
+                res.send(products);
             }
         })
+    }
+
+
+    //changing status - active/inactive
+    static changeStatus(res: Response, data: any) {
+        ProductModel.update({ _id: data.id }, { $set: { status: data.status } }, function (err) {
+            if (err) {
+                res.send({ status: false });
+            } else {
+                res.send({ status: true });
+            }
+        });
     }
 
 }

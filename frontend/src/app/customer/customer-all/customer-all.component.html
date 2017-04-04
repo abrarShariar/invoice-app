@@ -1,13 +1,15 @@
-<div class="content-wrapper" style="height: 1500px;">
+<div class="content-wrapper" style="height: 1800px;">
     <section class="content-header">
-        <h1>
-            All Customers
-        </h1>
-        <ol class="breadcrumb">
-            <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> InvoiceApp</a></li>
-            <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> Customer</a></li>
-            <li class="active">All</li>
-        </ol>
+        <div class="col-xs-12">
+            <h1>
+                All Customers
+            </h1>
+            <ol class="breadcrumb">
+                <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> InvoiceApp</a></li>
+                <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> Customer</a></li>
+                <li class="active">All</li>
+            </ol>
+        </div>
     </section>
     <section class="content">
         <!--  Page Content Here -->
@@ -71,7 +73,7 @@
                                     <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(customer._id,customer.status)"> Inactive</button>
                                 </td>
                                 <td>
-                                    <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/customer/detail',customer._id]"> Details</a>
+                                    <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/customer/detail',customer._id]"> Edit</a>
                                 </td>
                             </tr>
                         </tbody>

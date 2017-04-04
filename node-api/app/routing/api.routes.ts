@@ -48,6 +48,13 @@ router.get('/product/all', (req: Request, res: Response) => {
     ProductController.getAllProduct(res);
 });
 
+//set active/inactive status
+router.put('/product/status_change', (req: Request, res: Response) => {
+    ProductController.changeStatus(res, req.body);
+});
+
+
+
 
 
 

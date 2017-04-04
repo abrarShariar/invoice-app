@@ -8,6 +8,8 @@ import {Ng2PaginationModule} from 'ng2-pagination';
 import {DialogModule} from 'primeng/primeng';
 import { CustomerDetailComponent } from './customer-detail/customer-detail.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CustomerCreateComponent } from './customer-create/customer-create.component';
+import { ProductService } from '../product/product.service';
 
 
 @NgModule({
@@ -21,13 +23,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ],
     declarations: [
         CustomerAllComponent,
-        CustomerDetailComponent
+        CustomerDetailComponent,
+        CustomerCreateComponent
     ],
     exports: [
 
     ],
     providers: [
-        CustomerService
+        CustomerService,
+        ProductService
     ]
 })
 export class CustomerModule { }

@@ -1,7 +1,9 @@
 <section class="content-header">
-    <h1>
-        All Products
-    </h1>
+    <div class="col-xs-12">
+        <h1>
+            All Products
+        </h1>
+    </div>
 </section>
 <section class="content">
     <!--  Page Content Here -->
@@ -20,15 +22,21 @@
                             <th>Name</th>
                             <th>Rate &nbsp;(BDT/month) </th>
                             <th>Description</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                         <tr *ngFor="let product of products | paginate: { itemsPerPage: 10, currentPage: p }">
                             <td>{{ product.name }}</td>
                             <td>{{ product.rate }} </td>
                             <td>{{ product.description }}</td>
+                            <td *ngIf="product.status">
+                                <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(product._id,product.status)"> Active</button>
+                            </td>
+                            <td *ngIf="!product.status">
+                                <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(product._id,product.status)"> Inactive</button>
+                            </td>
                             <td>
                                 <a type="button" class="btn btn-primary btn-xs"> Edit</a>
-                                <a type="button" class="btn btn-danger btn-xs"> Delete</a>
                             </td>
                         </tr>
                     </tbody>

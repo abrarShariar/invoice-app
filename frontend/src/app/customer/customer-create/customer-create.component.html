@@ -1,27 +1,27 @@
 <div class="content-wrapper" style="height: 1000px;">
-    <section class=" content-header " *ngIf="customer ">
+    <section class=" content-header ">
         <div class="col-xs-12">
             <h1>
-                Customer Details - <em>{{ customer.username }}</em>
+                Create New Customer
             </h1>
             <ol class="breadcrumb ">
                 <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
                 <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Customer</a></li>
-                <li class="active ">All</li>
+                <li class="active ">Create</li>
             </ol>
         </div>
     </section>
     <section class="content ">
         <div class="col-md-6">
-            <div class="alert alert-success" role="alert" *ngIf="showSuccess">Customer Data Updated Successfully !!</div>
+            <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Customer CreatedSuccessfully !!</div>
             <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
             <!--  Page Content Here -->
-            <form class="form-horizontal " [formGroup]="customerDetailForm" *ngIf="customer" (submit)="submitCustomerDetail()">
+            <form class="form-horizontal " [formGroup]="customerCreateForm" (submit)="submitCustomerCreateForm()">
                 <!--username-->
                 <div class=" form-group ">
                     <label for="username " class="col-sm-2 control-label ">Username</label>
                     <div class="col-sm-10 ">
-                        <input formControlName="username" type="text " class="form-control " id="username " placeholder="Username ">
+                        <input formControlName="username" type="text " class="form-control " id="username " placeholder="Username " required>
                     </div>
                 </div>
                 <!--email-->
@@ -74,7 +74,7 @@
                 <div class="form-group ">
                     <label for="country " class="col-sm-2 control-label ">Country</label>
                     <div class="col-sm-10 ">
-                        <input type="text" formControlName="country" class="form-control " id="country " placeholder="website ">
+                        <input type="text" formControlName="country" class="form-control " id="country " placeholder="country ">
                     </div>
                 </div>
 
@@ -114,16 +114,26 @@
                 <div class="form-group ">
                     <label for="postal_code " class="col-sm-2 control-label ">Status</label>
                     <div class="col-sm-10 ">
-                        <select formControlName="status">
+                        <select formControlName="status" required class="form-control">
                             <option value="true">Active</option>
                             <option value="false">Inactive</option>
                         </select>
                     </div>
                 </div>
 
+                <!--product list-->
+                <div class="form-group ">
+                    <label for="postal_code " class="col-sm-2 control-label ">Product</label>
+                    <div class="col-sm-10 ">
+                        <select required *ngIf="productList" class="form-control">
+                            <option value="{{ product.name }}" *ngFor="let product of productList">{{ product.name }} - <em> {{ product.rate }} BDT/month </em> </option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="form-group ">
                     <div class="col-sm-offset-2 col-sm-10 ">
-                        <button type="submit " class="btn btn-success ">Update</button>
+                        <button type="submit " class="btn btn-success ">Save</button>
                         <a type="button" class="btn btn-primary " [routerLink]="['/customer/all']">Back</a>
                     </div>
                 </div>

@@ -22,4 +22,9 @@ export class ProductService {
     return this.http.get(url).map((res) => res.json());
   }
 
+  setStatus(data:any){
+     let url = this.productUrl + 'status_change/';
+     return this.http.put(url,data).map((res)=>res.json());
+  }
+
 }

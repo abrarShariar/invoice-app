@@ -1,13 +1,15 @@
 <div class="content-wrapper" style="height:1000px">
     <section class=" content-header ">
-        <h1>
-            Create New Product
-        </h1>
-        <ol class="breadcrumb ">
-            <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
-            <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Product</a></li>
-            <li class="active ">New</li>
-        </ol>
+        <div class="col-xs-12">
+            <h1>
+                Create New Product
+            </h1>
+            <ol class="breadcrumb ">
+                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
+                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Product</a></li>
+                <li class="active ">New</li>
+            </ol>
+        </div>
     </section>
     <section class="content ">
         <div class="col-md-6">
@@ -47,7 +49,7 @@
         </div>
         <div class="col-md-6"></div>
         <div class="col-md-12">
-            <app-product-all [products]="products"></app-product-all>
+            <app-product-all (statusChange)="statusChanged($event)" [products]="products"></app-product-all>
         </div>
 
     </section>
