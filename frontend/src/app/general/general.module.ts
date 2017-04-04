@@ -10,6 +10,7 @@ import { FooterComponent } from './footer/footer.component';
 import { HomeModule } from '../home/home.module';
 import { FileUploadModule } from '../file-upload/file-upload.module';
 import { CustomerModule } from '../customer/customer.module';
+import { ProductModule } from '../product/product.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { CustomerModule } from '../customer/customer.module';
         HomeModule,
         GeneralRoutingModule,
         FileUploadModule,
-        CustomerModule
+        CustomerModule,
+        ProductModule
     ],
     declarations: [
         DashboardComponent,

@@ -5,6 +5,8 @@ import { HomeBodyComponent } from '../home/home-body/home-body.component';
 import { ExcelFileUploaderComponent } from '../file-upload/excel-file-uploader/excel-file-uploader.component';
 import { CustomerAllComponent } from '../customer/customer-all/customer-all.component';
 import { CustomerDetailComponent } from '../customer/customer-detail/customer-detail.component';
+import { ProductCreateComponent } from '../product/product-create/product-create.component';
+
 
 const generalRoutes = [
     {
@@ -27,6 +29,10 @@ const generalRoutes = [
     {
         path: 'customer/detail/:id',
         component: CustomerDetailComponent
+    },
+    {
+        path: 'product',
+        component: ProductCreateComponent
     }
 
 ];

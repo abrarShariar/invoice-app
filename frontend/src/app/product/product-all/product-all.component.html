@@ -1,0 +1,45 @@
+<section class="content-header">
+    <h1>
+        All Products
+    </h1>
+</section>
+<section class="content">
+    <!--  Page Content Here -->
+
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">List Of All Products</h3>
+                <br>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            <th>Rate &nbsp;(BDT/month) </th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr *ngFor="let product of products | paginate: { itemsPerPage: 10, currentPage: p }">
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.rate }} </td>
+                            <td>{{ product.description }}</td>
+                            <td>
+                                <a type="button" class="btn btn-primary btn-xs"> Edit</a>
+                                <a type="button" class="btn btn-danger btn-xs"> Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+        <div class="col-md-offset-4">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+    </div>
+</section>
