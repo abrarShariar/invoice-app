@@ -11,7 +11,9 @@ export class CustomerController {
 
     //create a new customer
     static createNewCustomer(res: Response, data: any) {
+        console.log(data);
         let isDataInserted: boolean = false;
+        let timestamp = Date.now();
         let customer = new CustomerModel({
             username: data.username,
             email: data.email,
@@ -25,7 +27,8 @@ export class CustomerController {
             area: data.area,
             city: data.city,
             postal_code: data.postal_code,
-            status: true
+            status: true,
+            product: data.product
         });
 
         customer.save(function (err) {
@@ -40,7 +43,7 @@ export class CustomerController {
 
     //get all customers
     static getAllCustomers(res: Response) {
-        CustomerModel.find({}, (err, customers) => {
+        CustomerModel.find({}).sort('-created_on').exec((err, customers) => {
             let allCustomers = [];
             if (!err) {
                 _.each(customers, (item) => {
@@ -50,7 +53,7 @@ export class CustomerController {
                 });
                 res.send(allCustomers);
             }
-        })
+        });
     }
 
 
@@ -92,7 +95,8 @@ export class CustomerController {
                 area: data.area,
                 city: data.city,
                 postal_code: data.postal_code,
-                status: data.status
+                status: data.status,
+                product: data.product
             }
         }, function (err) {
             if (err) {
@@ -103,5 +107,5 @@ export class CustomerController {
         })
     }
 
-    
+
 }

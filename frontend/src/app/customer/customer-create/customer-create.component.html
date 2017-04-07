@@ -12,7 +12,7 @@
         </div>
     </section>
     <section class="content ">
-        <div class="col-md-6">
+        <div class="col-md-offset-2 col-md-7">
             <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Customer CreatedSuccessfully !!</div>
             <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
             <!--  Page Content Here -->
@@ -86,11 +86,13 @@
                     </div>
                 </div>
 
-                <!--location-->
+                <!--area list-->
                 <div class="form-group ">
-                    <label for="location " class="col-sm-2 control-label ">Area</label>
+                    <label for="area " class="col-sm-2 control-label ">Area</label>
                     <div class="col-sm-10 ">
-                        <input type="text " formControlName="area" class="form-control " id="area " placeholder="area ">
+                        <select required *ngIf="areaList" class="form-control" formControlName="area">
+                            <option *ngFor="let area of areaList" value="{{ area._id }}">{{ area.name }} </option>
+                        </select>
                     </div>
                 </div>
 
@@ -125,8 +127,8 @@
                 <div class="form-group ">
                     <label for="postal_code " class="col-sm-2 control-label ">Product</label>
                     <div class="col-sm-10 ">
-                        <select required *ngIf="productList" class="form-control">
-                            <option value="{{ product.name }}" *ngFor="let product of productList">{{ product.name }} - <em> {{ product.rate }} BDT/month </em> </option>
+                        <select required *ngIf="productList" class="form-control" formControlName="product">
+                            <option *ngFor="let product of productList" value="{{ product._id }}">{{ product.name }} - <em> {{ product.rate }} BDT/month </em> </option>
                         </select>
                     </div>
                 </div>

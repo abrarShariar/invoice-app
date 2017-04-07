@@ -2,5 +2,6 @@ export class Customer {
     name:string;
     rate:string;
     description:string;
-    status:boolean
+    status:boolean;
+    vat:string;
 }

@@ -1,0 +1,48 @@
+<div class="content-wrapper" style="height:1000px">
+    <section class=" content-header ">
+        <div class="col-xs-12">
+            <h1 *ngIf="!editMode">
+                Add New Area
+            </h1>
+            <h1 *ngIf="editMode">
+                Update Area
+            </h1>
+            <ol class="breadcrumb ">
+                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
+                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Area</a></li>
+                <li class="active ">New</li>
+            </ol>
+        </div>
+    </section>
+    <section class="content ">
+        <div class="col-md-6">
+            <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Area Added Successfully !!</div>
+            <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
+            <!--  Page Content Here -->
+            <form class="form-horizontal " [formGroup]="areaCreateForm" (submit)="submitCreateAreaForm()">
+                <!--name-->
+                <div class=" form-group">
+                    <label for="name" class="col-sm-2 control-label ">Name</label>
+                    <div class="col-sm-10 ">
+                        <input formControlName="name" type="text " class="form-control" id="name" placeholder="area name ">
+                    </div>
+                </div>
+
+                <div class="form-group ">
+                    <div class="col-sm-offset-2 col-sm-10 ">
+                        <button type="submit" class="btn btn-success" *ngIf="!editMode">Save</button>
+                        <a type="button" class="btn btn-primary " [routerLink]="['/']" *ngIf="!editMode">Back</a>
+                        <button type="submit" class="btn btn-warning" *ngIf="editMode">Update</button>
+                        <button type="button" class="btn btn-danger" *ngIf="editMode" (click)="cancelEdit()">Cancel</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-12">
+            <app-area-all (showEditForm)="showEditForm($event)" (statusChange)="statusChanged($event)" [areas]="areas"></app-area-all>
+        </div>
+
+    </section>
+</div>

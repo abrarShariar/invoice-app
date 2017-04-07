@@ -1,3 +1,6 @@
+import { Product } from '../product/product';
+import { Area } from '../area/area';
+
 export class Customer {
     id?:string;
     username:string;
@@ -13,4 +16,7 @@ export class Customer {
     city:string;
     postal_code:string;
     status:boolean;
+    product?:string;
+    productData?: Product;
+    areaData?: Area;
 }

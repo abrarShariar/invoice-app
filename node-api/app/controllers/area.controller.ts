@@ -1,24 +1,20 @@
 import { Router, Request, Response } from 'express';
 import { Observable } from 'rxjs/Rx';
 import * as _ from 'underscore';
-import { ProductModel } from '../database/models/product.model';
+import { AreaModel } from '../database/models/area.model';
 
 
-export class ProductController {
+export class AreaController {
     constructor() { }
 
-    //create new product
+    //create new areas
     static create(res: Response, data: any) {
         let isDataInserted: boolean = false;
-        let product = new ProductModel({
+        let area = new AreaModel({
             name: data.name,
-            rate: data.rate,
-            description: data.description,
-            status: data.status,
-            vat: data.vat
+            status: true
         });
-
-        product.save(function (err) {
+        area.save(function (err) {
             if (err) {
                 res.send({ status: false });
             } else {
@@ -28,19 +24,18 @@ export class ProductController {
     }
 
 
-    //get all product
-    static getAllProduct(res: Response) {
-        ProductModel.find({}, (err, products) => {
+    //get all areas
+    static getAllArea(res: Response) {
+        AreaModel.find({}, (err, areas) => {
             if (!err) {
-                res.send(products);
+                res.send(areas);
             }
         })
     }
 
-
     //changing status - active/inactive
     static changeStatus(res: Response, data: any) {
-        ProductModel.update({ _id: data.id }, { $set: { status: data.status } }, function (err) {
+        AreaModel.update({ _id: data.id }, { $set: { status: data.status } }, function (err) {
             if (err) {
                 res.send({ status: false });
             } else {
@@ -49,24 +44,21 @@ export class ProductController {
         });
     }
 
-    //get product by _id
-    static getProductById(res: Response, id) {
-        ProductModel.findById(id, function (err, data) {
+    //get area by _id
+    static getAreaById(res: Response, id) {
+        AreaModel.findById(id, function (err, data) {
             if (!err) {
                 res.send(data);
             }
         })
     }
 
-    //update product
+    //update area
     static update(res: Response, data: any) {
-        ProductModel.update({ _id: data.id }, {
+        AreaModel.update({ _id: data.id }, {
             $set: {
                 name: data.name,
-                rate: data.rate,
-                description: data.description,
-                status: data.status,
-                vat: data.vat
+                status: true
             }
         }, function (err) {
             if (err) {
@@ -76,5 +68,4 @@ export class ProductController {
             }
         });
     }
-
 }

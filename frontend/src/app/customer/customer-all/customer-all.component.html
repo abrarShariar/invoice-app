@@ -51,6 +51,7 @@
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Fullname</th>
+                                <th>Product</th>
                                 <th>Mobile</th>
                                 <th>Location</th>
                                 <th>Area</th>
@@ -62,9 +63,10 @@
                                 <td>{{ customer.username }}</td>
                                 <td>{{ customer.email }}</td>
                                 <td>{{ customer.fullname }}</td>
+                                <td>{{ customer.productData?.name }} - <em *ngIf="customer.productData?.rate">{{ customer.productData?.rate }} BDT/month</em></td>
                                 <td>{{ customer.mobile_primary }}</td>
                                 <td>{{ customer.location }}</td>
-                                <td>{{ customer.area }}</td>
+                                <td>{{ customer.areaData?.name }}</td>
                                 <td>{{ customer.city }}</td>
                                 <td *ngIf="customer.status">
                                     <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(customer._id,customer.status)"> Active</button>

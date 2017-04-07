@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../customer.service';
 import { Customer } from '../customer';
+import * as _ from 'underscore';
+import { ProductService } from '../../product/product.service';
+import { Product } from '../../product/product';
+import { AreaService } from '../../area/area.service';
+import { Area } from '../../area/area';
 
 
 @Component({
@@ -12,18 +17,53 @@ export class CustomerAllComponent implements OnInit {
   public customers: Customer[] = [];
   public filterByTitle: string;
   display: boolean = false;
+  public productList: Product[] = [];
 
-  constructor(private customerService: CustomerService) { }
+  constructor(private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
 
   ngOnInit() {
     this.getAllCustomer();
   }
 
   getAllCustomer() {
+    this.customers = [];
     this.customerService.getAllCustomers()
       .subscribe(
       (res) => {
-        this.customers = res;
+        let data: Customer[] = [];
+        data = res;
+        // getting products
+        _.each(data, (item) => {
+          let customer: Customer;
+          customer = item;
+          if (item.product) {
+            this.productService.getProductById(item.product)
+              .subscribe(
+              (res: Product) => {
+                customer.productData = res;
+              },
+              (err) => {
+              }
+              )
+          }
+
+          if (item.area) {
+            this.areaService.getAreaById(item.area)
+              .subscribe(
+              (res: Area) => {
+                customer.areaData = res;
+              },
+              (err) => {
+
+              }
+              )
+          }
+
+          this.customers.push(customer);
+        });
+
+
+
       },
       (err) => {
         console.log("Error In getAllCustomer");
@@ -61,7 +101,7 @@ export class CustomerAllComponent implements OnInit {
     this.customerService.getCustomerDetails(id)
       .subscribe(
       (res) => {
-       
+
       },
       (err) => {
         console.log(err);
@@ -69,5 +109,5 @@ export class CustomerAllComponent implements OnInit {
       )
   }
 
-  
+
 }

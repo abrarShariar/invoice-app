@@ -15,6 +15,8 @@ export class ProductCreateComponent implements OnInit {
   public productCreateForm: FormGroup;
   showSuccess: boolean = false;
   showError: boolean = false;
+  editMode: boolean = false;
+  private id: any;
 
   constructor(private fb: FormBuilder, private productService: ProductService) { }
 
@@ -28,34 +30,54 @@ export class ProductCreateComponent implements OnInit {
       name: ['', Validators.required],
       rate: ['', Validators.required],
       description: [''],
-      status: [true]
+      status: [true],
+      vat: ['']
     });
   }
 
   submitCreateProductForm() {
+    this.showError = false;
+    this.showSuccess = false;
     let data = {
+      id: this.id,
       name: this.productCreateForm.value.name,
       rate: this.productCreateForm.value.rate,
       description: this.productCreateForm.value.description,
-      status: true
+      status: true,
+      vat: this.productCreateForm.value.vat
     }
 
-    this.productService.createProduct(data)
-      .subscribe(
-      (res) => {
-        if (res.status) {
-          this.getAllProduct();
-          this.showSuccess = true;
-          this.productCreateForm.reset();
-        } else {
+    if (!this.editMode) {
+      this.productService.createProduct(data)
+        .subscribe(
+        (res) => {
+          if (res.status) {
+            this.getAllProduct();
+            this.showSuccess = true;
+            this.productCreateForm.reset();
+          } else {
+            this.showError = true;
+          }
+        },
+        (err) => {
+          console.log("ERROR from createProduct");
           this.showError = true;
         }
-      },
-      (err) => {
-        console.log("ERROR from createProduct");
-        this.showError = true;
-      }
-      )
+        )
+    } else {
+      this.productService.updateProduct(data)
+        .subscribe(
+        (res) => {
+          console.log(res);
+          this.getAllProduct();
+          this.productCreateForm.reset();
+          this.editMode = false;
+        },
+        (err) => {
+
+        }
+        )
+    }
   }
 
   getAllProduct() {
@@ -70,8 +92,34 @@ export class ProductCreateComponent implements OnInit {
       )
   }
 
-  statusChanged(event:any) {
-      this.getAllProduct();
+  statusChanged(event: any) {
+    this.getAllProduct();
+  }
+
+  showEditForm(event) {
+    this.editMode = true;
+    this.id = event;
+    this.productService.getProductById(event)
+      .subscribe(
+      (res) => {
+        this.productCreateForm.patchValue({
+          name: [res.name],
+          rate: [res.rate],
+          description: [res.description],
+          status: [res.status],
+          vat: [res.vat]
+        });
+      },
+      (err) => {
+
+      }
+      )
+  }
+
+  cancelEdit() {
+    this.editMode = false;
+    this.productCreateForm.reset();
+    this.getAllProduct();
   }
 
 }

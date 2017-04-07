@@ -1,21 +1,21 @@
-import { Component, OnInit, Output, Input, SimpleChange, EventEmitter } from '@angular/core';
-import { ProductService } from '../product.service';
-import { Product } from '../product';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange } from '@angular/core';
+import { AreaService } from '../area.service';
+import { Area } from '../area';
 
 @Component({
-  selector: 'app-product-all',
-  templateUrl: './product-all.component.html',
-  styleUrls: ['./product-all.component.css']
+  selector: 'app-area-all',
+  templateUrl: './area-all.component.html',
+  styleUrls: ['./area-all.component.css']
 })
-export class ProductAllComponent implements OnInit {
-  @Input() products: Product[] = [];
+export class AreaAllComponent implements OnInit {
+  @Input() areas: Area[] = [];
   @Output() statusChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() showEditForm: EventEmitter<string> = new EventEmitter<string>();
-  constructor(private productService: ProductService) { }
+
+  constructor(private areaService: AreaService) { }
 
   ngOnInit() {
   }
-
 
   toggleStatus(id, status) {
     let data = {
@@ -23,7 +23,7 @@ export class ProductAllComponent implements OnInit {
       status: !status
     };
 
-    this.productService.setStatus(data)
+    this.areaService.setStatus(data)
       .subscribe(
       (res) => {
         if (res.status) {
@@ -38,11 +38,9 @@ export class ProductAllComponent implements OnInit {
       )
   }
 
-
-  editProduct(id){
+  editArea(id) {
     this.showEditForm.emit(id);
   }
-
 
 
 }

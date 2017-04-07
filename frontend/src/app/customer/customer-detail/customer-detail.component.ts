@@ -6,7 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-
+import { Product } from '../../product/product';
+import { ProductService } from '../../product/product.service';
+import { AreaService } from '../../area/area.service';
+import { Area } from '../../area/area';
 
 @Component({
   selector: 'app-customer-detail',
@@ -18,12 +21,16 @@ export class CustomerDetailComponent implements OnInit {
   private subscription: Subscription;
   public customerDetailForm: FormGroup;
   private id: any;
-  showSuccess:boolean = false;
-  showError:boolean = false;
+  public productList: any[] = [];
+  public areaList: any[] = [];
+  showSuccess: boolean = false;
+  showError: boolean = false;
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private customerService: CustomerService) { }
+  constructor(private areaService: AreaService, private productService: ProductService, private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private customerService: CustomerService) { }
 
   ngOnInit() {
+    this.getProductList();
+    this.getAreaList();
     this.subscription = this.route.params.subscribe(params => {
       this.getCustomerDetails(params['id']);
       this.id = params['id'];
@@ -61,7 +68,8 @@ export class CustomerDetailComponent implements OnInit {
       area: [this.customer.area],
       city: [this.customer.city],
       postal_code: [this.customer.postal_code],
-      status: [this.customer.status]
+      status: [this.customer.status],
+      product: [this.customer.product]
     });
   }
 
@@ -80,7 +88,8 @@ export class CustomerDetailComponent implements OnInit {
       area: this.customerDetailForm.value.area,
       city: this.customerDetailForm.value.city,
       postal_code: this.customerDetailForm.value.postal_code,
-      status: this.customerDetailForm.value.status
+      status: this.customerDetailForm.value.status,
+      product: this.customerDetailForm.value.product
     }
 
     this.customerService.updateCustomer(data)
@@ -94,6 +103,40 @@ export class CustomerDetailComponent implements OnInit {
       },
       (err) => {
         this.showError = true;
+      }
+      )
+  }
+
+ getProductList() {
+    this.productList = [];
+    this.productService.getAllProduct()
+      .subscribe(
+      (res) => {
+        _.each(res, (item) => {
+          if (item['status']) {
+            this.productList.push(item);
+          }
+        });
+      },
+      (err) => {
+        console.log("ERROR from productList");
+      }
+      )
+  }
+
+  getAreaList() {
+    this.areaList = [];
+    this.areaService.getAllArea()
+      .subscribe(
+      (res) => {
+        _.each(res, (item) => {
+          if (item['status']) {
+            this.areaList.push(item);
+          }
+        });
+      },
+      (err) => {
+        console.log("ERROR from getAreaList");
       }
       )
   }

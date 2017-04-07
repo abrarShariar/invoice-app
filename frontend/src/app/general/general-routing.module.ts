@@ -7,6 +7,7 @@ import { CustomerAllComponent } from '../customer/customer-all/customer-all.comp
 import { CustomerDetailComponent } from '../customer/customer-detail/customer-detail.component';
 import { ProductCreateComponent } from '../product/product-create/product-create.component';
 import { CustomerCreateComponent } from '../customer/customer-create/customer-create.component';
+import { AreaCreateComponent } from '../area/area-create/area-create.component';
 
 const generalRoutes = [
     {
@@ -37,6 +38,11 @@ const generalRoutes = [
     {
         path: 'product',
         component: ProductCreateComponent
+    },
+    {
+        path: 'area',
+        component: AreaCreateComponent
+
     }
 
 ];

@@ -4,7 +4,7 @@ let Schema = mongoose.Schema;
 
 export let customerSchema = new Schema({
     id: String,
-    username: String,
+    username: {type:String, unique: true,dropDups: true },
     email: String,
     fullname: String,
     customer_currency: String,
@@ -16,5 +16,7 @@ export let customerSchema = new Schema({
     area: String,
     city: String,
     postal_code: String,
-    status:Boolean
+    status:Boolean,
+    product:String,
+    created_on : { type : Date, default: Date.now }
 });

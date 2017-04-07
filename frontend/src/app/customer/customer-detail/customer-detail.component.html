@@ -86,11 +86,13 @@
                     </div>
                 </div>
 
-                <!--location-->
+                <!--area list-->
                 <div class="form-group ">
-                    <label for="location " class="col-sm-2 control-label ">Area</label>
+                    <label for="area " class="col-sm-2 control-label ">Area</label>
                     <div class="col-sm-10 ">
-                        <input type="text " formControlName="area" class="form-control " id="area " placeholder="area ">
+                        <select required *ngIf="areaList" class="form-control" formControlName="area">
+                            <option  [selected]="area._id == customer.area" *ngFor="let area of areaList" value="{{ area._id }}">{{ area.name }} </option>
+                        </select>
                     </div>
                 </div>
 
@@ -114,9 +116,19 @@
                 <div class="form-group ">
                     <label for="postal_code " class="col-sm-2 control-label ">Status</label>
                     <div class="col-sm-10 ">
-                        <select formControlName="status">
+                        <select formControlName="status" class="form-control">
                             <option value="true">Active</option>
                             <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!--product list-->
+                <div class="form-group ">
+                    <label for="postal_code " class="col-sm-2 control-label ">Product</label>
+                    <div class="col-sm-10 ">
+                        <select required *ngIf="productList" class="form-control" formControlName="product">
+                            <option [selected]="product._id == customer.product" *ngFor="let product of productList" value="{{ product._id }}">{{ product.name }} - <em> {{ product.rate }} BDT/month </em> </option>
                         </select>
                     </div>
                 </div>

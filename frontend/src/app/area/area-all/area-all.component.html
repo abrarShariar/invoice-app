@@ -1,7 +1,7 @@
 <section class="content-header">
     <div class="col-xs-12">
         <h1>
-            All Products
+            All Areas
         </h1>
     </div>
 </section>
@@ -11,7 +11,7 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">List Of All Products</h3>
+                <h3 class="box-title">List Of All Areas</h3>
                 <br>
             </div>
             <!-- /.box-header -->
@@ -20,26 +20,20 @@
                     <tbody>
                         <tr>
                             <th>Name</th>
-                            <th>Rate &nbsp;(BDT/month) </th>
-                            <th>VAT(%)</th>
-                            <th>Description</th>
                             <th>Status</th>
                             <th>Action</th>
 
                         </tr>
-                        <tr *ngFor="let product of products | paginate: { itemsPerPage: 10, currentPage: p }">
-                            <td>{{ product.name }}</td>
-                            <td>{{ product.rate }} </td>
-                            <td>{{ product.vat }}</td>
-                            <td>{{ product.description }}</td>
-                            <td *ngIf="product.status">
-                                <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(product._id,product.status)"> Active</button>
+                        <tr *ngFor="let area of areas | paginate: { itemsPerPage: 10, currentPage: p }">
+                            <td>{{ area.name }}</td>
+                            <td *ngIf="area.status">
+                                <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(area._id,area.status)"> Active</button>
                             </td>
-                            <td *ngIf="!product.status">
-                                <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(product._id,product.status)"> Inactive</button>
+                            <td *ngIf="!area.status">
+                                <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(area._id,area.status)"> Inactive</button>
                             </td>
                             <td>
-                                <a type="button" class="btn btn-primary btn-xs" (click)="editProduct(product._id)"> Edit</a>
+                                <a type="button" class="btn btn-primary btn-xs" (click)="editArea(area._id)"> Edit</a>
                             </td>
                         </tr>
                     </tbody>

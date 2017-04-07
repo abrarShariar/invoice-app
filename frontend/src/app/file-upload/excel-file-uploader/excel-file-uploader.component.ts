@@ -66,7 +66,8 @@ export class ExcelFileUploaderComponent implements OnInit {
           area: data[10],
           city: data[11],
           postal_code: data[12],
-          status: true
+          status: true,
+          product: ""
         }
         this.fileUploadService.createNewCustomer(customer)
           .subscribe(

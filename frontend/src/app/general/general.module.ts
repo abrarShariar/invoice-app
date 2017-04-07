@@ -11,6 +11,7 @@ import { HomeModule } from '../home/home.module';
 import { FileUploadModule } from '../file-upload/file-upload.module';
 import { CustomerModule } from '../customer/customer.module';
 import { ProductModule } from '../product/product.module';
+import { AreaModule } from '../area/area.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ProductModule } from '../product/product.module';
         GeneralRoutingModule,
         FileUploadModule,
         CustomerModule,
-        ProductModule
+        ProductModule,
+        AreaModule
     ],
     declarations: [
         DashboardComponent,

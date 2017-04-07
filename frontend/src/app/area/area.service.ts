@@ -4,37 +4,37 @@ import { environment } from "../../environments/environment";
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
-
 @Injectable()
-export class ProductService {
+export class AreaService {
 
-  private productUrl = environment.api_server + 'product/';
+  private areaUrl = environment.api_server + 'area/';
 
   constructor(private http: CustomHttpService) { }
 
-  createProduct(data: any) {
-    let url = this.productUrl + 'create/';
+  createArea(data: any) {
+    let url = this.areaUrl + 'create/';
     return this.http.post(url, data).map((res) => res.json());
   }
 
-  getAllProduct() {
-    let url = this.productUrl + 'all';
+  getAllArea() {
+    let url = this.areaUrl + 'all/';
     return this.http.get(url).map((res) => res.json());
   }
 
   setStatus(data: any) {
-    let url = this.productUrl + 'status_change/';
+    let url = this.areaUrl + 'status_change/';
     return this.http.put(url, data).map((res) => res.json());
   }
 
-  getProductById(id: any) {
-    let url = this.productUrl + 'id/' + id;
+  getAreaById(id: any) {
+    let url = this.areaUrl + 'id/' + id;
     return this.http.get(url).map((res) => res.json());
   }
 
-  updateProduct(data: any) {
-    let url = this.productUrl + 'update/';
+  updateArea(data: any) {
+    let url = this.areaUrl + 'update/';
     return this.http.put(url, data).map((res) => res.json());
   }
 
+  
 }

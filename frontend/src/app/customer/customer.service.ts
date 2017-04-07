@@ -11,27 +11,31 @@ export class CustomerService {
 
   constructor(private http: CustomHttpService) { }
 
-  getAllCustomers(){
+  getAllCustomers() {
     let url = this.customerUrl + 'all/';
-    return this.http.get(url).map((res)=>res.json());
+    return this.http.get(url).map((res) => res.json());
   }
 
-  setStatus(data:any){
-     let url = this.customerUrl + 'status_change/';
-     return this.http.put(url,data).map((res)=>res.json());
+  setStatus(data: any) {
+    let url = this.customerUrl + 'status_change/';
+    return this.http.put(url, data).map((res) => res.json());
   }
 
-  getCustomerDetails(id){
+  getCustomerDetails(id) {
     let url = this.customerUrl + 'details/' + id;
-    return this.http.get(url).map((res)=>res.json());
+    return this.http.get(url).map((res) => res.json());
   }
 
-  updateCustomer(data:any){
-      let url = this.customerUrl + 'details/update';
-      return this.http.put(url,data).map((res)=>res.json());
+  updateCustomer(data: any) {
+    let url = this.customerUrl + 'details/update';
+    return this.http.put(url, data).map((res) => res.json());
   }
 
-  
+  createNewCustomer(data: any) {
+    let url = this.customerUrl + 'create/';
+    return this.http.post(url, data).map((res) => res.json());
+  }
+
 
 
 
