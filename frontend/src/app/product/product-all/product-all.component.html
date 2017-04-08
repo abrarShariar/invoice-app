@@ -23,7 +23,6 @@
                             <th>Rate &nbsp;(BDT/month) </th>
                             <th>VAT(%)</th>
                             <th>Description</th>
-                            <th>Status</th>
                             <th>Action</th>
 
                         </tr>
@@ -32,12 +31,12 @@
                             <td>{{ product.rate }} </td>
                             <td>{{ product.vat }}</td>
                             <td>{{ product.description }}</td>
-                            <td *ngIf="product.status">
+                            <!--<td *ngIf="product.status">
                                 <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(product._id,product.status)"> Active</button>
                             </td>
                             <td *ngIf="!product.status">
                                 <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(product._id,product.status)"> Inactive</button>
-                            </td>
+                            </td>-->
                             <td>
                                 <a type="button" class="btn btn-primary btn-xs" (click)="editProduct(product._id)"> Edit</a>
                             </td>

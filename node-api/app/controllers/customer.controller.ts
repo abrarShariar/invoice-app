@@ -3,6 +3,8 @@ import { CustomerModel } from '../database/models/customer.model';
 import { Customer } from '../classes/Customer';
 import { Observable } from 'rxjs/Rx';
 import * as _ from 'underscore';
+import { AreaModel } from '../database/models/area.model';
+
 /*
 * Controller to handle request to api/customer/ 
 */
@@ -11,7 +13,6 @@ export class CustomerController {
 
     //create a new customer
     static createNewCustomer(res: Response, data: any) {
-        console.log(data);
         let isDataInserted: boolean = false;
         let timestamp = Date.now();
         let customer = new CustomerModel({
@@ -107,5 +108,40 @@ export class CustomerController {
         })
     }
 
+
+    //search customers list by username
+    static searchByUsername(res: Response, data: any) {
+        CustomerModel.find({ "username": { $regex: ".*" + data.text + ".*", $options: 'i' } }, function (err, data) {
+            if (!err) {
+                res.send(data);
+            }
+        });
+    }
+
+    //search customers list by mobile number
+    static searchByMobileNumber(res: Response, data: any) {
+        CustomerModel.find({ "mobile_primary": { $regex: ".*" + data.text + ".*", $options: 'i' } }, function (err, data) {
+            if (!err) {
+                res.send(data);
+            }
+        });
+    }
+
+    //search customers list by area
+    static searchByArea(res: Response, data: any) {
+        AreaModel.find({ "name": { $regex: ".*" + data.text + ".*", $options: 'i' } }, function (err, data) {
+            if (!err) {
+                res.send(data);
+            }
+        });
+    }
+
+    static customerByArea(res:Response, id){
+          CustomerModel.findById(id, function (err, data) {
+            if (!err) {
+                res.send(data);
+            }
+        })
+    }
 
 }

@@ -20,18 +20,17 @@
                     <tbody>
                         <tr>
                             <th>Name</th>
-                            <th>Status</th>
+                            <!--<th>Status</th>-->
                             <th>Action</th>
-
                         </tr>
                         <tr *ngFor="let area of areas | paginate: { itemsPerPage: 10, currentPage: p }">
                             <td>{{ area.name }}</td>
-                            <td *ngIf="area.status">
+                            <!--<td *ngIf="area.status">
                                 <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(area._id,area.status)"> Active</button>
                             </td>
                             <td *ngIf="!area.status">
                                 <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(area._id,area.status)"> Inactive</button>
-                            </td>
+                            </td>-->
                             <td>
                                 <a type="button" class="btn btn-primary btn-xs" (click)="editArea(area._id)"> Edit</a>
                             </td>

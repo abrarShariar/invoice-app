@@ -8,6 +8,9 @@ import { CustomerDetailComponent } from '../customer/customer-detail/customer-de
 import { ProductCreateComponent } from '../product/product-create/product-create.component';
 import { CustomerCreateComponent } from '../customer/customer-create/customer-create.component';
 import { AreaCreateComponent } from '../area/area-create/area-create.component';
+import { InvoiceAllComponent } from '../invoice/invoice-all/invoice-all.component';
+import { InvoiceRecentComponent } from '../invoice/invoice-recent/invoice-recent.component';
+
 
 const generalRoutes = [
     {
@@ -42,7 +45,14 @@ const generalRoutes = [
     {
         path: 'area',
         component: AreaCreateComponent
-
+    },
+    {
+        path: 'invoice/all',
+        component: InvoiceAllComponent
+    },
+    {
+        path: 'invoice/recent',
+        component: InvoiceRecentComponent
     }
 
 ];

@@ -7,6 +7,7 @@ import { Router, Request, Response } from 'express';
 import { CustomerController } from '../controllers/customer.controller';
 import { ProductController } from '../controllers/product.controller';
 import { AreaController } from '../controllers/area.controller';
+import { InvoiceController } from '../controllers/invoice.controller';
 
 const router: Router = Router();
 
@@ -71,7 +72,7 @@ router.post('/area/create', (req: Request, res: Response) => {
 });
 
 //get all areas
-router.get('/area/all',(req: Request, res: Response)=>{
+router.get('/area/all', (req: Request, res: Response) => {
     AreaController.getAllArea(res);
 });
 
@@ -88,6 +89,31 @@ router.get('/area/id/:id', (req: Request, res: Response) => {
 //update area
 router.put('/area/update', (req: Request, res: Response) => {
     AreaController.update(res, req.body);
+});
+
+//get recent invoices (this month)
+router.get('/invoice/recent', (req: Request, res: Response) => {
+    InvoiceController.getRecentInvoice(res);
+});
+
+//search all customers data by username
+router.post('/customer/search/username', (req: Request, res: Response) => {
+    CustomerController.searchByUsername(res, req.body);
+});
+
+//search all customers data by mobile number
+router.post('/customer/search/mobile_number', (req: Request, res: Response) => {
+    CustomerController.searchByMobileNumber(res, req.body);
+});
+
+//search all customers data by area
+router.post('/customer/search/area', (req: Request, res: Response) => {
+    CustomerController.searchByArea(res, req.body);
+});
+
+//search all customers data by area id
+router.post('/customer/search/customerByArea', (req: Request, res: Response) => {
+    CustomerController.customerByArea(res, req.body);
 });
 
 

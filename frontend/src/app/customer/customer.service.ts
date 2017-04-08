@@ -36,8 +36,23 @@ export class CustomerService {
     return this.http.post(url, data).map((res) => res.json());
   }
 
+  searchByUsername(data: any) {
+    let url = this.customerUrl + 'search/username/';
+    return this.http.post(url, data).map((res) => res.json());
+  }
 
+  searchByMobileNumber(data: any) {
+    let url = this.customerUrl + 'search/mobile_number/';
+    return this.http.post(url, data).map((res) => res.json());
+  }
 
+  searchByArea(data: any) {
+    let url = this.customerUrl + 'search/area/';
+    return this.http.post(url, data).map((res) => res.json());
+  }
 
-
+  getCustomerByArea(data:any){
+    let url = this.customerUrl + 'search/customerByArea/';
+    return this.http.post(url, data).map((res) => res.json());
+  }
 }

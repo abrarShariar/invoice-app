@@ -47,7 +47,10 @@
             </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="#"> <i class="fa fa-circle-o"></i> All Invoices</a>
+                        <a [routerLink]="['dashboard/invoice/recent']"> <i class="fa fa-circle-o"></i> Recent Invoices</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['dashboard/invoice/all']"> <i class="fa fa-circle-o"></i> All Invoices</a>
                     </li>
                     <li>
                         <a href="#"> <i class="fa fa-circle-o"></i>Invoice Settings</a>

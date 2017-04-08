@@ -12,6 +12,7 @@ import { FileUploadModule } from '../file-upload/file-upload.module';
 import { CustomerModule } from '../customer/customer.module';
 import { ProductModule } from '../product/product.module';
 import { AreaModule } from '../area/area.module';
+import { InvoiceModule } from '../invoice/invoice.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { AreaModule } from '../area/area.module';
         FileUploadModule,
         CustomerModule,
         ProductModule,
-        AreaModule
+        AreaModule,
+        InvoiceModule
     ],
     declarations: [
         DashboardComponent,

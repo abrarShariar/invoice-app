@@ -18,6 +18,7 @@ export class CustomerAllComponent implements OnInit {
   public filterByTitle: string;
   display: boolean = false;
   public productList: Product[] = [];
+  public searchMode = 'username';
 
   constructor(private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
 
@@ -71,10 +72,6 @@ export class CustomerAllComponent implements OnInit {
       )
   }
 
-  setFilter(event: any) {
-    this.filterByTitle = event.target.text;
-  }
-
   toggleStatus(id, status) {
     let data = {
       id: id,
@@ -108,6 +105,96 @@ export class CustomerAllComponent implements OnInit {
       }
       )
   }
+
+  quickSearch(event: any) {
+    let data = {
+      text: event
+    }
+    if (this.searchMode == 'username') {
+      this.customerService.searchByUsername(data)
+        .subscribe(
+        (res) => {
+          this.buildSearchResult(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+        )
+    }
+    else if (this.searchMode == 'mobile_number') {
+      this.customerService.searchByMobileNumber(data)
+        .subscribe(
+        (res) => {
+          this.buildSearchResult(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+        )
+    }
+    else if (this.searchMode == 'area') {
+      this.customerService.searchByArea(data)
+        .subscribe(
+        (res:Area[]) => {
+          console.log(res);
+          _.each(res, (item) => {
+            this.customerService.getCustomerByArea(item._id)
+              .subscribe(
+              (res) => {
+                console.log(res);
+              },
+              (err) => {
+                console.log(err);
+              }
+              )
+          });
+        },
+        (err) => {
+          console.log(err);
+        }
+        )
+    }
+  }
+
+
+  buildSearchResult(customerList: Customer[]) {
+    this.customers = [];
+    // getting products
+    _.each(customerList, (item) => {
+      let customer: Customer;
+      customer = item;
+      if (item.product) {
+        this.productService.getProductById(item.product)
+          .subscribe(
+          (res: Product) => {
+            customer.productData = res;
+          },
+          (err) => {
+          }
+          )
+      }
+
+      if (item.area) {
+        this.areaService.getAreaById(item.area)
+          .subscribe(
+          (res: Area) => {
+            customer.areaData = res;
+          },
+          (err) => {
+
+          }
+          )
+      }
+      this.customers.push(customer);
+    });
+  }
+
+
+  //change search filter
+  filterChange(event: any) {
+    this.searchMode = event;
+  }
+
 
 
 }

@@ -24,16 +24,14 @@
                             <div class="col-lg-6" style="float:right">
                                 <div class="input-group">
                                     <div class="input-group-btn">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filter By {{ filterByTitle }} <span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
-                                            <li><a (click)="setFilter($event)"> Username </a></li>
-                                            <li><a (click)="setFilter($event)">Email</a></li>
-                                            <li><a (click)="setFilter($event)">Area</a></li>
-                                            <li><a (click)="setFilter($event)">City</a></li>
-                                        </ul>
+                                        <select style="font-size: 15px;height: 34px;" (change)="filterChange($event.target.value)">
+                                            <option value="username">Username</option>
+                                            <option value="mobile_number">Mobile Number</option>
+                                            <option value="area">Area</option>
+                                        </select>
                                     </div>
                                     <!-- /btn-group -->
-                                    <input type="text" class="form-control" aria-label="..." placeholder="Search Customers List">
+                                    <input type="text" class="form-control" aria-label="..." placeholder="Search Customers List" (input)="quickSearch($event.target.value)">
                                 </div>
                                 <!-- /input-group -->
                             </div>
