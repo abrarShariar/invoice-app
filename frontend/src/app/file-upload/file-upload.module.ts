@@ -7,6 +7,7 @@ import { FileSelectDirective, FileUploader } from 'ng2-file-upload';
 import { ExcelFileUploaderComponent } from './excel-file-uploader/excel-file-uploader.component';
 //service
 import { FileUploadService } from './file-upload.service';
+import { CustomerService } from '../customer/customer.service';
 
 @NgModule({
     imports: [
@@ -23,7 +24,8 @@ import { FileUploadService } from './file-upload.service';
         ExcelFileUploaderComponent
     ],
     providers: [
-        FileUploadService
+        FileUploadService,
+        CustomerService
     ]
 })
 export class FileUploadModule { }

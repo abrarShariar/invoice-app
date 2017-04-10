@@ -6,6 +6,7 @@ import { NgClass, NgStyle } from '@angular/common';
 import * as _ from 'underscore';
 import { FileUploadService } from '../file-upload.service';
 import { Customer } from '../../customer/customer';
+import { CustomerService } from '../../customer/customer.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class ExcelFileUploaderComponent implements OnInit {
   public isFileRead: boolean;
   private allCustomerData: Customer[] = [];
 
-  constructor(private fb: FormBuilder, private fileUploadService: FileUploadService) { }
+  constructor(private customerService:CustomerService,private fb: FormBuilder, private fileUploadService: FileUploadService) { }
 
   ngOnInit() {
     this.createForm();
@@ -63,16 +64,15 @@ export class ExcelFileUploaderComponent implements OnInit {
           website: data[7],
           country: data[8],
           location: data[9],
-          area: data[10],
+          area: "",
           city: data[11],
           postal_code: data[12],
           status: true,
           product: ""
         }
-        this.fileUploadService.createNewCustomer(customer)
+        this.customerService.createNewCustomer(customer)
           .subscribe(
           (res) => {
-            let result = res.json();
             this.isFileRead = true
           },
           (err) => {

@@ -91,11 +91,6 @@ router.put('/area/update', (req: Request, res: Response) => {
     AreaController.update(res, req.body);
 });
 
-//get recent invoices (this month)
-router.get('/invoice/recent', (req: Request, res: Response) => {
-    InvoiceController.getRecentInvoice(res);
-});
-
 //search all customers data by username
 router.post('/customer/search/username', (req: Request, res: Response) => {
     CustomerController.searchByUsername(res, req.body);
@@ -116,8 +111,10 @@ router.post('/customer/search/customerByArea', (req: Request, res: Response) => 
     CustomerController.customerByArea(res, req.body);
 });
 
-
-
+//get recent invoices (this month)
+router.get('/invoice/recent', (req: Request, res: Response) => {
+    InvoiceController.getRecentInvoice(res);
+});
 
 
 export const ApiRoute: Router = router;

@@ -11,36 +11,47 @@ export class InvoiceController {
 
     //get invoices of this month for active users
     static getRecentInvoice(res: Response) {
-        let result = [];
-        CustomerModel.find({ status: true }, (err, customers) => {
-            if (!err) {
-                _.each(customers, (item) => {
-                    let invoiceData = {
-                        username: item.username,
-                        fullname: item.fullname,
-                        mobile: item.mobile_primary,
-                        email: item.email,
-                        productData: {},
-                        areaData: {}
-                    };
-                    ProductModel.findById({ _id: item.product }, (err, data) => {
-                        if (!err) {
-                            invoiceData.productData = data;
-                            AreaModel.findById({ _id: item.area }, (err, data) => {
-                                if (!err) {
-                                    invoiceData.areaData = data;
-                                    result.push(invoiceData);
-                                }
-                            })
-                        }
-                    })
-
-                });
+        CustomerModel.find({ status: true, product: { $ne: '' } }, function (err, data) {
+            if(!err){
+                res.send(data);
             }
         });
-        res.send(result);
-
-
     }
+
+
+
+
+
+
+    // static getRecentInvoice(res: Response) {
+    //     let result = [];
+    //     CustomerModel.find({ status: true }, (err, customers) => {
+    //         if (!err) {
+    //             _.each(customers, (item) => {
+    //                 let invoiceData = {
+    //                     username: item.username,
+    //                     fullname: item.fullname,
+    //                     mobile: item.mobile_primary,
+    //                     email: item.email,
+    //                     productData: {},
+    //                     areaData: {}
+    //                 };
+    //                 ProductModel.findById({ _id: item.product }, (err, data) => {
+    //                     if (!err) {
+    //                         invoiceData.productData = data;
+    //                         AreaModel.findById({ _id: item.area }, (err, data) => {
+    //                             if (!err) {
+    //                                 invoiceData.areaData = data;
+    //                                 result.push(invoiceData);
+    //                             }
+    //                         })
+    //                     }
+    //                 })
+
+    //             });
+    //         }
+    //     });
+    //     res.send(result);
+    // }
 
 }

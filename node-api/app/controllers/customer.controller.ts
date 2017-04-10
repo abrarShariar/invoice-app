@@ -136,8 +136,8 @@ export class CustomerController {
         });
     }
 
-    static customerByArea(res:Response, id){
-          CustomerModel.findById(id, function (err, data) {
+    static customerByArea(res:Response, data:any){
+          CustomerModel.find({ "area": data.text }, function (err, data) {
             if (!err) {
                 res.send(data);
             }

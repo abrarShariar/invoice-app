@@ -13,7 +13,7 @@
     </section>
     <section class="content ">
         <div class="col-md-offset-2 col-md-7">
-            <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Customer CreatedSuccessfully !!</div>
+            <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Customer Created Successfully !!</div>
             <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
             <!--  Page Content Here -->
             <form class="form-horizontal " [formGroup]="customerCreateForm" (submit)="submitCustomerCreateForm()">

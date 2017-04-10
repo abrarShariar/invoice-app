@@ -1,5 +1,5 @@
 export class Area {
-    _id?:string;
+    id?:string;
     name:string;
     status:boolean;
 }

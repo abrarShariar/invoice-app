@@ -60,11 +60,17 @@ export class CustomerAllComponent implements OnInit {
               )
           }
 
-          this.customers.push(customer);
+          let undefinedKey = false;
+          for (let key in customer) {
+            if (_.isUndefined(customer[key]) || _.isNull(customer[key])) {
+              undefinedKey = true;
+              break;
+            }
+          }
+          if (!undefinedKey) {
+            this.customers.push(customer);
+          }
         });
-
-
-
       },
       (err) => {
         console.log("Error In getAllCustomer");
@@ -107,6 +113,10 @@ export class CustomerAllComponent implements OnInit {
   }
 
   quickSearch(event: any) {
+    if (event == '') {
+      this.getAllCustomer();
+      return;
+    }
     let data = {
       text: event
     }
@@ -135,13 +145,15 @@ export class CustomerAllComponent implements OnInit {
     else if (this.searchMode == 'area') {
       this.customerService.searchByArea(data)
         .subscribe(
-        (res:Area[]) => {
-          console.log(res);
+        (res) => {
           _.each(res, (item) => {
-            this.customerService.getCustomerByArea(item._id)
+            let newData = {
+              text: item["_id"]
+            }
+            this.customerService.getCustomerByArea(newData)
               .subscribe(
               (res) => {
-                console.log(res);
+                this.buildSearchResult(res);
               },
               (err) => {
                 console.log(err);

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InvoiceService } from '../invoice.service';
+import { Customer } from '../../customer/customer';
+import * as _ from 'underscore';
 
 
 @Component({
@@ -18,8 +20,10 @@ export class InvoiceRecentComponent implements OnInit {
   getRecentInvoice() {
     this.invoiceService.getRecentInvoice()
       .subscribe(
-      (res) => {
-        console.log(res);
+      (res:Customer[]) => {
+          _.each(res,(item)=>{
+            
+          });
       },
       (err) => {
         console.log(err);
