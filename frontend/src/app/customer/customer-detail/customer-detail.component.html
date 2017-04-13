@@ -1,4 +1,4 @@
-<div class="content-wrapper" style="height: 1000px;">
+<div class="content-wrapper" style="height: 1200px;">
     <section class=" content-header " *ngIf="customer ">
         <div class="col-xs-12">
             <h1>
@@ -12,134 +12,136 @@
         </div>
     </section>
     <section class="content ">
-        <div class="col-md-6">
-            <div class="alert alert-success" role="alert" *ngIf="showSuccess">Customer Data Updated Successfully !!</div>
-            <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
-            <!--  Page Content Here -->
-            <form class="form-horizontal " [formGroup]="customerDetailForm" *ngIf="customer" (submit)="submitCustomerDetail()">
-                <!--username-->
-                <div class=" form-group ">
-                    <label for="username " class="col-sm-2 control-label ">Username</label>
-                    <div class="col-sm-10 ">
-                        <input formControlName="username" type="text " class="form-control " id="username " placeholder="Username ">
+        <div class="col-md-offset-2 col-md-7">
+            <div class="box box-primary">
+                <div class="alert alert-success" role="alert" *ngIf="showSuccess">Customer Data Updated Successfully !!</div>
+                <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
+                <!--  Page Content Here -->
+                <form class="form-horizontal " [formGroup]="customerDetailForm" *ngIf="customer" (submit)="submitCustomerDetail()">
+                    <!--username-->
+                    <div class=" form-group ">
+                        <label for="username " class="col-sm-2 control-label ">Username</label>
+                        <div class="col-sm-10 ">
+                            <input formControlName="username" type="text " class="form-control " id="username " placeholder="Username ">
+                        </div>
                     </div>
-                </div>
-                <!--email-->
-                <div class="form-group ">
-                    <label for="email " class="col-sm-2 control-label ">Email</label>
-                    <div class="col-sm-10 ">
-                        <input formControlName="email" type="email " class="form-control " id="email " placeholder="Email ">
+                    <!--email-->
+                    <div class="form-group ">
+                        <label for="email " class="col-sm-2 control-label ">Email</label>
+                        <div class="col-sm-10 ">
+                            <input formControlName="email" type="email " class="form-control " id="email " placeholder="Email ">
+                        </div>
                     </div>
-                </div>
-                <!--fullname-->
-                <div class="form-group ">
-                    <label for="fullname " class="col-sm-2 control-label ">Fullname</label>
-                    <div class="col-sm-10 ">
-                        <input formControlName="fullname" type="text " class="form-control " id="fullname " placeholder="Fullname ">
+                    <!--fullname-->
+                    <div class="form-group ">
+                        <label for="fullname " class="col-sm-2 control-label ">Fullname</label>
+                        <div class="col-sm-10 ">
+                            <input formControlName="fullname" type="text " class="form-control " id="fullname " placeholder="Fullname ">
+                        </div>
                     </div>
-                </div>
-                <!--customer_currency-->
-                <div class="form-group ">
-                    <label for="customer_currency " class="col-sm-2 control-label ">Customer Currency</label>
-                    <div class="col-sm-10 ">
-                        <input formControlName="customer_currency" type="text " class="form-control " id="customer_currency " placeholder="Customer Currency ">
+                    <!--customer_currency-->
+                    <div class="form-group ">
+                        <label for="customer_currency " class="col-sm-2 control-label ">Customer Currency</label>
+                        <div class="col-sm-10 ">
+                            <input formControlName="customer_currency" type="text " class="form-control " id="customer_currency " placeholder="Customer Currency ">
+                        </div>
                     </div>
-                </div>
 
-                <!--mobile_primary-->
-                <div class="form-group ">
-                    <label for="mobile_primary " class="col-sm-2 control-label ">Mobile Primary</label>
-                    <div class="col-sm-10 ">
-                        <input formControlName="mobile_primary" type="text " class="form-control " id="mobile_primary " placeholder="Mobile primary ">
+                    <!--mobile_primary-->
+                    <div class="form-group ">
+                        <label for="mobile_primary " class="col-sm-2 control-label ">Mobile Primary</label>
+                        <div class="col-sm-10 ">
+                            <input formControlName="mobile_primary" type="text " class="form-control " id="mobile_primary " placeholder="Mobile primary ">
+                        </div>
                     </div>
-                </div>
 
-                <!--mobile_secondary-->
-                <div class="form-group ">
-                    <label for="mobile_secondary " class="col-sm-2 control-label ">Mobile Secondary</label>
-                    <div class="col-sm-10 ">
-                        <input formControlName="mobile_secondary" type="text " class="form-control " id="mobile_secondary " placeholder="Mobile secondary ">
+                    <!--mobile_secondary-->
+                    <div class="form-group ">
+                        <label for="mobile_secondary " class="col-sm-2 control-label ">Mobile Secondary</label>
+                        <div class="col-sm-10 ">
+                            <input formControlName="mobile_secondary" type="text " class="form-control " id="mobile_secondary " placeholder="Mobile secondary ">
+                        </div>
                     </div>
-                </div>
 
-                <!--website-->
-                <div class="form-group ">
-                    <label for="website " class="col-sm-2 control-label ">Website</label>
-                    <div class="col-sm-10 ">
-                        <input type="text" formControlName="website" class="form-control " id="website " placeholder="website ">
+                    <!--website-->
+                    <div class="form-group">
+                        <label for="website" class="col-sm-2 control-label ">Website</label>
+                        <div class="col-sm-10">
+                            <input type="text" formControlName="website" class="form-control " id="website " placeholder="website ">
+                        </div>
                     </div>
-                </div>
 
-                <!--country-->
-                <div class="form-group ">
-                    <label for="country " class="col-sm-2 control-label ">Country</label>
-                    <div class="col-sm-10 ">
-                        <input type="text" formControlName="country" class="form-control " id="country " placeholder="website ">
+                    <!--country-->
+                    <div class="form-group ">
+                        <label for="country " class="col-sm-2 control-label ">Country</label>
+                        <div class="col-sm-10">
+                            <input type="text" formControlName="country" class="form-control " id="country " placeholder="website ">
+                        </div>
                     </div>
-                </div>
 
-                <!--location-->
-                <div class="form-group ">
-                    <label for="location " class="col-sm-2 control-label ">Location</label>
-                    <div class="col-sm-10 ">
-                        <input type="text " formControlName="location" class="form-control " id="location " placeholder="location ">
+                    <!--location-->
+                    <div class="form-group ">
+                        <label for="location " class="col-sm-2 control-label ">Location</label>
+                        <div class="col-sm-10">
+                            <input type="text " formControlName="location" class="form-control " id="location " placeholder="location ">
+                        </div>
                     </div>
-                </div>
 
-                <!--area list-->
-                <div class="form-group ">
-                    <label for="area " class="col-sm-2 control-label ">Area</label>
-                    <div class="col-sm-10 ">
-                        <select required *ngIf="areaList" class="form-control" formControlName="area">
+                    <!--area list-->
+                    <div class="form-group ">
+                        <label for="area " class="col-sm-2 control-label ">Area</label>
+                        <div class="col-sm-10 ">
+                            <select required *ngIf="areaList" class="form-control" formControlName="area">
                             <option  [selected]="area._id == customer.area" *ngFor="let area of areaList" value="{{ area._id }}">{{ area.name }} </option>
                         </select>
+                        </div>
                     </div>
-                </div>
 
-                <!--city-->
-                <div class="form-group ">
-                    <label for="city " class="col-sm-2 control-label ">City</label>
-                    <div class="col-sm-10 ">
-                        <input type="text " formControlName="city" class="form-control " id="city " placeholder="city ">
+                    <!--city-->
+                    <div class="form-group ">
+                        <label for="city " class="col-sm-2 control-label ">City</label>
+                        <div class="col-sm-10 ">
+                            <input type="text " formControlName="city" class="form-control " id="city " placeholder="city ">
+                        </div>
                     </div>
-                </div>
 
-                <!--postal_code-->
-                <div class="form-group ">
-                    <label for="postal_code " class="col-sm-2 control-label ">Postal Code</label>
-                    <div class="col-sm-10 ">
-                        <input type="text " formControlName="postal_code" class="form-control " id="postal_code " placeholder="Postal Code ">
+                    <!--postal_code-->
+                    <div class="form-group ">
+                        <label for="postal_code " class="col-sm-2 control-label ">Postal Code</label>
+                        <div class="col-sm-10 ">
+                            <input type="text " formControlName="postal_code" class="form-control " id="postal_code " placeholder="Postal Code ">
+                        </div>
                     </div>
-                </div>
 
-                <!--status-->
-                <div class="form-group ">
-                    <label for="postal_code " class="col-sm-2 control-label ">Status</label>
-                    <div class="col-sm-10 ">
-                        <select formControlName="status" class="form-control">
+                    <!--status-->
+                    <div class="form-group ">
+                        <label for="postal_code " class="col-sm-2 control-label ">Status</label>
+                        <div class="col-sm-10 ">
+                            <select formControlName="status" class="form-control">
                             <option value="true">Active</option>
                             <option value="false">Inactive</option>
                         </select>
+                        </div>
                     </div>
-                </div>
 
-                <!--product list-->
-                <div class="form-group ">
-                    <label for="postal_code " class="col-sm-2 control-label ">Product</label>
-                    <div class="col-sm-10 ">
-                        <select required *ngIf="productList" class="form-control" formControlName="product">
+                    <!--product list-->
+                    <div class="form-group ">
+                        <label for="postal_code " class="col-sm-2 control-label ">Product</label>
+                        <div class="col-sm-10 ">
+                            <select required *ngIf="productList" class="form-control" formControlName="product">
                             <option [selected]="product._id == customer.product" *ngFor="let product of productList" value="{{ product._id }}">{{ product.name }} - <em> {{ product.rate }} BDT/month </em> </option>
                         </select>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group ">
-                    <div class="col-sm-offset-2 col-sm-10 ">
-                        <button type="submit " class="btn btn-success ">Update</button>
-                        <a type="button" class="btn btn-primary " [routerLink]="['/customer/all']">Back</a>
+                    <div class="form-group ">
+                        <div class="col-sm-offset-2 col-sm-10 ">
+                            <button type="submit " class="btn btn-success ">Update</button>
+                            <a type="button" class="btn btn-primary " [routerLink]="['/customer/all']">Back</a>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </section>
 </div>

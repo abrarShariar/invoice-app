@@ -17,6 +17,6 @@ export let customerSchema = new Schema({
     city: String,
     postal_code: String,
     status:Boolean,
-    product:String,
+    productList: [String],
     created_on : { type : Date, default: Date.now }
 });

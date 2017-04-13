@@ -16,7 +16,7 @@ export class Customer {
     city:string;
     postal_code:string;
     status:boolean;
-    product?:string;
-    productData?: Product;
+    productList?:any[] = [];
     areaData?: Area;
+    productData?: Product[] = [];
 }

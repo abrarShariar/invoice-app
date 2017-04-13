@@ -1,3 +1,4 @@
+import { ProductRoutingModule } from '../../product/product-routing.module';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CustomerService } from '../customer.service';
 import * as _ from 'underscore';
@@ -55,6 +56,10 @@ export class CustomerDetailComponent implements OnInit {
   }
 
   buildForm() {
+    let productId = '';
+    if(this.customer.productList.length>0){
+      productId = this.customer.productList[0]["_id"];
+    }
     this.customerDetailForm = this.fb.group({
       username: [this.customer.username],
       email: [this.customer.email],
@@ -69,7 +74,7 @@ export class CustomerDetailComponent implements OnInit {
       city: [this.customer.city],
       postal_code: [this.customer.postal_code],
       status: [this.customer.status],
-      product: [this.customer.product]
+      product: [productId]
     });
   }
 
@@ -89,7 +94,7 @@ export class CustomerDetailComponent implements OnInit {
       city: this.customerDetailForm.value.city,
       postal_code: this.customerDetailForm.value.postal_code,
       status: this.customerDetailForm.value.status,
-      product: this.customerDetailForm.value.product
+      productList: [this.customerDetailForm.value.product]
     }
 
     this.customerService.updateCustomer(data)

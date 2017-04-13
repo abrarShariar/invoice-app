@@ -83,7 +83,6 @@ export class AreaCreateComponent implements OnInit {
       .subscribe(
       (res) => {
         this.areas = res;
-        console.log(this.areas);
       },
       (err) => {
         console.log(err);

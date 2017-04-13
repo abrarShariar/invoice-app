@@ -1,3 +1,4 @@
+import { FileItem } from 'ng2-file-upload/file-upload/file-item.class';
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../customer.service';
 import { Customer } from '../customer';
@@ -20,6 +21,8 @@ export class CustomerAllComponent implements OnInit {
   public productList: Product[] = [];
   public searchMode = 'username';
 
+  // public tempCustomer:Customer;
+
   constructor(private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
 
   ngOnInit() {
@@ -34,25 +37,27 @@ export class CustomerAllComponent implements OnInit {
         let data: Customer[] = [];
         data = res;
         // getting products
-        _.each(data, (item) => {
-          let customer: Customer;
-          customer = item;
-          if (item.product) {
-            this.productService.getProductById(item.product)
-              .subscribe(
-              (res: Product) => {
-                customer.productData = res;
-              },
-              (err) => {
-              }
-              )
+        _.each(data, (item: Customer) => {
+          item.productData = [];
+          if (item.productList.length > 0) {
+            _.each(item.productList, (element) => {
+              this.productService.getProductById(element)
+                .subscribe(
+                (res: Product) => {
+                  item.productData.push(res);
+                },
+                (err) => {
+                }
+                )
+            });
           }
+
 
           if (item.area) {
             this.areaService.getAreaById(item.area)
               .subscribe(
               (res: Area) => {
-                customer.areaData = res;
+                item.areaData = res;
               },
               (err) => {
 
@@ -60,16 +65,7 @@ export class CustomerAllComponent implements OnInit {
               )
           }
 
-          let undefinedKey = false;
-          for (let key in customer) {
-            if (_.isUndefined(customer[key]) || _.isNull(customer[key])) {
-              undefinedKey = true;
-              break;
-            }
-          }
-          if (!undefinedKey) {
-            this.customers.push(customer);
-          }
+          this.customers.push(item);
         });
       },
       (err) => {
@@ -172,32 +168,37 @@ export class CustomerAllComponent implements OnInit {
   buildSearchResult(customerList: Customer[]) {
     this.customers = [];
     // getting products
-    _.each(customerList, (item) => {
-      let customer: Customer;
-      customer = item;
-      if (item.product) {
-        this.productService.getProductById(item.product)
-          .subscribe(
-          (res: Product) => {
-            customer.productData = res;
-          },
-          (err) => {
-          }
-          )
+    _.each(customerList, (item:Customer) => {
+      item.productData = [];
+
+      if (item.productList.length > 0) {
+        _.each(item.productList, (element) => {
+          this.productService.getProductById(element)
+            .subscribe(
+            (res: Product) => {
+              item.productData.push(res);
+            },
+            (err) => {
+            }
+            )
+        });
+
+
+
       }
 
       if (item.area) {
         this.areaService.getAreaById(item.area)
           .subscribe(
           (res: Area) => {
-            customer.areaData = res;
+            item.areaData = res;
           },
           (err) => {
 
           }
           )
       }
-      this.customers.push(customer);
+      this.customers.push(item);
     });
   }
 

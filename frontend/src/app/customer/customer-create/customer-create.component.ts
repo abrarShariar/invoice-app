@@ -20,7 +20,7 @@ export class CustomerCreateComponent implements OnInit {
   public productList: any[] = [];
   public areaList: any[] = [];
 
-  constructor(private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService,private areaService: AreaService) { }
+  constructor(private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
 
   ngOnInit() {
     this.buildForm();
@@ -33,11 +33,9 @@ export class CustomerCreateComponent implements OnInit {
       username: [''],
       email: [''],
       fullname: [''],
-      customer_currency: [''],
       mobile_primary: [''],
       mobile_secondary: [''],
       website: [''],
-      country: [''],
       location: [''],
       area: [''],
       city: [''],
@@ -50,23 +48,24 @@ export class CustomerCreateComponent implements OnInit {
   submitCustomerCreateForm() {
     this.showSuccess = false;
     this.showError = false;
-    let data = {
+    let data: Customer = {
       username: this.customerCreateForm.value.username,
       email: this.customerCreateForm.value.email,
       fullname: this.customerCreateForm.value.fullname,
-      customer_currency: this.customerCreateForm.value.customer_currency,
+      customer_currency: 'BDT',
       mobile_primary: this.customerCreateForm.value.mobile_primary,
       mobile_secondary: this.customerCreateForm.value.mobile_secondary,
       website: this.customerCreateForm.value.website,
-      country: this.customerCreateForm.value.country,
+      country: 'Bangladesh',
       location: this.customerCreateForm.value.location,
       area: this.customerCreateForm.value.area,
       city: this.customerCreateForm.value.city,
       postal_code: this.customerCreateForm.value.postal_code,
       status: this.customerCreateForm.value.status,
-      product: this.customerCreateForm.value.product
+      productList: [this.customerCreateForm.value.product]
     };
-    
+
+
     this.customerService.createNewCustomer(data)
       .subscribe(
       (res) => {
@@ -82,8 +81,6 @@ export class CustomerCreateComponent implements OnInit {
         console.log("Error in createNewCustomer");
       }
       )
-
-
   }
 
   getProductList() {
@@ -103,7 +100,7 @@ export class CustomerCreateComponent implements OnInit {
       )
   }
 
-   getAreaList() {
+  getAreaList() {
     this.areaList = [];
     this.areaService.getAllArea()
       .subscribe(

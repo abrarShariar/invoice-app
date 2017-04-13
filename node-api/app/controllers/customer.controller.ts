@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { CustomerModel } from '../database/models/customer.model';
-import { Customer } from '../classes/Customer';
 import { Observable } from 'rxjs/Rx';
 import * as _ from 'underscore';
 import { AreaModel } from '../database/models/area.model';
@@ -29,7 +28,7 @@ export class CustomerController {
             city: data.city,
             postal_code: data.postal_code,
             status: true,
-            product: data.product
+            productList: data.productList
         });
 
         customer.save(function (err) {
@@ -97,7 +96,7 @@ export class CustomerController {
                 city: data.city,
                 postal_code: data.postal_code,
                 status: data.status,
-                product: data.product
+                productList: data.productList
             }
         }, function (err) {
             if (err) {

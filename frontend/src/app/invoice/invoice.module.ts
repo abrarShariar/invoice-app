@@ -9,6 +9,8 @@ import { InvoiceAllComponent } from './invoice-all/invoice-all.component';
 import { InvoiceCreateComponent } from './invoice-create/invoice-create.component';
 import { InvoiceService } from './invoice.service';
 import { InvoiceRecentComponent } from './invoice-recent/invoice-recent.component';
+import { ProductService } from '../product/product.service';
+import { AreaService } from '../area/area.service';
 
 @NgModule({
     imports: [
@@ -28,7 +30,9 @@ import { InvoiceRecentComponent } from './invoice-recent/invoice-recent.componen
 
     ],
     providers: [
-        InvoiceService
+        InvoiceService,
+        ProductService,
+        AreaService
     ]
 })
 export class InvoiceModule { }

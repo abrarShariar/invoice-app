@@ -61,7 +61,7 @@
                                 <td>{{ customer.username }}</td>
                                 <td>{{ customer.email }}</td>
                                 <td>{{ customer.fullname }}</td>
-                                <td>{{ customer.productData?.name }} - <em *ngIf="customer.productData?.rate">{{ customer.productData?.rate }} BDT/month</em></td>
+                                <td><span *ngIf="customer.productData?.length>0"> {{ customer.productData[0]?.name }} - <em *ngIf="customer.productData[0]?.rate">{{ customer.productData[0]?.rate }} BDT/month</em> </span><small class="label bg-blue">{{ customer.productData.length }}</small></td>
                                 <td>{{ customer.mobile_primary }}</td>
                                 <td>{{ customer.location }}</td>
                                 <td>{{ customer.areaData?.name }}</td>
