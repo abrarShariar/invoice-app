@@ -11,6 +11,10 @@ import { InvoiceService } from './invoice.service';
 import { InvoiceRecentComponent } from './invoice-recent/invoice-recent.component';
 import { ProductService } from '../product/product.service';
 import { AreaService } from '../area/area.service';
+import { InvoiceEditComponent } from './invoice-edit/invoice-edit.component';
+
+import {SelectButtonModule} from 'primeng/primeng';
+
 
 @NgModule({
     imports: [
@@ -19,12 +23,14 @@ import { AreaService } from '../area/area.service';
         DialogModule,
         FormsModule,
         ReactiveFormsModule,
-        InvoiceRoutingModule
+        InvoiceRoutingModule,
+        SelectButtonModule
     ],
     declarations: [
         InvoiceAllComponent,
         InvoiceCreateComponent,
-        InvoiceRecentComponent
+        InvoiceRecentComponent,
+        InvoiceEditComponent
     ],
     exports: [
 

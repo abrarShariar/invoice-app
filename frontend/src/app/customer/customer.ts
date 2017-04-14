@@ -1,5 +1,6 @@
 import { Product } from '../product/product';
 import { Area } from '../area/area';
+import { Invoice } from '../invoice/invoice';
 
 export class Customer {
     id?:string;
@@ -17,6 +18,8 @@ export class Customer {
     postal_code:string;
     status:boolean;
     productList?:any[] = [];
+    invoiceList?:any[] = [];
     areaData?: Area;
     productData?: Product[] = [];
+    invoiceData?: Invoice[] = [];
 }

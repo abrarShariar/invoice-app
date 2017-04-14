@@ -10,7 +10,7 @@ import { CustomerCreateComponent } from '../customer/customer-create/customer-cr
 import { AreaCreateComponent } from '../area/area-create/area-create.component';
 import { InvoiceAllComponent } from '../invoice/invoice-all/invoice-all.component';
 import { InvoiceRecentComponent } from '../invoice/invoice-recent/invoice-recent.component';
-
+import { InvoiceEditComponent } from '../invoice/invoice-edit/invoice-edit.component';
 
 const generalRoutes = [
     {
@@ -53,8 +53,11 @@ const generalRoutes = [
     {
         path: 'invoice/recent',
         component: InvoiceRecentComponent
+    },
+    {
+        path: 'invoice/edit',
+        component: InvoiceEditComponent
     }
-
 ];
 @NgModule({
     imports: [

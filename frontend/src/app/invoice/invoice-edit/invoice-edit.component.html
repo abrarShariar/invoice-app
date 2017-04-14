@@ -1,0 +1,142 @@
+<div class="content-wrapper" style="height: 1200px;">
+    <section class=" content-header " *ngIf="invoice">
+        <div class="col-xs-12">
+            <h1>
+                Invoice Details of <em>{{ invoice.customerData.username }}</em> <small>for the month of {{currentDate | date:'MMMM'}} </small>
+            </h1>
+            <ol class="breadcrumb ">
+                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
+                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Invoice</a></li>
+                <li class="active ">Edit</li>
+            </ol>
+        </div>
+    </section>
+    <section class="content ">
+        <div class="col-md-offset-1 col-md-10">
+            <div class="box box-primary">
+                <div class="alert alert-success" role="alert" *ngIf="showSuccess">Invoice Data Updated Successfully !!</div>
+                <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
+                <!--  Page Content Here -->
+                <form class="form-horizontal " [formGroup]="invoiceDetailForm" *ngIf="invoice" (submit)="submitInvoiceDetail()">
+                    <div class="col-md-6">
+                        <!--username-->
+                        <div class=" form-group ">
+                            <label for="username " class="col-sm-2 control-label ">Username</label>
+                            <div class="col-sm-10 ">
+                                <input formControlName="username" type="text " class="form-control " id="username " placeholder="Username " readonly>
+                            </div>
+                        </div>
+                        <!--email-->
+                        <div class="form-group ">
+                            <label for="email " class="col-sm-2 control-label ">Email</label>
+                            <div class="col-sm-10 ">
+                                <input formControlName="email" type="email " class="form-control " id="email " placeholder="Email " readonly>
+                            </div>
+                        </div>
+                        <!--fullname-->
+                        <div class="form-group ">
+                            <label for="fullname " class="col-sm-2 control-label ">Fullname</label>
+                            <div class="col-sm-10 ">
+                                <input formControlName="fullname" type="text " class="form-control " id="fullname " placeholder="Fullname " readonly>
+                            </div>
+                        </div>
+
+                        <!--mobile_primary-->
+                        <div class="form-group ">
+                            <label for="mobile_primary " class="col-sm-2 control-label ">Mobile Primary</label>
+                            <div class="col-sm-10 ">
+                                <input formControlName="mobile_primary" type="text " class="form-control " id="mobile_primary " placeholder="Mobile primary " readonly>
+                            </div>
+                        </div>
+
+                        <!--mobile_secondary-->
+                        <div class="form-group ">
+                            <label for="mobile_secondary " class="col-sm-2 control-label ">Mobile Secondary</label>
+                            <div class="col-sm-10 ">
+                                <input formControlName="mobile_secondary" type="text " class="form-control " id="mobile_secondary " placeholder="Mobile secondary " readonly>
+                            </div>
+                        </div>
+
+                        <!--location-->
+                        <div class="form-group ">
+                            <label for="location " class="col-sm-2 control-label ">Location</label>
+                            <div class="col-sm-10">
+                                <input type="text " formControlName="location" class="form-control " id="location " placeholder="location " readonly>
+                            </div>
+                        </div>
+
+                        <!--area-->
+                        <div class="form-group ">
+                            <label for="area " class="col-sm-2 control-label ">Area</label>
+                            <div class="col-sm-10">
+                                <input type="text " formControlName="area" class="form-control " id="area " placeholder="area " readonly>
+                            </div>
+                        </div>
+
+                        <!--city-->
+                        <div class="form-group ">
+                            <label for="city " class="col-sm-2 control-label ">City</label>
+                            <div class="col-sm-10">
+                                <input type="text " formControlName="city" class="form-control " id="city " placeholder="city " readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <!--invoice_created_date-->
+                        <div class="form-group ">
+                            <label for="invoice_created_date " class="col-sm-2 control-label ">Invoice created on</label>
+                            <div class="col-sm-10">
+                                <input type="datetime" class="form-control " id="invoice_created_date">
+                            </div>
+                        </div>
+
+                        <!--payment_due_date-->
+                        <div class="form-group ">
+                            <label for="payment_due_date " class="col-sm-2 control-label ">Payment Due Date</label>
+                            <div class="col-sm-10">
+                                <input type="datetime" class="form-control " id="amount_due ">
+                            </div>
+                        </div>
+
+                        <!--amount_due-->
+                        <div class="form-group ">
+                            <label for="amount_due " class="col-sm-2 control-label ">Amount Due (BDT) </label>
+                            <div class="col-sm-10">
+                                <input type="text " formControlName="amount_due" class="form-control " id="amount_due " placeholder="amount due">
+                            </div>
+
+                        </div>
+
+                        <!--discount-->
+                        <div class="form-group ">
+                            <label for="discount " class="col-sm-2 control-label ">Discount (BDT) </label>
+                            <div class="col-sm-10">
+                                <input type="text " formControlName="discount" class="form-control " id="discount " placeholder="discount">
+                            </div>
+                        </div>
+
+                        <!--total-->
+                        <div class="form-group ">
+                            <label for="discount " class="col-sm-2 control-label ">Total (BDT) </label>
+                            <div class="col-sm-10">
+                                <input type="text " formControlName="total" class="form-control " id="total " placeholder="total">
+                            </div>
+                        </div>
+
+
+                        <p-selectButton [options]="cities" [(ngModel)]="selectedCity"></p-selectButton>
+
+                    </div>
+                    <div class="form-group ">
+                        <div class="col-sm-offset-2 col-sm-10 ">
+                            <button type="submit " class="btn btn-success ">Update</button>
+                            <a type="button" class="btn btn-primary " [routerLink]="['/invoice/recent']">Back</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
