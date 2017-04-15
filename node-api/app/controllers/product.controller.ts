@@ -60,6 +60,7 @@ export class ProductController {
 
     //update product
     static update(res: Response, data: any) {
+        console.log(data);
         ProductModel.update({ _id: data.id }, {
             $set: {
                 name: data.name,
@@ -73,6 +74,15 @@ export class ProductController {
                 res.send({ status: false });
             } else {
                 res.send({ status: true });
+            }
+        });
+    }
+
+     //search products list by name
+    static searchByName(res: Response, data: any) {
+        ProductModel.find({ "name": { $regex: ".*" + data.text + ".*", $options: 'i' } }, function (err, data) {
+            if (!err) {
+                res.send(data);
             }
         });
     }

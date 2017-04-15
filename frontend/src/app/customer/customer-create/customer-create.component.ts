@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef,AfterContentInit,ViewChild  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CustomerService } from '../customer.service';
 import * as _ from 'underscore';
@@ -14,13 +14,16 @@ import { AreaService } from '../../area/area.service';
   styleUrls: ['./customer-create.component.css']
 })
 export class CustomerCreateComponent implements OnInit {
+  
+  
   showSuccess: boolean = false;
   showError: boolean = false;
   public customerCreateForm: FormGroup;
   public productList: any[] = [];
   public areaList: any[] = [];
 
-  constructor(private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
+
+  constructor(private elementRef: ElementRef,private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
 
   ngOnInit() {
     this.buildForm();

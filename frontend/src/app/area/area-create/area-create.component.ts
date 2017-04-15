@@ -62,7 +62,7 @@ export class AreaCreateComponent implements OnInit {
       this.areaService.updateArea(data)
         .subscribe(
         (res) => {
-          console.log(res);
+          // console.log(res);
           this.getAllArea();
           this.areaCreateForm.reset();
           this.editMode = false;
@@ -107,7 +107,6 @@ export class AreaCreateComponent implements OnInit {
     this.areaService.getAreaById(event)
       .subscribe(
       (res) => {
-        console.log(res);
         this.areaCreateForm.patchValue({
           name: [res.name]
         });

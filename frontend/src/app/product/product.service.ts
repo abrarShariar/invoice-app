@@ -37,4 +37,9 @@ export class ProductService {
     return this.http.put(url, data).map((res) => res.json());
   }
 
+  searchByName(data: any) {
+    let url = this.productUrl + 'search/name/';
+    return this.http.post(url, data).map((res) => res.json());
+  }
+
 }

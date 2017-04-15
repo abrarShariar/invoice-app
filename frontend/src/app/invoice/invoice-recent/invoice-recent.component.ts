@@ -18,7 +18,7 @@ export class InvoiceRecentComponent implements OnInit {
   public currentDate: number = Date.now();
   public invoiceList: Invoice[] = [];
   public searchMode = 'username';
-  constructor(private router:Router,private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) { }
+  constructor(private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) { }
 
   ngOnInit() {
     this.getRecentInvoice();
@@ -30,7 +30,22 @@ export class InvoiceRecentComponent implements OnInit {
       .subscribe(
       (res: Customer[]) => {
         _.each(res, (customer: Customer) => {
+          customer.productData = [];
           let tempInvoice: Invoice;
+
+          // get all products
+          if (customer.productList.length > 0) {
+            _.each(customer.productList, (element) => {
+              this.productService.getProductById(element)
+                .subscribe(
+                (res: Product) => {
+                  customer.productData.push(res);
+                },
+                (err) => {
+                }
+                )
+            });
+          }
           // get area
           this.areaService.getAreaById(customer.area)
             .subscribe(
@@ -39,15 +54,19 @@ export class InvoiceRecentComponent implements OnInit {
             }
             )
 
+          let date = new Date();
+          let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+
           //prepare invoice
           tempInvoice = {
             customerData: customer,
-            payment_due_date: Date.now(),
+            payment_due_date: firstDay,
             status: 'Due',
             discount: 0,
-            invoice_created_date: Date.now(),
+            invoice_created_date: firstDay,
             total: 0,
-            amount_due: 0
+            amount_due: 0,
+            productList: customer.productList
           }
 
           _.each(customer.productList, (item) => {
@@ -62,7 +81,7 @@ export class InvoiceRecentComponent implements OnInit {
               }
               )
           });
-          
+
           this.invoiceList.push(tempInvoice);
           // console.log(tempInvoice);
         });
@@ -84,11 +103,11 @@ export class InvoiceRecentComponent implements OnInit {
   }
 
   //edit invoice
-  editInvoice(invoice:Invoice){
-      let navextras: NavigationExtras={            
-           queryParams:{"invoice":JSON.stringify(invoice)}
-         };
-    this.router.navigate(['/invoice/edit'],navextras);
+  editInvoice(invoice: Invoice) {
+    let navextras: NavigationExtras = {
+      queryParams: { "invoice": JSON.stringify(invoice) }
+    };
+    this.router.navigate(['/invoice/edit'], navextras);
   }
 
 }

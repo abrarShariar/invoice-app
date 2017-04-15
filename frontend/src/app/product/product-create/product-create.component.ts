@@ -38,6 +38,7 @@ export class ProductCreateComponent implements OnInit {
   submitCreateProductForm() {
     this.showError = false;
     this.showSuccess = false;
+    // console.log(this.productCreateForm.value);
     let data = {
       id: this.id,
       name: this.productCreateForm.value.name,
@@ -68,7 +69,7 @@ export class ProductCreateComponent implements OnInit {
       this.productService.updateProduct(data)
         .subscribe(
         (res) => {
-          console.log(res);
+          // console.log(res);
           this.getAllProduct();
           this.productCreateForm.reset();
           this.editMode = false;
@@ -103,11 +104,11 @@ export class ProductCreateComponent implements OnInit {
       .subscribe(
       (res) => {
         this.productCreateForm.patchValue({
-          name: [res.name],
-          rate: [res.rate],
-          description: [res.description],
-          status: [res.status],
-          vat: [res.vat]
+          name: res.name,
+          rate: res.rate,
+          description: res.description,
+          status: res.status,
+          vat: res.vat
         });
       },
       (err) => {

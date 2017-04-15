@@ -147,5 +147,10 @@ export class CustomerDetailComponent implements OnInit {
   }
 
 
+  addProduct(){
+    
+  }
+
+
 
 }

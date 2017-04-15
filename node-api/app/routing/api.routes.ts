@@ -116,5 +116,12 @@ router.get('/invoice/recent', (req: Request, res: Response) => {
     InvoiceController.getRecentInvoice(res);
 });
 
+//search all products data by name
+router.post('/product/search/name', (req: Request, res: Response) => {
+    ProductController.searchByName(res, req.body);
+});
+
+
+
 
 export const ApiRoute: Router = router;

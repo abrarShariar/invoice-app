@@ -81,6 +81,7 @@ export class CustomerController {
 
     //update customer details data
     static updateCustomerDetails(res: Response, data: any) {
+        console.log(data);
         CustomerModel.update({ _id: data.id }, {
             $set: {
                 username: data.username,

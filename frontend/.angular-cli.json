@@ -21,12 +21,14 @@
             "../node_modules/bootstrap/dist/css/bootstrap.min.css",
             "./assets/dist/css/AdminLTE.min.css",
             "./assets/dist/css/skins/skin-blue.min.css",
+            "./assets/dist/datepicker/datepicker3.css",
             "styles.css"
         ],
         "scripts": [
             "../node_modules/jquery/dist/jquery.min.js",
             "../node_modules/bootstrap/dist/js/bootstrap.min.js",
-            "./assets/dist/js/app.min.js"
+            "./assets/dist/js/app.min.js",
+            "./assets/dist/datepicker/bootstrap-datepicker.js"
         ],
         "environmentSource": "environments/environment.ts",
         "environments": {

@@ -13,8 +13,6 @@ import { ProductService } from '../product/product.service';
 import { AreaService } from '../area/area.service';
 import { InvoiceEditComponent } from './invoice-edit/invoice-edit.component';
 
-import {SelectButtonModule} from 'primeng/primeng';
-
 
 @NgModule({
     imports: [
@@ -24,7 +22,6 @@ import {SelectButtonModule} from 'primeng/primeng';
         FormsModule,
         ReactiveFormsModule,
         InvoiceRoutingModule,
-        SelectButtonModule
     ],
     declarations: [
         InvoiceAllComponent,

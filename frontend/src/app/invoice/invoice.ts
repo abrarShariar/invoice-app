@@ -6,10 +6,10 @@ export class Invoice {
     id?: string;
     customerData?: Customer;
     productList?: any[] = [];
-    payment_due_date?: number;
+    payment_due_date?: any;
     amount_due?: number;
     status?: string;    //Due / Paid / Partially Paid
     total?: number;
     discount?: number;
-    invoice_created_date?: number;
+    invoice_created_date?: any;
 }

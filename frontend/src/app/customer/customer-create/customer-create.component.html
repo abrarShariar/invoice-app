@@ -129,9 +129,13 @@
                     <div class="form-group ">
                         <label for="postal_code " class="col-sm-2 control-label ">Product</label>
                         <div class="col-sm-10 ">
-                            <select required *ngIf="productList" class="form-control" formControlName="product">
-                            <option *ngFor="let product of productList" value="{{ product._id }}">{{ product.name }} - <em> {{ product.rate }} BDT/month </em> </option>
-                        </select>
+                            <div class="product_select_box">
+                                <select required *ngIf="productList" class="form-control">
+                                    <option *ngFor="let product of productList" value="{{ product._id }}">
+                                         {{ product.name }} - <em> {{ product.rate }} BDT/month </em> 
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 

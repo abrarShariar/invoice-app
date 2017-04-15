@@ -11,8 +11,17 @@ export class InvoiceController {
 
     //get invoices of this month for active users
     static getRecentInvoice(res: Response) {
-        CustomerModel.find({ status: true, product: { $ne: '' } }, function (err, data) {
-            if(!err){
+        CustomerModel.find({
+            $and: [
+                { status: true },
+                {
+                    productList: {
+                        $exists: true, $not: { $size: 0 }
+                    }
+                }
+            ]
+        }, function (err, data) {
+            if (!err) {
                 res.send(data);
             }
         });

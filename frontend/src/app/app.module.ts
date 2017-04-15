@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthService } from './auth.service';
 import { CustomHttpService } from "./custom-http.service";
 
+import {AutoCompleteModule,PickListModule, ConfirmDialogModule, SharedModule} from 'primeng/primeng';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CustomHttpService } from "./custom-http.service";
     AppRoutingModule,
     //user defines modules
     GeneralModule,
+    AutoCompleteModule,PickListModule, ConfirmDialogModule, SharedModule,
     NgbModule.forRoot()
   ],
   providers: [

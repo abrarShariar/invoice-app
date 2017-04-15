@@ -49,11 +49,12 @@
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Fullname</th>
-                                <!--<th>Product</th>-->
-                                <th>Total (BDT)</th>
                                 <th>Mobile</th>
                                 <th>Area</th>
+                                <th>Product</th>
+                                <th>Total (BDT)</th>
                                 <th>Status</th>
+                                <th>Due Date</th>
                                 <th>Change Status</th>
                                 <th>Action</th>
                             </tr>
@@ -61,12 +62,17 @@
                                 <td>{{ invoice.customerData?.username }}</td>
                                 <td>{{ invoice.customerData?.email }}</td>
                                 <td>{{ invoice.customerData?.fullname }}</td>
-                                <!--<td><span *ngIf="customer.productData?.length>0"> {{ customer.productData[0]?.name }} - <em *ngIf="customer.productData[0]?.rate">{{ customer.productData[0]?.rate }} BDT/month</em> </span><small class="label bg-blue">{{ customer.productData.length }}</small></td>-->
-                                <td>{{ invoice.total }}</td>
                                 <td>{{ invoice.customerData?.mobile_primary }}</td>
                                 <td>{{ invoice.customerData?.areaData?.name }}</td>
+                                <td><span *ngIf="invoice.customerData?.productData?.length>0"> {{ invoice.customerData?.productData[0]?.name }} - <em *ngIf="invoice.customerData?.productData[0]?.rate">{{ invoice.customerData?.productData[0]?.rate }} BDT/month</em> </span>
+                                    <small class="label bg-blue">{{ invoice.customerData?.productData.length }}</small>
+                                </td>
+                                <td>{{ invoice.total }}</td>
                                 <td>
                                     <label class="label label-danger"> {{ invoice.status }} </label>
+                                </td>
+                                <td>
+                                    {{ invoice?.payment_due_date | date }}
                                 </td>
                                 <td>
                                     <button class="btn btn-success btn-xs"> Paid</button>
