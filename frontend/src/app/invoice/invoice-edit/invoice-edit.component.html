@@ -17,7 +17,7 @@
                 <div class="alert alert-success" role="alert" *ngIf="showSuccess">Invoice Data Updated Successfully !!</div>
                 <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
                 <!--  Page Content Here -->
-                <form class="form-horizontal " [formGroup]="invoiceDetailForm" *ngIf="invoice" (submit)="submitInvoiceDetail()">
+                <form class="form-horizontal " [formGroup]="invoiceDetailForm" *ngIf="invoice" (submit)="submitInvoiceEditForm()">
                     <div class="col-md-6">
                         <!--username-->
                         <div class=" form-group ">
@@ -83,6 +83,15 @@
                     </div>
 
                     <div class="col-md-6">
+                        <!--choose status-->
+                        <div class="form-group ">
+                            <label for="status " class="col-sm-2 control-label ">Payment Status</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline"><input formControlName="status" type="radio" name="status" value="Due" (change)="changeStatus($event)">Due</label>
+                                <label class="radio-inline"><input formControlName="status" type="radio" name="status" value="Paid" (change)="changeStatus($event)">Paid</label>
+                                <label class="radio-inline"><input formControlName="status" type="radio" name="status" value="Partially Paid" (change)="changeStatus($event)">Partially Paid</label>
+                            </div>
+                        </div>
 
                         <!--invoice_created_date-->
                         <div class="form-group ">
@@ -93,21 +102,39 @@
                         </div>
 
                         <!--payment_due_date-->
-                        <div class="form-group ">
+                        <div class="form-group " *ngIf="paymentStatus=='Due'">
                             <label for="payment_due_date " class="col-sm-2 control-label ">Payment Due Date</label>
                             <div class="col-sm-10">
                                 <input type="date" formControlName="payment_due_date" value="currentDate.toString('Y-m-d')">
                             </div>
                         </div>
 
+                        <!--payment paid / partially paid date-->
+                        <div class="form-group " *ngIf="paymentStatus!='Due'">
+                            <label for="paid " class="col-sm-2 control-label ">Payment Paid Date</label>
+                            <div class="col-sm-10">
+                                <input type="date" formControlName="paid_date">
+                            </div>
+                        </div>
+
+                        <!--amoount partially paid-->
+                        <div class="form-group " *ngIf="paymentStatus=='Partially Paid'">
+                            <label for="amount_partially_paid " class="col-sm-2 control-label ">Amount Partially Paid (BDT) </label>
+                            <div class="col-sm-10">
+                                <input type="text " (keyup)="getPartiallyPaid($event)" formControlName="amount_partially_paid" class="form-control " id="amount_partially_paid " placeholder="amount partially paid">
+                            </div>
+                        </div>
+
                         <!--amount_due-->
-                        <div class="form-group ">
+                        <div class="form-group " *ngIf="paymentStatus!='Paid'">
                             <label for="amount_due " class="col-sm-2 control-label ">Amount Due (BDT) </label>
                             <div class="col-sm-10">
-                                <input type="text " formControlName="amount_due" class="form-control " id="amount_due " placeholder="amount due">
+                                <input *ngIf="paymentStatus=='Due'" type="text " formControlName="amount_due" class="form-control " id="amount_due " placeholder="amount due">
+                                <input *ngIf="paymentStatus=='Partially Paid'" type="text " formControlName="amount_due" class="form-control " id="amount_due " placeholder="amount due" readonly>
                             </div>
-
                         </div>
+
+
 
                         <!--discount-->
                         <div class="form-group ">
@@ -121,7 +148,8 @@
                         <div class="form-group ">
                             <label for="discount " class="col-sm-2 control-label ">Total (BDT) </label>
                             <div class="col-sm-10">
-                                <input type="text " formControlName="total" class="form-control " id="total " placeholder="total">
+                                <input *ngIf="paymentStatus!='Paid'" type="text " formControlName="total" class="form-control " id="total " placeholder="total">
+                                <input *ngIf="paymentStatus=='Paid'" type="text " formControlName="total" class="form-control " id="total " placeholder="total" readonly>
                             </div>
                         </div>
                         <div>
@@ -152,14 +180,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <button (click)="addProduct()" type="button" class="pull-right btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Add Product</button>
+                            <button *ngIf="paymentStatus!='Paid'" (click)="addProduct()" type="button" class="pull-right btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Add Product</button>
                         </div>
-
                     </div>
-                    <div class="form-group ">
-                        <div class="col-sm-offset-2 col-sm-10 ">
-                            <button type="submit " class="btn btn-success ">Update</button>
-                            <a type="button" class="btn btn-primary " [routerLink]="['/invoice/recent']">Back</a>
+                    <div class="form-group" >
+                        <div class="col-sm-offset-1 col-sm-10 " style="margin-top:10px">
+                            <button type="submit " class="btn btn-success">Update</button>
+                            <button type="button " class="btn btn-info">Generate Invoice</button>
+                            <a type="button" class="btn btn-primary" [routerLink]="['/invoice/recent']">Back</a>
                         </div>
                     </div>
                 </form>

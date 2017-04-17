@@ -64,9 +64,10 @@
                                 <td>{{ invoice.customerData?.fullname }}</td>
                                 <td>{{ invoice.customerData?.mobile_primary }}</td>
                                 <td>{{ invoice.customerData?.areaData?.name }}</td>
-                                <td><span *ngIf="invoice.customerData?.productData?.length>0"> {{ invoice.customerData?.productData[0]?.name }} - <em *ngIf="invoice.customerData?.productData[0]?.rate">{{ invoice.customerData?.productData[0]?.rate }} BDT/month</em> </span>
+                                <!--<td><span *ngIf="invoice.customerData?.productData?.length>0"> {{ invoice.customerData?.productData[0]?.name }} - <em *ngIf="invoice.customerData?.productData[0]?.rate">{{ invoice.customerData?.productData[0]?.rate }} BDT/month</em> </span>
                                     <small class="label bg-blue">{{ invoice.customerData?.productData.length }}</small>
-                                </td>
+                                </td>-->
+                                <td><small class="label bg-blue">{{ invoice.customerData?.productData.length }}</small></td>
                                 <td>{{ invoice.total }}</td>
                                 <td>
                                     <label class="label label-danger"> {{ invoice.status }} </label>

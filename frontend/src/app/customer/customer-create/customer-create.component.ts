@@ -21,7 +21,8 @@ export class CustomerCreateComponent implements OnInit {
   public customerCreateForm: FormGroup;
   public productList: any[] = [];
   public areaList: any[] = [];
-
+  public numbers;
+  public allProductCounter = 1;
   public allProducts: any[] = [];
 
 
@@ -128,20 +129,30 @@ export class CustomerCreateComponent implements OnInit {
   }
 
   removeProduct(index) {
+    this.allProductCounter--;
     this.allProducts.splice(index, 1);
   }
 
   addProduct() {
+    this.allProductCounter++;
     let newProduct = this.productList[0]._id;
     this.allProducts.push(newProduct);
   }
 
   onProductChange(event: any, index) {
     this.allProducts[index] = event.target.value;
-    }
+  }
 
   checkProductList() {
     console.log(this.allProducts);
+  }
+
+  createRange(number) {
+    let items: number[] = [];
+    for (let i = 1; i <= number; i++) {
+      items.push(i);
+    }
+    return items;
   }
 
 }

@@ -36,6 +36,7 @@ export class InvoiceEditComponent implements OnInit {
   public invoice: Invoice;
   public currentDate: number = Date.now();
   public datePipe: DatePipe = new DatePipe('en-US');
+  public paymentStatus: string = 'Due';
 
   constructor(private elementRef: ElementRef, private productService: ProductService, private fb: FormBuilder, private invoiceService: InvoiceService, private route: ActivatedRoute, private router: Router) {
 
@@ -46,6 +47,7 @@ export class InvoiceEditComponent implements OnInit {
     this.subscription = this.route.params.subscribe(params => {
       let data = this.route.queryParams["_value"].invoice;
       this.invoice = JSON.parse(data);
+      console.log(this.invoice);
       this.allProductsAdd = this.invoice.productList;
       this.buildForm();
     });
@@ -69,9 +71,11 @@ export class InvoiceEditComponent implements OnInit {
       total: [this.invoice.total],
       discount: [this.invoice.discount],
       invoice_created_date: [invoice_created_date],
-      date: [''],
-
+      paid_date: [''],
+      amount_partially_paid: ['']
     })
+
+    console.log(this.invoiceDetailForm.value);
   }
 
   getProductSuggestions(event: any) {
@@ -115,14 +119,36 @@ export class InvoiceEditComponent implements OnInit {
 
   removeProduct(index) {
     let delIndex = this.allProductsAdd.indexOf(this.additionalProducts[index]);
-    this.allProductsAdd.splice(delIndex,1);
-    this.additionalProducts.splice(index,1);
+    this.allProductsAdd.splice(delIndex, 1);
+    this.additionalProducts.splice(index, 1);
   }
 
-  onProductChange(event:any){
-    // console.log(event.target.value);
+  onProductChange(event: any) {
     this.allProductsAdd.push(event.target.value);
-    console.log(this.allProductsAdd);
+  }
+
+  submitInvoiceEditForm() {
+    console.log(this.invoiceDetailForm);
+  }
+
+
+  changeStatus(event: any) {
+    this.paymentStatus = event.target.value;
+    if (this.paymentStatus == 'Paid') {
+      let currentDate = this.datePipe.transform(Date.now(), 'y-MM-dd');
+      this.invoiceDetailForm.patchValue({
+        paid_date: currentDate
+      });
+    }
+
+  }
+
+
+  getPartiallyPaid(event:any){
+     this.invoiceDetailForm.patchValue({
+        amount_partially_paid: event.target.value,
+        amount_due: this.invoice.amount_due - event.target.value
+      });
   }
 
 

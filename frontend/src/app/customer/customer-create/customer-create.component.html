@@ -126,7 +126,7 @@
                     </div>
 
                     <!--product list-->
-                    <div class="form-group " *ngFor="let newProduct of allProducts;let i=index">
+                    <div class="form-group " *ngFor="let item of createRange(allProductCounter);let i=index">
                         <label for="" class="col-sm-2 control-label ">Product [{{ i+1 }}]</label>
                         <div class="col-sm-10 ">
                             <div class="productSelectBox">

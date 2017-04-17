@@ -26,6 +26,7 @@ export class CustomerDetailComponent implements OnInit {
   public areaList: any[] = [];
   showSuccess: boolean = false;
   showError: boolean = false;
+  public allProductCounter;
 
   constructor(private areaService: AreaService, private productService: ProductService, private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private customerService: CustomerService) { }
 
@@ -47,6 +48,8 @@ export class CustomerDetailComponent implements OnInit {
       .subscribe(
       (res) => {
         this.customer = res;
+        this.allProductCounter = this.customer.productList.length;
+        console.log(this.allProductCounter);
         this.buildForm();
       },
       (err) => {
@@ -57,7 +60,7 @@ export class CustomerDetailComponent implements OnInit {
 
   buildForm() {
     let productId = '';
-    if(this.customer.productList.length>0){
+    if (this.customer.productList.length > 0) {
       productId = this.customer.productList[0]["_id"];
     }
     this.customerDetailForm = this.fb.group({
@@ -74,11 +77,12 @@ export class CustomerDetailComponent implements OnInit {
       city: [this.customer.city],
       postal_code: [this.customer.postal_code],
       status: [this.customer.status],
-      product: [productId]
+      product: ['']
     });
   }
 
   submitCustomerDetail() {
+    this.customer.productList = _.uniq(this.customer.productList);
     let data = {
       id: this.id,
       username: this.customerDetailForm.value.username,
@@ -94,9 +98,9 @@ export class CustomerDetailComponent implements OnInit {
       city: this.customerDetailForm.value.city,
       postal_code: this.customerDetailForm.value.postal_code,
       status: this.customerDetailForm.value.status,
-      productList: [this.customerDetailForm.value.product]
+      productList: this.customer.productList
     }
-
+    
     this.customerService.updateCustomer(data)
       .subscribe(
       (res) => {
@@ -112,7 +116,7 @@ export class CustomerDetailComponent implements OnInit {
       )
   }
 
- getProductList() {
+  getProductList() {
     this.productList = [];
     this.productService.getAllProduct()
       .subscribe(
@@ -146,9 +150,25 @@ export class CustomerDetailComponent implements OnInit {
       )
   }
 
+  createRange(number) {
+    let items: number[] = [];
+    for (let i = 1; i <= number; i++) {
+      items.push(i);
+    }
+    return items;
+  }
 
-  addProduct(){
-    
+  onProductChange(event: any, index) {
+    this.customer.productList[index] = event.target.value;
+  }
+
+  removeProduct(index) {
+    this.customer.productList.splice(index, 1);
+  }
+
+   addProduct() {
+    let newProduct = this.productList[0]._id;
+    this.customer.productList.push(newProduct);
   }
 
 
