@@ -36,9 +36,11 @@ export class CustomerAllComponent implements OnInit {
       (res) => {
         let data: Customer[] = [];
         data = res;
+
         // getting products
         _.each(data, (item: Customer) => {
           item.productData = [];
+          
           if (item.productList.length > 0) {
             _.each(item.productList, (element) => {
               this.productService.getProductById(element)
@@ -168,7 +170,7 @@ export class CustomerAllComponent implements OnInit {
   buildSearchResult(customerList: Customer[]) {
     this.customers = [];
     // getting products
-    _.each(customerList, (item:Customer) => {
+    _.each(customerList, (item: Customer) => {
       item.productData = [];
 
       if (item.productList.length > 0) {

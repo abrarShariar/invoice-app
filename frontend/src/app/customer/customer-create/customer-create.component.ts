@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef,AfterContentInit,ViewChild  } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterContentInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CustomerService } from '../customer.service';
 import * as _ from 'underscore';
@@ -14,16 +14,18 @@ import { AreaService } from '../../area/area.service';
   styleUrls: ['./customer-create.component.css']
 })
 export class CustomerCreateComponent implements OnInit {
-  
-  
+
+
   showSuccess: boolean = false;
   showError: boolean = false;
   public customerCreateForm: FormGroup;
   public productList: any[] = [];
   public areaList: any[] = [];
 
+  public allProducts: any[] = [];
 
-  constructor(private elementRef: ElementRef,private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
+
+  constructor(private elementRef: ElementRef, private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
 
   ngOnInit() {
     this.buildForm();
@@ -51,6 +53,8 @@ export class CustomerCreateComponent implements OnInit {
   submitCustomerCreateForm() {
     this.showSuccess = false;
     this.showError = false;
+    this.allProducts = _.uniq(this.allProducts);
+
     let data: Customer = {
       username: this.customerCreateForm.value.username,
       email: this.customerCreateForm.value.email,
@@ -65,7 +69,7 @@ export class CustomerCreateComponent implements OnInit {
       city: this.customerCreateForm.value.city,
       postal_code: this.customerCreateForm.value.postal_code,
       status: this.customerCreateForm.value.status,
-      productList: [this.customerCreateForm.value.product]
+      productList: this.allProducts
     };
 
 
@@ -99,6 +103,9 @@ export class CustomerCreateComponent implements OnInit {
       },
       (err) => {
         console.log("ERROR from productList");
+      },
+      () => {
+        this.allProducts.push(this.productList[0]._id);
       }
       )
   }
@@ -119,4 +126,22 @@ export class CustomerCreateComponent implements OnInit {
       }
       )
   }
+
+  removeProduct(index) {
+    this.allProducts.splice(index, 1);
+  }
+
+  addProduct() {
+    let newProduct = this.productList[0]._id;
+    this.allProducts.push(newProduct);
+  }
+
+  onProductChange(event: any, index) {
+    this.allProducts[index] = event.target.value;
+    }
+
+  checkProductList() {
+    console.log(this.allProducts);
+  }
+
 }
