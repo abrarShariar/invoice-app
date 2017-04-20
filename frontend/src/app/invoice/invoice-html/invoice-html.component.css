@@ -1,0 +1,14 @@
+#invoice_box {
+    background-color: #fff;
+    font-size: 20px;
+}
+
+#company_logo {
+    margin-top: 10px;
+    width: 250px;
+    height: 200px;
+}
+
+.row-divide {
+    border-bottom: 4px solid #d2d6de;
+}

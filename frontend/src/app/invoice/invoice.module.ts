@@ -12,6 +12,7 @@ import { InvoiceRecentComponent } from './invoice-recent/invoice-recent.componen
 import { ProductService } from '../product/product.service';
 import { AreaService } from '../area/area.service';
 import { InvoiceEditComponent } from './invoice-edit/invoice-edit.component';
+import { InvoiceHtmlComponent } from './invoice-html/invoice-html.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { InvoiceEditComponent } from './invoice-edit/invoice-edit.component';
         InvoiceAllComponent,
         InvoiceCreateComponent,
         InvoiceRecentComponent,
-        InvoiceEditComponent
+        InvoiceEditComponent,
+        InvoiceHtmlComponent
     ],
     exports: [
 

@@ -11,13 +11,28 @@ export class InvoiceService {
 
   constructor(private http: CustomHttpService) { }
 
-  getAllInvoice(){
+  getAllInvoice() {
     let url = this.invoiceUrl + 'all';
     return this.http.get(url).map((res) => res.json());
   }
 
-  getRecentInvoice(){
+  getRecentInvoice() {
     let url = this.invoiceUrl + 'recent';
+    return this.http.get(url).map((res) => res.json());
+  }
+
+  storeInvoice(data: any) {
+    let url = this.invoiceUrl + 'create';
+    return this.http.post(url, data).map((res) => res.json());
+  }
+
+  downloadPDF(data: any) {
+    let url = this.invoiceUrl + 'generate/pdf';
+    return this.http.post(url, data).map((res) => res.json());
+  }
+
+  getInvoiceById(id:string){
+    let url = this.invoiceUrl + 'id/' + id;
     return this.http.get(url).map((res) => res.json());
   }
 

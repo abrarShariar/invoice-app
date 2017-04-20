@@ -1,4 +1,4 @@
-<div class="content-wrapper" style="height: 2000px;">
+<div class="content-wrapper" style="height: 1000px;">
     <section class=" content-header " *ngIf="invoice">
         <div class="col-xs-12">
             <h1>
@@ -129,7 +129,7 @@
                         <div class="form-group " *ngIf="paymentStatus!='Paid'">
                             <label for="amount_due " class="col-sm-2 control-label ">Amount Due (BDT) </label>
                             <div class="col-sm-10">
-                                <input *ngIf="paymentStatus=='Due'" type="text " formControlName="amount_due" class="form-control " id="amount_due " placeholder="amount due">
+                                <input *ngIf="paymentStatus=='Due'" type="text " formControlName="amount_due" class="form-control " id="amount_due " placeholder="amount due" readonly>
                                 <input *ngIf="paymentStatus=='Partially Paid'" type="text " formControlName="amount_due" class="form-control " id="amount_due " placeholder="amount due" readonly>
                             </div>
                         </div>
@@ -138,9 +138,9 @@
 
                         <!--discount-->
                         <div class="form-group ">
-                            <label for="discount " class="col-sm-2 control-label ">Discount (BDT) </label>
+                            <label for="discount " class="col-sm-2 control-label">Discount (BDT) </label>
                             <div class="col-sm-10">
-                                <input type="text " formControlName="discount" class="form-control " id="discount " placeholder="discount">
+                                <input (keyup)="getDiscount($event)" type="text" formControlName="discount" class="form-control " id="discount " placeholder="discount">
                             </div>
                         </div>
 
@@ -158,7 +158,7 @@
                                 <label for="" class="col-sm-2 control-label ">Product [{{ i+1 }}]</label>
                                 <div class="col-sm-10 ">
                                     <div class="productSelectBox">
-                                        <select (change)="onProductChange($event)" required *ngIf="productList" class="form-control" style="margin-bottom:10px">
+                                        <select (change)="onProductChange($event,i,'my')" required *ngIf="productList" class="form-control" style="margin-bottom:10px">
                                                 <option [selected]="product._id == myProduct._id" *ngFor="let product of productList" value="{{ product._id }}">
                                                 {{ product.name }} - <em> {{ product.rate }} BDT/month </em>
                                                 </option>
@@ -172,22 +172,22 @@
                                 <label for="" class="col-sm-2 control-label ">Product  [{{ i+invoice.customerData?.productData.length+1 }}]</label>
                                 <div class="col-sm-10 ">
                                     <div class="productSelectBox">
-                                        <select (change)="onProductChange($event)" required *ngIf="productList" class="form-control" style="margin-bottom:10px">
+                                        <select (change)="onProductChange($event,i,'add')" required *ngIf="productList" class="form-control" style="margin-bottom:10px">
                                                     <option *ngFor="let product of productList" value="{{ product._id }}">
                                                         {{ product.name }} - <em> {{ product.rate }} BDT/month </em> </option>
                                         </select>
-                                        <button type="button" class="pull-right btn btn-danger btn-xs" (click)="removeProduct(i)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                        <button *ngIf="paymentStatus=='Due'" type="button" class="pull-right btn btn-danger btn-xs" (click)="removeProduct(i)"><i class="fa fa-times" aria-hidden="true"></i></button>
                                     </div>
                                 </div>
                             </div>
                             <button *ngIf="paymentStatus!='Paid'" (click)="addProduct()" type="button" class="pull-right btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Add Product</button>
                         </div>
                     </div>
-                    <div class="form-group" >
+                    <div class="form-group">
                         <div class="col-sm-offset-1 col-sm-10 " style="margin-top:10px">
-                            <button type="submit " class="btn btn-success">Update</button>
-                            <button type="button " class="btn btn-info">Generate Invoice</button>
-                            <a type="button" class="btn btn-primary" [routerLink]="['/invoice/recent']">Back</a>
+                            <!--<button type="submit " class="btn btn-success">Save</button>-->
+                            <button type="submit" class="btn btn-info btn-lg">Generate Invoice</button>
+                            <a type="button" class="btn btn-primary btn-lg" [routerLink]="['/invoice/recent']">Back</a>
                         </div>
                     </div>
                 </form>

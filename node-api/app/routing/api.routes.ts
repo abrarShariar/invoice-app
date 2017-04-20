@@ -121,7 +121,19 @@ router.post('/product/search/name', (req: Request, res: Response) => {
     ProductController.searchByName(res, req.body);
 });
 
+// post invoice
+router.post('/invoice/create', (req: Request, res: Response) => {
+    InvoiceController.storeInvoice(res, req.body);
+});
 
+// generate invoice as PDF
+router.post('/invoice/generate/pdf', (req: Request, res: Response) => {
+    InvoiceController.generateInvoice(res, req.body);
+});
+
+router.get('/invoice/id/:id',(req: Request, res: Response)=>{
+    InvoiceController.getInvoiceById(res, req.params.id);
+})
 
 
 export const ApiRoute: Router = router;

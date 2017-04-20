@@ -47,7 +47,6 @@ export class InvoiceEditComponent implements OnInit {
     this.subscription = this.route.params.subscribe(params => {
       let data = this.route.queryParams["_value"].invoice;
       this.invoice = JSON.parse(data);
-      console.log(this.invoice);
       this.allProductsAdd = this.invoice.productList;
       this.buildForm();
     });
@@ -74,8 +73,6 @@ export class InvoiceEditComponent implements OnInit {
       paid_date: [''],
       amount_partially_paid: ['']
     })
-
-    console.log(this.invoiceDetailForm.value);
   }
 
   getProductSuggestions(event: any) {
@@ -87,7 +84,6 @@ export class InvoiceEditComponent implements OnInit {
       .subscribe(
       (res) => {
         this.productSuggestions = res;
-        console.log(this.productSuggestions);
       },
       (err) => {
 
@@ -115,20 +111,50 @@ export class InvoiceEditComponent implements OnInit {
   addProduct() {
     let newProduct = this.productList[0];
     this.additionalProducts.push(newProduct);
+    this.allProductsAdd.push(newProduct._id);
+    this.updatePayments();
   }
 
   removeProduct(index) {
     let delIndex = this.allProductsAdd.indexOf(this.additionalProducts[index]);
     this.allProductsAdd.splice(delIndex, 1);
     this.additionalProducts.splice(index, 1);
+    this.updatePayments();
   }
 
-  onProductChange(event: any) {
-    this.allProductsAdd.push(event.target.value);
+  onProductChange(event: any, index, mode) {
+    if (mode != 'my') {
+      index = index + this.invoice.customerData.productData.length;
+    }
+    this.allProductsAdd[index] = event.target.value;
+    this.updatePayments();
   }
 
   submitInvoiceEditForm() {
-    console.log(this.invoiceDetailForm);
+    let data = {};
+    data = {
+      customer_id: this.invoice.customerData['_id'],
+      payment_due_date: this.invoiceDetailForm.value.payment_due_date,
+      amount_due: this.invoiceDetailForm.value.amount_due,
+      status: this.invoiceDetailForm.value.status,
+      total: this.invoiceDetailForm.value.total,
+      discount: this.invoiceDetailForm.value.discount,
+      invoice_created_date: this.invoiceDetailForm.value.invoice_created_date,
+      paid_date: this.invoiceDetailForm.value.paid_date,
+      amount_partially_paid: this.invoiceDetailForm.value.amount_partially_paid,
+      productList: this.allProductsAdd,
+      action: 'Not Downloaded'
+    }
+    
+    this.invoiceService.storeInvoice(data)
+      .subscribe(
+      (res) => {
+        this.router.navigate(['dashboard/invoice/display',res.id]);
+      },
+      (err) => {
+
+      }
+      )
   }
 
 
@@ -140,19 +166,34 @@ export class InvoiceEditComponent implements OnInit {
         paid_date: currentDate
       });
     }
-
   }
 
 
-  getPartiallyPaid(event:any){
-     this.invoiceDetailForm.patchValue({
-        amount_partially_paid: event.target.value,
-        amount_due: this.invoice.amount_due - event.target.value
-      });
+  getPartiallyPaid(event: any) {
+    this.invoiceDetailForm.patchValue({
+      amount_partially_paid: event.target.value,
+      amount_due: this.invoice.amount_due - event.target.value
+    });
   }
 
 
+  getDiscount(event: any) {
+    this.invoiceDetailForm.patchValue({
+      total: this.invoiceDetailForm.value.amount_due - event.target.value
+    });
+  }
 
+  updatePayments() {
+    let total = 0;
+    _.each(this.allProductsAdd, (item) => {
+      let product = _.findWhere(this.productList, { _id: item });
+      total += product.rate;
+    });
 
-
+    this.invoiceDetailForm.patchValue({
+      total: total,
+      discount: 0,
+      amount_due: total
+    });
+  }
 }
