@@ -13,7 +13,7 @@ import { CustomerModule } from '../customer/customer.module';
 import { ProductModule } from '../product/product.module';
 import { AreaModule } from '../area/area.module';
 import { InvoiceModule } from '../invoice/invoice.module';
-
+import { SettingsModule } from '../settings/settings.module';
 
 @NgModule({
     imports: [
@@ -24,7 +24,8 @@ import { InvoiceModule } from '../invoice/invoice.module';
         CustomerModule,
         ProductModule,
         AreaModule,
-        InvoiceModule
+        InvoiceModule,
+        SettingsModule
     ],
     declarations: [
         DashboardComponent,

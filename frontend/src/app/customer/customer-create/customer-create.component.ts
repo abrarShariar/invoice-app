@@ -37,15 +37,16 @@ export class CustomerCreateComponent implements OnInit {
   buildForm() {
     this.customerCreateForm = this.fb.group({
       username: [''],
+      nid: [''],
       email: [''],
       fullname: [''],
-      mobile_primary: [''],
-      mobile_secondary: [''],
+      mobile_primary: ['+880'],
+      mobile_secondary: ['+880'],
       website: [''],
       location: [''],
       area: [''],
-      city: [''],
-      postal_code: [''],
+      city: ['Tangail'],
+      postal_code: ['1900'],
       status: [''],
       product: ['']
     });
@@ -58,6 +59,7 @@ export class CustomerCreateComponent implements OnInit {
 
     let data: Customer = {
       username: this.customerCreateForm.value.username,
+      nid: this.customerCreateForm.value.nid,
       email: this.customerCreateForm.value.email,
       fullname: this.customerCreateForm.value.fullname,
       customer_currency: 'BDT',

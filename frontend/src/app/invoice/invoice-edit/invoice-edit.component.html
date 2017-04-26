@@ -1,4 +1,4 @@
-<div class="content-wrapper" style="height: 1000px;">
+<div class="content-wrapper" style="height: 2000px;">
     <section class=" content-header " *ngIf="invoice">
         <div class="col-xs-12">
             <h1>
@@ -176,7 +176,7 @@
                                                     <option *ngFor="let product of productList" value="{{ product._id }}">
                                                         {{ product.name }} - <em> {{ product.rate }} BDT/month </em> </option>
                                         </select>
-                                        <button *ngIf="paymentStatus=='Due'" type="button" class="pull-right btn btn-danger btn-xs" (click)="removeProduct(i)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                        <button *ngIf="paymentStatus!='Paid'" type="button" class="pull-right btn btn-danger btn-xs" (click)="removeProduct(i)"><i class="fa fa-times" aria-hidden="true"></i></button>
                                     </div>
                                 </div>
                             </div>

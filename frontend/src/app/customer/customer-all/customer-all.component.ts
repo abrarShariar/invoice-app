@@ -40,7 +40,7 @@ export class CustomerAllComponent implements OnInit {
         // getting products
         _.each(data, (item: Customer) => {
           item.productData = [];
-          
+
           if (item.productList.length > 0) {
             _.each(item.productList, (element) => {
               this.productService.getProductById(element)
@@ -76,16 +76,18 @@ export class CustomerAllComponent implements OnInit {
       )
   }
 
-  toggleStatus(id, status) {
+  toggleStatus(customer) {
     let data = {
-      id: id,
-      status: !status
+      id: customer['_id'],
+      status: !customer['status']
     };
 
     this.customerService.setStatus(data)
       .subscribe(
       (res) => {
-        this.getAllCustomer();
+        if(res['status']){
+          customer['status'] = !customer['status']
+        }
       },
       (err) => {
         console.log('Error in toggleStatus');

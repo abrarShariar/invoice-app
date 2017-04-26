@@ -5,6 +5,7 @@ import { Invoice } from '../invoice/invoice';
 export class Customer {
     id?:string;
     username:string;
+    nid?:string;
     email:string;
     fullname:string;
     customer_currency:string;

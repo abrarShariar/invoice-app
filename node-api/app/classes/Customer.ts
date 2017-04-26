@@ -1,5 +1,6 @@
 export class Customer {
     username:string;
+    nid: number;
     email:string;
     fullname:string;
     customer_currency:string;

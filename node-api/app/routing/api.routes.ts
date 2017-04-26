@@ -111,6 +111,10 @@ router.post('/customer/search/customerByArea', (req: Request, res: Response) => 
     CustomerController.customerByArea(res, req.body);
 });
 
+router.get('/customer/id/username=:username',(req: Request, res: Response)=>{
+     CustomerController.getIdByUsername(res,req.params.username);
+});
+
 //get recent invoices (this month)
 router.get('/invoice/recent', (req: Request, res: Response) => {
     InvoiceController.getRecentInvoice(res);
@@ -131,9 +135,15 @@ router.post('/invoice/generate/pdf', (req: Request, res: Response) => {
     InvoiceController.generateInvoice(res, req.body);
 });
 
+// get invoice by id
 router.get('/invoice/id/:id',(req: Request, res: Response)=>{
     InvoiceController.getInvoiceById(res, req.params.id);
-})
+});
+
+//search all customers data by username
+router.post('/invoice/search/username', (req: Request, res: Response) => {
+    InvoiceController.searchByUsername(res, req.body);
+});
 
 
 export const ApiRoute: Router = router;

@@ -51,8 +51,13 @@ export class CustomerService {
     return this.http.post(url, data).map((res) => res.json());
   }
 
-  getCustomerByArea(data:any){
+  getCustomerByArea(data: any) {
     let url = this.customerUrl + 'search/customerByArea/';
     return this.http.post(url, data).map((res) => res.json());
+  }
+
+  getCustomerIdByUsername(username) {
+    let url = this.customerUrl + 'id/username=' + username;
+    return this.http.get(url).map((res) => res.json());
   }
 }

@@ -21,7 +21,6 @@
             <li class="header">Cyber Solutions BD</li>
             <!-- Optionally, you can add icons to the links -->
             <li class="active"><a [routerLink]="['dashboard/home']"><i class="fa fa-home"></i><span>Home</span></a></li>
-            <li><a [routerLink]="['dashboard/upload-file']"><i class="fa fa-files-o"></i> <span>Upload File</span></a></li>
             <!-- customer options -->
             <li class="treeview">
                 <a href="#"><i class="fa fa-users"></i> <span>Customers</span>
@@ -60,6 +59,8 @@
 
             <!--reports-->
             <li><a href="#"><i class="fa fa-pie-chart"></i><span>Reports</span></a></li>
+            <li><a [routerLink]="['dashboard/upload-file']"><i class="fa fa-files-o"></i> <span>Upload File</span></a></li>
+            <li><a [routerLink]="['dashboard/settings']"><i class="fa fa-files-o"></i> <span>Settings</span></a></li>
         </ul>
         <!-- /.sidebar-menu -->
     </section>

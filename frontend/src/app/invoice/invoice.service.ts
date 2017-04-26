@@ -31,11 +31,14 @@ export class InvoiceService {
     return this.http.post(url, data).map((res) => res.json());
   }
 
-  getInvoiceById(id:string){
+  getInvoiceById(id: string) {
     let url = this.invoiceUrl + 'id/' + id;
     return this.http.get(url).map((res) => res.json());
   }
 
-
+  searchByUsername(data: any) {
+    let url = this.invoiceUrl + 'search/username/';
+    return this.http.post(url, data).map((res) => res.json());
+  }
 
 }

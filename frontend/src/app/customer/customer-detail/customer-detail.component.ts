@@ -65,6 +65,7 @@ export class CustomerDetailComponent implements OnInit {
     }
     this.customerDetailForm = this.fb.group({
       username: [this.customer.username],
+      nid: [this.customer.nid],
       email: [this.customer.email],
       fullname: [this.customer.fullname],
       customer_currency: [this.customer.customer_currency],
@@ -86,6 +87,7 @@ export class CustomerDetailComponent implements OnInit {
     let data = {
       id: this.id,
       username: this.customerDetailForm.value.username,
+      nid: this.customerDetailForm.value.nid,
       email: this.customerDetailForm.value.email,
       fullname: this.customerDetailForm.value.fullname,
       customer_currency: this.customerDetailForm.value.customer_currency,
@@ -170,7 +172,4 @@ export class CustomerDetailComponent implements OnInit {
     let newProduct = this.productList[0]._id;
     this.customer.productList.push(newProduct);
   }
-
-
-
 }

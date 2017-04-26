@@ -16,6 +16,7 @@ export class CustomerController {
         let timestamp = Date.now();
         let customer = new CustomerModel({
             username: data.username,
+            nid: data.nid,
             email: data.email,
             fullname: data.fullname,
             customer_currency: data.customer_currency,
@@ -84,6 +85,7 @@ export class CustomerController {
         CustomerModel.update({ _id: data.id }, {
             $set: {
                 username: data.username,
+                nid: data.nid,
                 email: data.email,
                 fullname: data.fullname,
                 customer_currency: data.customer_currency,
@@ -135,12 +137,20 @@ export class CustomerController {
         });
     }
 
-    static customerByArea(res:Response, data:any){
-          CustomerModel.find({ "area": data.text }, function (err, data) {
+    static customerByArea(res: Response, data: any) {
+        CustomerModel.find({ "area": data.text }, function (err, data) {
             if (!err) {
                 res.send(data);
             }
         })
+    }
+
+    static getIdByUsername(res: Response, username) {
+        CustomerModel.find({ "username": { $regex: ".*" + username + ".*", $options: 'i' } }, function (err, data) {
+            if (!err) {
+                res.send(data);
+            }
+        });
     }
 
 }

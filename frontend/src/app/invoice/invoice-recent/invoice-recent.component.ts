@@ -7,7 +7,7 @@ import * as _ from 'underscore';
 import { Invoice } from '../invoice';
 import { ProductService } from '../../product/product.service';
 import { AreaService } from '../../area/area.service';
-
+import { CustomerService } from '../../customer/customer.service';
 
 @Component({
   selector: 'app-invoice-recent',
@@ -18,7 +18,7 @@ export class InvoiceRecentComponent implements OnInit {
   public currentDate: number = Date.now();
   public invoiceList: Invoice[] = [];
   public searchMode = 'username';
-  constructor(private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) { }
+  constructor(private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) { }
 
   ngOnInit() {
     this.getRecentInvoice();
@@ -83,7 +83,6 @@ export class InvoiceRecentComponent implements OnInit {
           });
 
           this.invoiceList.push(tempInvoice);
-          // console.log(tempInvoice);
         });
       },
       (err) => {
@@ -98,8 +97,40 @@ export class InvoiceRecentComponent implements OnInit {
   }
 
   //quick search
-  quickSerach(event: any) {
-    console.log(event);
+  quickSearch(event: any) {
+    if (event == '') {
+      this.getRecentInvoice();
+      return;
+    }
+    let data = {
+      text: event
+    }
+    let reg = new RegExp(event, "i");
+    let resArray = [];
+    if (this.searchMode == 'username') {
+      _.each(this.invoiceList, (item) => {
+        if (reg.test(item['customerData']['username'])) {
+          resArray.push(item);
+        }
+      });
+      this.invoiceList = resArray;
+    }
+    else if (this.searchMode == 'mobile_number') {
+      _.each(this.invoiceList, (item) => {
+        if (reg.test(item['customerData']['mobile_primary'])) {
+          resArray.push(item);
+        }
+      });
+      this.invoiceList = resArray;
+    }
+    else if (this.searchMode == 'area') {
+      _.each(this.invoiceList, (item) => {
+        if (reg.test(item['customerData']['areaData']['name'])) {
+          resArray.push(item);
+        }
+      });
+      this.invoiceList = resArray;
+    }
   }
 
   //edit invoice

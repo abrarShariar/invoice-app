@@ -66,6 +66,15 @@ export class InvoiceController {
         })
     }
 
+    //search invoice list by username
+    static searchByUsername(res: Response, data: any) {
+        InvoiceModel.find({ "username": { $regex: ".*" + data.text + ".*", $options: 'i' } }, function (err, data) {
+            if (!err) {
+                res.send(data);
+            }
+        });
+    }
+
 
 
 }
