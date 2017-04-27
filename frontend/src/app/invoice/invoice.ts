@@ -9,7 +9,7 @@ export class Invoice {
     productList?: any[] = [];
     productData?: Product[] = [];
     payment_due_date?: any;
-    paid_date?: string;
+    paid_date?: any;
     amount_due?: number;
     status?: string;    //Due / Paid / Partially Paid
     total?: number;

@@ -8,6 +8,10 @@ import { Invoice } from '../invoice';
 import { ProductService } from '../../product/product.service';
 import { AreaService } from '../../area/area.service';
 import { CustomerService } from '../../customer/customer.service';
+// import * as $ from 'jquery';
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+
+
 
 @Component({
   selector: 'app-invoice-recent',
@@ -18,7 +22,9 @@ export class InvoiceRecentComponent implements OnInit {
   public currentDate: number = Date.now();
   public invoiceList: Invoice[] = [];
   public searchMode = 'username';
-  constructor(private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) { }
+  public partialInvoice: Invoice;
+  public partialPaymentForm: FormGroup;
+  constructor(private fb: FormBuilder,private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) { }
 
   ngOnInit() {
     this.getRecentInvoice();
@@ -77,7 +83,6 @@ export class InvoiceRecentComponent implements OnInit {
                 tempInvoice.amount_due = tempInvoice.total;
               },
               (err) => {
-
               }
               )
           });
@@ -139,6 +144,28 @@ export class InvoiceRecentComponent implements OnInit {
       queryParams: { "invoice": JSON.stringify(invoice) }
     };
     this.router.navigate(['/invoice/edit'], navextras);
+  }
+
+  changeStatus(status: string, invoice: Invoice) {
+    invoice.status = status;
+    if (invoice.status == 'Paid') {
+      invoice.paid_date = Date.now();
+      invoice.amount_due = 0;
+    } else if (invoice.status == 'Due') {
+
+    } else if (invoice.status == 'Partially Paid') {
+      this.partialPaymentForm = this.fb.group({
+          amount_partially_paid: ['']
+      });
+      this.partialInvoice = invoice;
+    }
+  }
+
+  submitPartialPaymentForm(){
+    let data = {
+      amount_partially_paid: this.partialPaymentForm.value.amount_partially_paid
+    };
+    console.log(this.partialPaymentForm.value);
   }
 
 }
