@@ -111,8 +111,8 @@ router.post('/customer/search/customerByArea', (req: Request, res: Response) => 
     CustomerController.customerByArea(res, req.body);
 });
 
-router.get('/customer/id/username=:username',(req: Request, res: Response)=>{
-     CustomerController.getIdByUsername(res,req.params.username);
+router.get('/customer/id/username=:username', (req: Request, res: Response) => {
+    CustomerController.getIdByUsername(res, req.params.username);
 });
 
 //get recent invoices (this month)
@@ -136,13 +136,33 @@ router.post('/invoice/generate/pdf', (req: Request, res: Response) => {
 });
 
 // get invoice by id
-router.get('/invoice/id/:id',(req: Request, res: Response)=>{
+router.get('/invoice/id/:id', (req: Request, res: Response) => {
     InvoiceController.getInvoiceById(res, req.params.id);
 });
 
 //search all customers data by username
 router.post('/invoice/search/username', (req: Request, res: Response) => {
     InvoiceController.searchByUsername(res, req.body);
+});
+
+// insert recent invoice into DB
+router.post('/invoice/recent/save', (req: Request, res: Response) => {
+    InvoiceController.saveRecentInvoice(res, req.body);
+});
+
+//drop all recent invoices
+router.get('/invoice/drop/recent/all', (req: Request, res: Response) => {
+    InvoiceController.dropRecentInvoiceAll(res);
+});
+
+//check if recent invoices exists
+router.get('/invoice/recent_invoice/exists',(req:Request, res:Response)=>{
+    InvoiceController.checkRecentInvoiceExists(res);
+});
+
+// get invoice from db
+router.get('/invoice/recent_invoice_db',(req:Request, res:Response)=>{
+    InvoiceController.getRecentInvoiceDB(res);
 });
 
 

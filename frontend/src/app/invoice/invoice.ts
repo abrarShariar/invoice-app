@@ -16,4 +16,5 @@ export class Invoice {
     discount?: number;
     invoice_created_date?: any;
     action?:string;
+    partially_paid?:number;
 }

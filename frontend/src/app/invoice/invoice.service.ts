@@ -41,4 +41,24 @@ export class InvoiceService {
     return this.http.post(url, data).map((res) => res.json());
   }
 
+  saveRecentInvoice(data: any) {
+    let url = this.invoiceUrl + 'recent/save';
+    return this.http.post(url, data).map((res) => res.json());
+  }
+
+  dropRecentInvoice(){
+    let url = this.invoiceUrl + 'drop/recent/all';
+    return this.http.get(url).map(res=>res.json());
+  }
+
+  checkIfRecentInvoiceExists(){
+    let url = this.invoiceUrl + 'recent_invoice/exists';
+    return this.http.get(url).map(res=>res.json());
+  }
+
+  getRecentInvoiceDB(){
+    let url = this.invoiceUrl + 'recent_invoice_db';
+    return this.http.get(url).map(res=>res.json());
+  }
+
 }
