@@ -43,40 +43,56 @@ export class InvoiceRecentComponent implements OnInit {
       )
   }
 
+  // New methods ---- New plans 
+
+
+
+
+
+
+
+
+
+
+
+  // ----------------------------
+
+
   getRecentInvoiceDB() {
     this.invoiceList = [];
     this.invoiceService.getRecentInvoiceDB()
       .subscribe(
       (res: Invoice[]) => {
         _.each(res, (invoice: Invoice) => {
-          invoice.productData = [];
           let customer: Customer;
-
-          //get all products
-          if (invoice.productList.length > 0) {
-            _.each(invoice.productList, (element) => {
-              this.productService.getProductById(element)
-                .subscribe(
-                (res: Product) => {
-                  invoice.productData.push(res);
-                }
-                )
-            });
-          }
-
           //get customer data
           this.customerService.getCustomerDetails(invoice.customer_id)
             .subscribe(
-            (res) => {
-              invoice.customerData = res;
-            },
-            (err) => {
-              console.log(err);
+            (res: Customer) => {
+              customer = res;
+              customer.productData = [];
+              //get all products
+              if (invoice.productList.length > 0) {
+                _.each(invoice.productList, (element) => {
+                  this.productService.getProductById(element)
+                    .subscribe(
+                    (res: Product) => {
+                      customer["productData"].push(res);
+                    }
+                    )
+                });
+              }
+              // get area
+              this.areaService.getAreaById(customer.area)
+                .subscribe(
+                (res) => {
+                  customer["areaData"] = res;
+                },
+              )
+              invoice.customerData = customer;
+              this.invoiceList.push(invoice);
             }
             )
-
-            console.log(invoice);
-            this.invoiceList.push(invoice);
         });
       },
     )
@@ -102,6 +118,7 @@ export class InvoiceRecentComponent implements OnInit {
                 )
             });
           }
+
           // get area
           this.areaService.getAreaById(customer.area)
             .subscribe(
@@ -138,7 +155,6 @@ export class InvoiceRecentComponent implements OnInit {
           });
           this.invoiceList.push(tempInvoice);
         });
-
       },
       (err) => {
         console.log(err);
@@ -191,6 +207,7 @@ export class InvoiceRecentComponent implements OnInit {
 
   //edit invoice
   editInvoice(invoice: Invoice) {
+    console.log(invoice);
     let navextras: NavigationExtras = {
       queryParams: { "invoice": JSON.stringify(invoice) }
     };
@@ -214,7 +231,6 @@ export class InvoiceRecentComponent implements OnInit {
     let data = {
       amount_partially_paid: this.partialPaymentForm.value.amount_partially_paid
     };
-    console.log(this.partialPaymentForm.value);
   }
 
   toggleSearchStatus(event: any) {
@@ -239,6 +255,10 @@ export class InvoiceRecentComponent implements OnInit {
       invoice.amount_due = invoice.total - this.partialPay;
       invoice.partially_paid = this.partialPay;
     }
+    if(this.partialPay == invoice.total){
+      invoice.status = 'Paid';
+      invoice.paid_date = Date.now();
+    }
     this.partialPay = 0;
   }
 
@@ -251,7 +271,6 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.dropRecentInvoice()
       .subscribe(
       (res) => {
-        console.log(res);
       },
       (err) => {
         console.log("ERR");
@@ -260,7 +279,6 @@ export class InvoiceRecentComponent implements OnInit {
 
     let data = {};
     _.each(this.invoiceList, (item) => {
-      console.log(item);
       data = {
         customer_id: item['customerData']['_id'],
         payment_due_date: item['payment_due_date'],

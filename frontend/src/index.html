@@ -30,8 +30,15 @@
     <!--jspdf-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
     <script src="./assets/dist/js/html2canvas.js"></script>
-    <!--chartjs-->
-    <script src="./node_modules/chart.js/src/chart.js"></script>
+
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        // !important: You want to give this variable(var googleLoaded = false;). This is used to run multiple chart in your jade.
+        var googleLoaded = false;
+        // !important: Define which chart packages to preload.Because this package uses ChartWrappers you can use any chart type that Google supports, but if it // isn't loaded it will load it on demand. 
+        var googleChartsPackagesToLoad = ['geochart'];
+    </script>
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">

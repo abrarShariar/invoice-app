@@ -11,7 +11,6 @@ import { ProductService } from '../../product/product.service';
 import * as _ from 'underscore';
 import { Product } from '../../product/product';
 
-
 @Component({
   selector: 'app-invoice-edit',
   templateUrl: './invoice-edit.component.html',

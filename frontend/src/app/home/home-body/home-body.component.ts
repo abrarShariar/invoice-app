@@ -10,6 +10,7 @@ export class HomeBodyComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log("Hello WOrld");
   }
 
 }
