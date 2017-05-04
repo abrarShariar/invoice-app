@@ -46,19 +46,24 @@ export class InvoiceService {
     return this.http.post(url, data).map((res) => res.json());
   }
 
-  dropRecentInvoice(){
+  dropRecentInvoice() {
     let url = this.invoiceUrl + 'drop/recent/all';
-    return this.http.get(url).map(res=>res.json());
+    return this.http.get(url).map(res => res.json());
   }
 
-  checkIfRecentInvoiceExists(){
+  checkIfRecentInvoiceExists() {
     let url = this.invoiceUrl + 'recent_invoice/exists';
-    return this.http.get(url).map(res=>res.json());
+    return this.http.get(url).map(res => res.json());
   }
 
-  getRecentInvoiceDB(){
+  getRecentInvoiceDB() {
     let url = this.invoiceUrl + 'recent_invoice_db';
-    return this.http.get(url).map(res=>res.json());
+    return this.http.get(url).map(res => res.json());
+  }
+
+  cleanInvoice() {
+    let url = this.invoiceUrl + 'clean_invoice';
+    return this.http.get(url).map(res => res.json());
   }
 
 }

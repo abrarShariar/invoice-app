@@ -1,12 +1,12 @@
-import { FileItem } from 'ng2-file-upload/file-upload/file-item.class';
-import { Component, OnInit } from '@angular/core';
-import { CustomerService } from '../customer.service';
-import { Customer } from '../customer';
+import {FileItem} from 'ng2-file-upload/file-upload/file-item.class';
+import {Component, OnInit} from '@angular/core';
+import {CustomerService} from '../customer.service';
+import {Customer} from '../customer';
 import * as _ from 'underscore';
-import { ProductService } from '../../product/product.service';
-import { Product } from '../../product/product';
-import { AreaService } from '../../area/area.service';
-import { Area } from '../../area/area';
+import {ProductService} from '../../product/product.service';
+import {Product} from '../../product/product';
+import {AreaService} from '../../area/area.service';
+import {Area} from '../../area/area';
 
 
 @Component({
@@ -23,7 +23,8 @@ export class CustomerAllComponent implements OnInit {
 
   // public tempCustomer:Customer;
 
-  constructor(private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
+  constructor(private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) {
+  }
 
   ngOnInit() {
     this.getAllCustomer();
@@ -33,46 +34,46 @@ export class CustomerAllComponent implements OnInit {
     this.customers = [];
     this.customerService.getAllCustomers()
       .subscribe(
-      (res) => {
-        let data: Customer[] = [];
-        data = res;
+        (res) => {
+          let data: Customer[] = [];
+          data = res;
 
-        // getting products
-        _.each(data, (item: Customer) => {
-          item.productData = [];
+          // getting products
+          _.each(data, (item: Customer) => {
+            item.productData = [];
 
-          if (item.productList.length > 0) {
-            _.each(item.productList, (element) => {
-              this.productService.getProductById(element)
+            if (item.productList.length > 0) {
+              _.each(item.productList, (element) => {
+                this.productService.getProductById(element)
+                  .subscribe(
+                    (res: Product) => {
+                      item.productData.push(res);
+                    },
+                    (err) => {
+                    }
+                  )
+              });
+            }
+
+
+            if (item.area) {
+              this.areaService.getAreaById(item.area)
                 .subscribe(
-                (res: Product) => {
-                  item.productData.push(res);
-                },
-                (err) => {
-                }
+                  (res: Area) => {
+                    item.areaData = res;
+                  },
+                  (err) => {
+
+                  }
                 )
-            });
-          }
+            }
 
-
-          if (item.area) {
-            this.areaService.getAreaById(item.area)
-              .subscribe(
-              (res: Area) => {
-                item.areaData = res;
-              },
-              (err) => {
-
-              }
-              )
-          }
-
-          this.customers.push(item);
-        });
-      },
-      (err) => {
-        console.log("Error In getAllCustomer");
-      }
+            this.customers.push(item);
+          });
+        },
+        (err) => {
+          console.log("Error In getAllCustomer");
+        }
       )
   }
 
@@ -84,14 +85,14 @@ export class CustomerAllComponent implements OnInit {
 
     this.customerService.setStatus(data)
       .subscribe(
-      (res) => {
-        if(res['status']){
-          customer['status'] = !customer['status']
+        (res) => {
+          if (res['status']) {
+            customer['status'] = !customer['status']
+          }
+        },
+        (err) => {
+          console.log('Error in toggleStatus');
         }
-      },
-      (err) => {
-        console.log('Error in toggleStatus');
-      }
       )
   }
 
@@ -103,12 +104,12 @@ export class CustomerAllComponent implements OnInit {
   getCustomerDetails(id) {
     this.customerService.getCustomerDetails(id)
       .subscribe(
-      (res) => {
+        (res) => {
 
-      },
-      (err) => {
-        console.log(err);
-      }
+        },
+        (err) => {
+          console.log(err);
+        }
       )
   }
 
@@ -123,47 +124,47 @@ export class CustomerAllComponent implements OnInit {
     if (this.searchMode == 'username') {
       this.customerService.searchByUsername(data)
         .subscribe(
-        (res) => {
-          this.buildSearchResult(res);
-        },
-        (err) => {
-          console.log(err);
-        }
+          (res) => {
+            this.buildSearchResult(res);
+          },
+          (err) => {
+            console.log(err);
+          }
         )
     }
     else if (this.searchMode == 'mobile_number') {
       this.customerService.searchByMobileNumber(data)
         .subscribe(
-        (res) => {
-          this.buildSearchResult(res);
-        },
-        (err) => {
-          console.log(err);
-        }
+          (res) => {
+            this.buildSearchResult(res);
+          },
+          (err) => {
+            console.log(err);
+          }
         )
     }
     else if (this.searchMode == 'area') {
       this.customerService.searchByArea(data)
         .subscribe(
-        (res) => {
-          _.each(res, (item) => {
-            let newData = {
-              text: item["_id"]
-            }
-            this.customerService.getCustomerByArea(newData)
-              .subscribe(
-              (res) => {
-                this.buildSearchResult(res);
-              },
-              (err) => {
-                console.log(err);
+          (res) => {
+            _.each(res, (item) => {
+              let newData = {
+                text: item["_id"]
               }
-              )
-          });
-        },
-        (err) => {
-          console.log(err);
-        }
+              this.customerService.getCustomerByArea(newData)
+                .subscribe(
+                  (res) => {
+                    this.buildSearchResult(res);
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                )
+            });
+          },
+          (err) => {
+            console.log(err);
+          }
         )
     }
   }
@@ -179,14 +180,13 @@ export class CustomerAllComponent implements OnInit {
         _.each(item.productList, (element) => {
           this.productService.getProductById(element)
             .subscribe(
-            (res: Product) => {
-              item.productData.push(res);
-            },
-            (err) => {
-            }
+              (res: Product) => {
+                item.productData.push(res);
+              },
+              (err) => {
+              }
             )
         });
-
 
 
       }
@@ -194,12 +194,12 @@ export class CustomerAllComponent implements OnInit {
       if (item.area) {
         this.areaService.getAreaById(item.area)
           .subscribe(
-          (res: Area) => {
-            item.areaData = res;
-          },
-          (err) => {
+            (res: Area) => {
+              item.areaData = res;
+            },
+            (err) => {
 
-          }
+            }
           )
       }
       this.customers.push(item);
@@ -211,7 +211,6 @@ export class CustomerAllComponent implements OnInit {
   filterChange(event: any) {
     this.searchMode = event;
   }
-
 
 
 }

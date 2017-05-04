@@ -1,92 +1,96 @@
 <div class="content-wrapper" style="height: 1800px;">
-    <section class="content-header">
-        <div class="col-xs-12">
-            <h1>
-                All Customers
-            </h1>
-            <ol class="breadcrumb">
-                <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> InvoiceApp</a></li>
-                <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> Customer</a></li>
-                <li class="active">All</li>
-            </ol>
-        </div>
-    </section>
-    <section class="content">
-        <!--  Page Content Here -->
+  <section class="content-header">
+    <div class="col-xs-12">
+      <h1>
+        All Customers
+      </h1>
+      <ol class="breadcrumb">
+        <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> InvoiceApp</a></li>
+        <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> Customer</a></li>
+        <li class="active">All</li>
+      </ol>
+    </div>
+  </section>
+  <section class="content">
+    <!--  Page Content Here -->
 
-        <div class="col-xs-12">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <h3 class="box-title">List Of All Customers</h3>
-                    <br>
-                    <div class="box-tools">
-                        <div class="row">
-                            <div class="col-lg-6" style="float:right">
-                                <div class="input-group">
-                                    <div class="input-group-btn">
-                                        <select style="font-size: 15px;height: 34px;" (change)="filterChange($event.target.value)">
-                                            <option value="username">Username</option>
-                                            <option value="mobile_number">Mobile Number</option>
-                                            <option value="area">Area</option>
-                                        </select>
-                                    </div>
-                                    <!-- /btn-group -->
-                                    <input type="text" class="form-control" aria-label="..." placeholder="Search Customers List" (input)="quickSearch($event.target.value)">
-                                </div>
-                                <!-- /input-group -->
-                            </div>
-                        </div>
-                        <br><br>
-                        <!-- /.row -->
-                        <!-- /.row -->
-                    </div>
+    <div class="col-xs-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">List Of All Customers</h3>
+          <br>
+          <div class="box-tools">
+            <div class="row">
+              <div class="col-lg-6" style="float:right">
+                <div class="input-group">
+                  <div class="input-group-btn">
+                    <select style="font-size: 15px;height: 34px;" (change)="filterChange($event.target.value)">
+                      <option value="username">Username</option>
+                      <option value="mobile_number">Mobile Number</option>
+                      <option value="area">Area</option>
+                    </select>
+                  </div>
+                  <!-- /btn-group -->
+                  <input type="text" class="form-control" aria-label="..." placeholder="Search Customers List"
+                         (input)="quickSearch($event.target.value)">
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
-                        <tbody>
-                            <tr>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Fullname</th>
-                                <th>Product</th>
-                                <th>Mobile</th>
-                                <th>Location</th>
-                                <th>Area</th>
-                                <th>City</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr *ngFor="let customer of customers | paginate: { itemsPerPage: 30, currentPage: p }">
-                                <td>{{ customer.username }}</td>
-                                <td>{{ customer.email }}</td>
-                                <td>{{ customer.fullname }}</td>
-                                <!--<td><span *ngIf="customer.productData?.length>0"> {{ customer.productData[0]?.name }} - <em *ngIf="customer.productData[0]?.rate">{{ customer.productData[0]?.rate }} BDT/month</em> </span><small class="label bg-blue">{{ customer.productData.length }}</small></td>-->
-                                <td><small class="label bg-blue">{{ customer.productData.length }}</small></td>
-                                <td>{{ customer.mobile_primary }}</td>
-                                <td>{{ customer.location }}</td>
-                                <td>{{ customer.areaData?.name }}</td>
-                                <td>{{ customer.city }}</td>
-                                <td *ngIf="customer.status">
-                                    <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(customer)"> Active</button>
-                                </td>
-                                <td *ngIf="!customer.status">
-                                    <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(customer)"> Inactive</button>
-                                </td>
-                                <td>
-                                    <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/customer/detail',customer._id]"> Edit</a>
-                                </td>
-                            </tr>
-                        </tbody>
-
-                    </table>
-                </div>
-                <!-- /.box-body -->
+                <!-- /input-group -->
+              </div>
             </div>
-            <!-- /.box -->
-            <div class="col-md-offset-4">
-                <pagination-controls (pageChange)="p = $event"></pagination-controls>
-            </div>
+            <br><br>
+            <!-- /.row -->
+            <!-- /.row -->
+          </div>
         </div>
-    </section>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+          <table class="table table-hover">
+            <tbody>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Fullname</th>
+              <th>Product</th>
+              <th>Mobile</th>
+              <th>Location</th>
+              <th>Area</th>
+              <th>City</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+            <tr *ngFor="let customer of customers | paginate: { itemsPerPage: 30, currentPage: p }">
+              <td>{{ customer.username }}</td>
+              <td>{{ customer.email }}</td>
+              <td>{{ customer.fullname }}</td>
+              <!--<td><span *ngIf="customer.productData?.length>0"> {{ customer.productData[0]?.name }} - <em *ngIf="customer.productData[0]?.rate">{{ customer.productData[0]?.rate }} BDT/month</em> </span><small class="label bg-blue">{{ customer.productData.length }}</small></td>-->
+              <td>
+                <small class="label bg-blue">{{ customer.productData.length }}</small>
+              </td>
+              <td>{{ customer.mobile_primary }}</td>
+              <td>{{ customer.location }}</td>
+              <td>{{ customer.areaData?.name }}</td>
+              <td>{{ customer.city }}</td>
+              <td *ngIf="customer.status">
+                <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(customer)"> Active</button>
+              </td>
+              <td *ngIf="!customer.status">
+                <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(customer)"> Inactive</button>
+              </td>
+              <td>
+                <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/customer/detail',customer._id]">
+                  Edit</a>
+              </td>
+            </tr>
+            </tbody>
+
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+      <div class="col-md-offset-4">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+  </section>
 </div>

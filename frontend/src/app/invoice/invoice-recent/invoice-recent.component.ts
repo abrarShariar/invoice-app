@@ -1,15 +1,14 @@
-import { Router, NavigationExtras } from '@angular/router';
-import { Product } from '../../product/product';
-import { Component, OnInit } from '@angular/core';
-import { InvoiceService } from '../invoice.service';
-import { Customer } from '../../customer/customer';
+import {Router, NavigationExtras} from '@angular/router';
+import {Product} from '../../product/product';
+import {Component, OnInit} from '@angular/core';
+import {InvoiceService} from '../invoice.service';
+import {Customer} from '../../customer/customer';
 import * as _ from 'underscore';
-import { Invoice } from '../invoice';
-import { ProductService } from '../../product/product.service';
-import { AreaService } from '../../area/area.service';
-import { CustomerService } from '../../customer/customer.service';
-// import * as $ from 'jquery';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import {Invoice} from '../invoice';
+import {ProductService} from '../../product/product.service';
+import {AreaService} from '../../area/area.service';
+import {CustomerService} from '../../customer/customer.service';
+import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-invoice-recent',
@@ -26,139 +25,168 @@ export class InvoiceRecentComponent implements OnInit {
   public partialPay: any;
   public isInvoiceSaved: boolean = false;
   public isInvoiceError: boolean = false;
-  constructor(private fb: FormBuilder, private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) { }
+
+  constructor(private fb: FormBuilder, private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) {
+  }
 
   ngOnInit() {
-    this.invoiceService.checkIfRecentInvoiceExists()
+    this.wakeUpInvoiceDemon();
+  }
+
+  // New methods ---- New plans
+  wakeUpInvoiceDemon() {
+    this.invoiceService.cleanInvoice()
       .subscribe(
-      (res) => {
-        if (res['count'] > 0) {
-          this.getRecentInvoiceDB();
-        } else {
-          this.buildRecentInvoice();
+        (res) => {
+          if (res.status) {
+            this.generateNewInvoice();
+          } else {
+            this.getRecentInvoiceDB();
+          }
+        },
+        (err) => {
+          console.log("Error in clean Invoice");
         }
-      },
-      (err) => {
-      }
       )
   }
 
-  // New methods ---- New plans 
-
-
-
-
-
-
-
-
-
-
-
-  // ----------------------------
-
+  generateNewInvoice() {
+    // 1) prepare invoice
+    // 2) Save to DB
+    // 3) Fetch and display all recent invoices
+    this.buildRecentInvoice();
+  }
 
   getRecentInvoiceDB() {
     this.invoiceList = [];
     this.invoiceService.getRecentInvoiceDB()
       .subscribe(
-      (res: Invoice[]) => {
-        _.each(res, (invoice: Invoice) => {
-          let customer: Customer;
-          //get customer data
-          this.customerService.getCustomerDetails(invoice.customer_id)
-            .subscribe(
-            (res: Customer) => {
-              customer = res;
-              customer.productData = [];
-              //get all products
-              if (invoice.productList.length > 0) {
-                _.each(invoice.productList, (element) => {
-                  this.productService.getProductById(element)
+        (res: Invoice[]) => {
+          _.each(res, (invoice: Invoice) => {
+            let customer: Customer;
+            this.customerService.getCustomerDetails(invoice.customer_id)
+              .subscribe(
+                (res: Customer) => {
+                  customer = res;
+                  customer.productData = [];
+                  if (invoice.productList.length > 0) {
+                    _.each(invoice.productList, (element) => {
+                      this.productService.getProductById(element)
+                        .subscribe(
+                          (res: Product) => {
+                            customer["productData"].push(res);
+                          }
+                        )
+                    });
+                  }
+                  this.areaService.getAreaById(customer.area)
                     .subscribe(
-                    (res: Product) => {
-                      customer["productData"].push(res);
-                    }
+                      (res) => {
+                        customer["areaData"] = res;
+                      },
                     )
-                });
-              }
-              // get area
-              this.areaService.getAreaById(customer.area)
-                .subscribe(
-                (res) => {
-                  customer["areaData"] = res;
-                },
+                  invoice.customerData = customer;
+                  this.invoiceList.push(invoice);
+                }
               )
-              invoice.customerData = customer;
-              this.invoiceList.push(invoice);
-            }
-            )
-        });
-      },
-    )
+          });
+        },
+      )
   }
 
+
   buildRecentInvoice() {
+    this.invoiceService.getRecentInvoice()
+      .subscribe(
+        (res: Customer[]) => {
+          let tempInvoice: Invoice;
+          _.each(res, (customer: Customer) => {
+            tempInvoice.customer_id = customer['_id'];
+            tempInvoice.productList = customer.productList;
+            let date = new Date();
+            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            tempInvoice.payment_due_date = firstDay;
+            tempInvoice.status = 'Due';
+            tempInvoice.discount = 0;
+            tempInvoice.total = 0;
+            tempInvoice.amount_due = 0;
+            _.each(customer.productList, (item) => {
+              this.productService.getProductById(item)
+                .subscribe(
+                  (res: Product) => {
+                    tempInvoice.total = tempInvoice.total + res.rate;
+                    tempInvoice.amount_due = tempInvoice.total;
+                  }
+                )
+            });
+          });
+        }
+      )
+  }
+
+
+  // ----------------------------
+
+
+  buildRecentInvoiceOld() {
     this.invoiceList = [];
     this.invoiceService.getRecentInvoice()
       .subscribe(
-      (res: Customer[]) => {
-        _.each(res, (customer: Customer) => {
-          customer.productData = [];
-          let tempInvoice: Invoice;
+        (res: Customer[]) => {
+          _.each(res, (customer: Customer) => {
+            customer.productData = [];
+            let tempInvoice: Invoice;
 
-          // get all products
-          if (customer.productList.length > 0) {
-            _.each(customer.productList, (element) => {
-              this.productService.getProductById(element)
-                .subscribe(
-                (res: Product) => {
-                  customer.productData.push(res);
+            if (customer.productList.length > 0) {
+              _.each(customer.productList, (element) => {
+                this.productService.getProductById(element)
+                  .subscribe(
+                    (res: Product) => {
+                      customer.productData.push(res);
+                    }
+                  )
+              });
+            }
+
+            this.areaService.getAreaById(customer.area)
+              .subscribe(
+                (res) => {
+                  customer.areaData = res;
                 }
+              )
+
+            let date = new Date();
+            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+
+            //prepare invoice
+            tempInvoice = {
+              customerData: customer,
+              payment_due_date: firstDay,
+              status: 'Due',
+              discount: 0,
+              invoice_created_date: firstDay,
+              total: 0,
+              amount_due: 0,
+              productList: customer.productList
+            }
+
+            _.each(customer.productList, (item) => {
+              this.productService.getProductById(item)
+                .subscribe(
+                  (res: Product) => {
+                    tempInvoice.total = tempInvoice.total + res.rate;
+                    tempInvoice.amount_due = tempInvoice.total;
+                  },
+                  (err) => {
+                  }
                 )
             });
-          }
-
-          // get area
-          this.areaService.getAreaById(customer.area)
-            .subscribe(
-            (res) => {
-              customer.areaData = res;
-            }
-            )
-
-          let date = new Date();
-          let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-
-          //prepare invoice
-          tempInvoice = {
-            customerData: customer,
-            payment_due_date: firstDay,
-            status: 'Due',
-            discount: 0,
-            invoice_created_date: firstDay,
-            total: 0,
-            amount_due: 0,
-            productList: customer.productList
-          }
-
-          _.each(customer.productList, (item) => {
-            this.productService.getProductById(item)
-              .subscribe(
-              (res: Product) => {
-                tempInvoice.total = tempInvoice.total + res.rate;
-                tempInvoice.amount_due = tempInvoice.total;
-              },
-              (err) => {
-              }
-              )
+            this.invoiceList.push(tempInvoice);
           });
-          this.invoiceList.push(tempInvoice);
-        });
-      },
-      (err) => {
-        console.log(err);
-      }
+        },
+        (err) => {
+          console.log(err);
+        }
       )
   }
 
@@ -209,7 +237,7 @@ export class InvoiceRecentComponent implements OnInit {
   editInvoice(invoice: Invoice) {
     console.log(invoice);
     let navextras: NavigationExtras = {
-      queryParams: { "invoice": JSON.stringify(invoice) }
+      queryParams: {"invoice": JSON.stringify(invoice)}
     };
     this.router.navigate(['/invoice/edit'], navextras);
   }
@@ -255,7 +283,7 @@ export class InvoiceRecentComponent implements OnInit {
       invoice.amount_due = invoice.total - this.partialPay;
       invoice.partially_paid = this.partialPay;
     }
-    if(this.partialPay == invoice.total){
+    if (this.partialPay == invoice.total) {
       invoice.status = 'Paid';
       invoice.paid_date = Date.now();
     }
@@ -270,11 +298,11 @@ export class InvoiceRecentComponent implements OnInit {
     //first clean recent invoices
     this.invoiceService.dropRecentInvoice()
       .subscribe(
-      (res) => {
-      },
-      (err) => {
-        console.log("ERR");
-      }
+        (res) => {
+        },
+        (err) => {
+          console.log("ERR");
+        }
       )
 
     let data = {};
@@ -295,16 +323,16 @@ export class InvoiceRecentComponent implements OnInit {
 
       this.invoiceService.saveRecentInvoice(data)
         .subscribe(
-        (res) => {
-          if (res.status) {
-            this.isInvoiceSaved = true;
-          } else {
+          (res) => {
+            if (res.status) {
+              this.isInvoiceSaved = true;
+            } else {
+              this.isInvoiceError = true;
+            }
+          },
+          (err) => {
             this.isInvoiceError = true;
           }
-        },
-        (err) => {
-          this.isInvoiceError = true;
-        }
         )
     });
   }
