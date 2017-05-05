@@ -2,7 +2,6 @@
 * API endpoints are defined here 
 * all routes start with /api
 */
-import * as express from 'express';
 import { Router, Request, Response } from 'express';
 import { CustomerController } from '../controllers/customer.controller';
 import { ProductController } from '../controllers/product.controller';
