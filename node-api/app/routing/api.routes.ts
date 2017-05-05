@@ -165,5 +165,10 @@ router.get('/invoice/recent_invoice_db',(req:Request, res:Response)=>{
     InvoiceController.getRecentInvoiceDB(res);
 });
 
+// clean and nuke recent invoices
+router.get('/invoice/clean_invoice',(req:Request, res:Response)=>{
+    InvoiceController.cleanInvoice(res);
+});
+
 
 export const ApiRoute: Router = router;

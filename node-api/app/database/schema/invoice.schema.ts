@@ -10,7 +10,6 @@ export let invoiceSchema = new Schema({
     status: String,
     total: String,
     discount: String,
-    invoice_created_date: String,
     paid_date: String,
     amount_partially_paid: String,
     productList: [String],

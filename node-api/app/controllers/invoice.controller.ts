@@ -1,21 +1,21 @@
-import { Router, Request, Response } from 'express';
-import { Observable } from 'rxjs/Rx';
+import {Router, Request, Response} from 'express';
 import * as _ from 'underscore';
-import { CustomerModel } from '../database/models/customer.model';
-import { ProductModel } from '../database/models/product.model';
-import { AreaModel } from '../database/models/area.model';
-import { InvoiceModel, RecentInvoiceModel } from '../database/models/invoice.model';
+import {CustomerModel} from '../database/models/customer.model';
+import {AllInvoiceModel, RecentInvoiceModel} from '../database/models/invoice.model';
 
+declare var Date: any;
 export class InvoiceController {
-    constructor() { }
+    constructor() {
+    }
+
     //get invoices of this month for active users
     static getRecentInvoice(res: Response) {
         CustomerModel.find({
             $and: [
-                { status: true },
+                {status: true},
                 {
                     productList: {
-                        $exists: true, $not: { $size: 0 }
+                        $exists: true, $not: {$size: 0}
                     }
                 }
             ]
@@ -28,7 +28,7 @@ export class InvoiceController {
 
     // create new invoice
     static storeInvoice(res: Response, data: any) {
-        let invoice = new InvoiceModel({
+        let invoice = new AllInvoiceModel({
             customer_id: data.customer_id,
             payment_due_date: data.payment_due_date,
             amount_due: data.amount_due,
@@ -43,9 +43,9 @@ export class InvoiceController {
 
         invoice.save(function (err, data) {
             if (err) {
-                res.send({ status: false });
+                res.send({status: false});
             } else {
-                res.send({ status: true, id: data._id });
+                res.send({status: true, id: data._id});
             }
         });
     }
@@ -58,7 +58,7 @@ export class InvoiceController {
 
     //get invoice by _id
     static getInvoiceById(res: Response, id) {
-        InvoiceModel.findById(id, function (err, data) {
+        AllInvoiceModel.findById(id, function (err, data) {
             if (!err) {
                 res.send(data);
             }
@@ -67,7 +67,7 @@ export class InvoiceController {
 
     //search invoice list by username
     static searchByUsername(res: Response, data: any) {
-        InvoiceModel.find({ "username": { $regex: ".*" + data.text + ".*", $options: 'i' } }, function (err, data) {
+        AllInvoiceModel.find({"username": {$regex: ".*" + data.text + ".*", $options: 'i'}}, function (err, data) {
             if (!err) {
                 res.send(data);
             }
@@ -83,7 +83,6 @@ export class InvoiceController {
             status: data.status,
             total: data.total,
             discount: data.discount,
-            invoice_created_date: data.invoice_created_date,
             paid_date: data.paid_date,
             amount_partially_paid: data.amount_partially_paid,
             productList: data.productList,
@@ -91,24 +90,24 @@ export class InvoiceController {
 
         invoice.save(function (err, data) {
             if (err) {
-                res.send({ status: false });
+                res.send({status: false});
             } else {
-                res.send({ status: true, id: data._id });
+                res.send({status: true, id: data._id});
             }
         });
     }
 
     static dropRecentInvoiceAll(res: Response) {
         if (RecentInvoiceModel.collection.drop()) {
-            res.send({ status: true });
+            res.send({status: true});
         } else {
-            res.send({ status: false });
+            res.send({status: false});
         }
     }
 
     static checkRecentInvoiceExists(res: Response) {
         RecentInvoiceModel.count({}, function (err, count) {
-            res.send({ "count": count });
+            res.send({"count": count});
         });
     }
 
@@ -120,4 +119,47 @@ export class InvoiceController {
         })
     }
 
+    //clean and nuke recent invoices
+    static cleanInvoice(res: Response) {
+        let isClean: boolean = false;
+        let date = new Date();
+        let firstDay = new Date(date.getFullYear(), date.getMonth(), 2);
+
+        RecentInvoiceModel.find({
+            "created_on": {
+                $lt: firstDay
+            }
+        }, (err, data) => {
+            _.each(data, (obj) => {
+                isClean = false;
+                let invoice = new AllInvoiceModel({
+                    id: obj['_id'],
+                    customer_id: obj['customer_id'],
+                    payment_due_date: obj['payment_due_date'],
+                    amount_due: obj['amount_due'],
+                    status: obj['status'],
+                    total: obj['total'],
+                    discount: obj['discount'],
+                    invoice_created_date: obj['invoice_created_date'],
+                    paid_date: obj['paid_date'],
+                    amount_partially_paid: obj['amount_partially_paid'],
+                    productList: obj['productList'],
+                    created_on: obj['created_on']
+                });
+
+                invoice.save(function (err, newData) {
+                    if (!err) {
+                        RecentInvoiceModel.find({ '_id': newData['id']}).remove(function(err,removed){
+                            if(!err){
+                                isClean = true;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+        res.send({"status": isClean});
+    }
+
 }
+
