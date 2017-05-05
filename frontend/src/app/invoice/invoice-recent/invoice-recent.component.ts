@@ -38,6 +38,7 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.cleanInvoice()
       .subscribe(
         (res) => {
+          console.log(res);
           if (res.status) {
             this.generateNewInvoice();
           } else {
@@ -51,11 +52,12 @@ export class InvoiceRecentComponent implements OnInit {
   }
 
   generateNewInvoice() {
-    // 1) prepare invoice
-    // 2) Save to DB
-
-    // 3) Fetch and display all recent invoices
-    this.buildRecentInvoice();
+    this.invoiceService.dropRecentInvoice()
+      .subscribe(
+        (res) => {
+          this.buildRecentInvoice();
+        }
+      )
   }
 
   getRecentInvoiceDB() {
@@ -95,11 +97,9 @@ export class InvoiceRecentComponent implements OnInit {
                 )
             });
           }
-
-        },
+        }
       )
   }
-
 
   buildRecentInvoice() {
     this.invoiceService.getRecentInvoice()
@@ -119,6 +119,7 @@ export class InvoiceRecentComponent implements OnInit {
               amount_due: 0,
               amount_partially_paid: 0
             };
+
             _.each(customer.productList, (item) => {
               this.productService.getProductById(item)
                 .subscribe(
@@ -130,6 +131,7 @@ export class InvoiceRecentComponent implements OnInit {
             });
             this.saveRecentInvoice(tempInvoice);
           });
+          this.getRecentInvoiceDB();
         }
       )
   }
@@ -146,17 +148,15 @@ export class InvoiceRecentComponent implements OnInit {
       )
   }
 
-
-  // ----------------------------
-  //change search filter
+//change search filter
   filterChange(event: any) {
     this.searchMode = event;
   }
 
-  //quick search
+//quick search
   quickSearch(event: any) {
     if (event == '') {
-      this.buildRecentInvoice();
+      this.getRecentInvoiceDB();
       return;
     }
     let data = {
@@ -190,7 +190,7 @@ export class InvoiceRecentComponent implements OnInit {
     }
   }
 
-  //edit invoice
+//edit invoice
   editInvoice(invoice: Invoice) {
     let navextras: NavigationExtras = {
       queryParams: {"invoice": JSON.stringify(invoice)}
@@ -200,15 +200,21 @@ export class InvoiceRecentComponent implements OnInit {
 
   changeStatus(status: string, invoice: Invoice) {
     invoice.status = status;
-
-    if (invoice.status == 'Paid') {
+    if (status == 'Paid') {
       invoice.paid_date = Date.now();
       invoice.amount_due = 0;
-    } else if (invoice.status == 'Due') {
+    } else if (status == 'Due') {
       invoice.amount_due = invoice.total;
-    } else if (invoice.status == 'Partially Paid') {
+    } else if (status == 'Partially Paid') {
       this.partialInvoice = invoice;
     }
+
+    this.invoiceService.changeInvoiceStatus(invoice)
+      .subscribe(
+        (res) => {
+          console.log(res);
+        }
+      )
   }
 
   submitPartialPaymentForm() {
@@ -218,10 +224,9 @@ export class InvoiceRecentComponent implements OnInit {
   }
 
   toggleSearchStatus(event: any) {
-
+    this.getRecentInvoiceDB();
     this.paymentStatus = event.target.value;
-    if (this.paymentStatus == 'Due') {
-      this.buildRecentInvoice();
+    if (this.paymentStatus == 'All') {
       return;
     }
     let resArray = [];
@@ -244,10 +249,6 @@ export class InvoiceRecentComponent implements OnInit {
       invoice.paid_date = Date.now();
     }
     this.partialPay = 0;
-  }
-
-  resetInvoiceAll() {
-    this.buildRecentInvoice();
   }
 
   saveInvoiceAll() {
@@ -292,4 +293,5 @@ export class InvoiceRecentComponent implements OnInit {
         )
     });
   }
+
 }

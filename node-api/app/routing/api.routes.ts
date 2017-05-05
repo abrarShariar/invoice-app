@@ -169,5 +169,9 @@ router.get('/invoice/clean_invoice',(req:Request, res:Response)=>{
     InvoiceController.cleanInvoice(res);
 });
 
+router.put('/invoice/change_status',(req:Request, res:Response)=>{
+    InvoiceController.changeStatus(res, req.body);
+});
+
 
 export const ApiRoute: Router = router;

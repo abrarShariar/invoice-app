@@ -142,7 +142,6 @@ export class CustomerCreateComponent implements OnInit {
     this.allProducts[index] = event.target.value;
   }
 
-
   createRange(number) {
     let items: number[] = [];
     for (let i = 1; i <= number; i++) {

@@ -54,4 +54,6 @@ export class CustomerService {
     let url = this.customerUrl + 'search/customerByArea/';
     return this.http.post(url, data).map((res) => res.json());
   }
+
+
 }

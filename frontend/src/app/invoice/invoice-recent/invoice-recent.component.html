@@ -1,151 +1,170 @@
 <div class="content-wrapper" style="height: 1800px;">
 
-    <div class="alert alert-success" role="alert" *ngIf="isInvoiceSaved">Invoice Data Saved Successfully !!</div>
-    <div class="alert alert-danger" role="alert" *ngIf="isInvoiceError">ERROR !! Please Try Again.</div>
+  <div class="alert alert-success" role="alert" *ngIf="isInvoiceSaved">Invoice Data Saved Successfully !!</div>
+  <div class="alert alert-danger" role="alert" *ngIf="isInvoiceError">ERROR !! Please Try Again.</div>
 
-    <section class="content-header">
-        <div class="col-xs-12">
-            <h1>
-                Recent Invoices <small><em> Generated for the month of {{ currentDate | date: 'MMMM' }} </em></small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> InvoiceApp</a></li>
-                <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> Invoice</a></li>
-                <li class="active">Recent</li>
-            </ol>
-            <!--<button (click)="resetInvoiceAll()" data-toggle="tooltip" title="Reset Invoices" class="btn btn-danger" style="float:right;margin-bottom: 15px;margin-top:10px;margin-left:10px"><i class="fa fa-refresh" aria-hidden="true" style="font-size: xx-large"></i></button>-->
-            <button (click)="saveInvoiceAll()" data-toggle="tooltip" title="Save Invoices" class="btn btn-success" style="float:right;margin-bottom: 15px;margin-top:10px"><i class="fa fa-floppy-o" aria-hidden="true" style="font-size: xx-large"></i></button>
+  <section class="content-header">
+    <div class="col-xs-12">
+      <h1>
+        Recent Invoices
+        <small><em> Generated for the month of {{ currentDate | date: 'MMMM' }} </em></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> InvoiceApp</a></li>
+        <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> Invoice</a></li>
+        <li class="active">Recent</li>
+      </ol>
+      <!--<button (click)="resetInvoiceAll()" data-toggle="tooltip" title="Reset Invoices" class="btn btn-danger" style="float:right;margin-bottom: 15px;margin-top:10px;margin-left:10px"><i class="fa fa-refresh" aria-hidden="true" style="font-size: xx-large"></i></button>-->
+      <button (click)="saveInvoiceAll()" data-toggle="tooltip" title="Save Invoices" class="btn btn-success"
+              style="float:right;margin-bottom: 15px;margin-top:10px"><i class="fa fa-floppy-o" aria-hidden="true"
+                                                                         style="font-size: xx-large"></i></button>
+    </div>
+  </section>
+
+  <section class="content">
+
+    <!--  Page Content Here -->
+    <div class="col-xs-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">List Of Recent Invoice</h3>
+          <br>
+          <div class="box-tools">
+            <div class="row">
+              <div class="col-md-offset-2 col-lg-4">
+                Filter : &nbsp;
+                <label class="radio-inline"><input type="radio" name="optradio" value="All"
+                                                   (change)="toggleSearchStatus($event)">All</label>
+
+                <label class="radio-inline"><input type="radio" name="optradio" value="Paid"
+                                                   (change)="toggleSearchStatus($event)">Paid</label>
+                <label class="radio-inline"><input type="radio" name="optradio" value="Due"
+                                                   (change)="toggleSearchStatus($event)">Due</label>
+                <label class="radio-inline"><input type="radio" name="optradio" value="Partially Paid"
+                                                   (change)="toggleSearchStatus($event)">Partially Paid</label>
+              </div>
+              <div class="col-lg-6" style="float:right">
+                <div class="input-group">
+                  <div class="input-group-btn">
+                    <select style="font-size: 15px;height: 34px;" (change)="filterChange($event.target.value)">
+                      <option value="username">Username</option>
+                      <option value="mobile_number">Mobile Number</option>
+                      <option value="area">Area</option>
+                    </select>
+                  </div>
+                  <!-- /btn-group -->
+                  <input type="text" class="form-control" aria-label="..." placeholder="Search Recent Invoices"
+                         (input)="quickSearch($event.target.value)">
+                </div>
+                <!-- /input-group -->
+              </div>
+            </div>
+            <br><br>
+            <!-- /.row -->
+            <!-- /.row -->
+          </div>
         </div>
-    </section>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding" *ngIf="invoiceList">
+          <table class="table table-hover">
+            <tbody>
+            <tr>
+              <th>Username</th>
+              <th>Fullname</th>
+              <th>Mobile</th>
+              <th>Area</th>
+              <th>Product</th>
+              <th>Due (BDT)</th>
+              <th>Paid (BDT)</th>
+              <th>Total (BDT)</th>
+              <th>Status</th>
+              <th>Transaction Date</th>
+              <th>Change Status</th>
+              <th>Action</th>
+            </tr>
+            <tr *ngFor="let invoice of invoiceList | paginate: { itemsPerPage: 30, currentPage: p }">
+              <td>{{ invoice.customerData?.username }}</td>
+              <td>{{ invoice.customerData?.fullname }}</td>
+              <td>{{ invoice.customerData?.mobile_primary }}</td>
+              <td>{{ invoice.customerData?.areaData?.name }}</td>
+              <!--<td><span *ngIf="invoice.customerData?.productData?.length>0"> {{ invoice.customerData?.productData[0]?.name }} - <em *ngIf="invoice.customerData?.productData[0]?.rate">{{ invoice.customerData?.productData[0]?.rate }} BDT/month</em> </span>
+                  <small class="label bg-blue">{{ invoice.customerData?.productData.length }}</small>
+              </td>-->
+              <td>
+                <small class="label bg-blue">{{ invoice.customerData?.productData?.length }}</small>
+              </td>
+              <td>{{ invoice?.amount_due }}</td>
+              <td>{{ invoice?.total - invoice?.amount_due }}</td>
+              <td>{{ invoice?.total }}</td>
+              <td>
+                <label class="label label-danger" *ngIf="invoice.status=='Due'"> {{ invoice.status }} </label>
+                <label class="label label-success" *ngIf="invoice.status=='Paid'"> {{ invoice.status }} </label>
+                <label class="label label-warning" *ngIf="invoice.status=='Partially Paid'"> {{ invoice.status
+                  }} </label>
+              </td>
+              <td *ngIf="invoice?.status=='Due' || invoice?.status=='Partially Paid'">
+                {{ invoice?.payment_due_date | date }}
+              </td>
+              <td *ngIf="invoice?.status=='Paid'">
+                {{ invoice?.paid_date | date }}
+              </td>
+              <td>
+                <button class="btn btn-success btn-xs" (click)="changeStatus('Paid',invoice)"> Paid</button>
+                <button type="button" class="btn btn-warning btn-xs" (click)="changeStatus('Partially Paid',invoice)"
+                        data-toggle="modal" data-target="#partiallyPaymentModal"> Partially Paid
+                </button>
+                <button class="btn btn-danger btn-xs" (click)="changeStatus('Due',invoice)"> Due</button>
+              </td>
+              <td>
+                <a type="button" class="btn btn-primary btn-xs" (click)="editInvoice(invoice)"> View</a>
+              </td>
 
-    <section class="content">
-
-        <!--  Page Content Here -->
-
-
-        <div class="col-xs-12">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <h3 class="box-title">List Of Recent Invoice</h3>
-                    <br>
-                    <div class="box-tools">
-                        <div class="row">
-                            <div class="col-md-offset-2 col-lg-4">
-                                Filter By Status: &nbsp;
-                                <label class="radio-inline"><input type="radio" name="optradio" value="Paid"  (change)="toggleSearchStatus($event)">Paid</label>
-                                <label class="radio-inline"><input type="radio" name="optradio" value="Due" (change)="toggleSearchStatus($event)">Due</label>
-                                <label class="radio-inline"><input type="radio" name="optradio" value="Partially Paid" (change)="toggleSearchStatus($event)">Partially Paid</label>
-                            </div>
-                            <div class="col-lg-6" style="float:right">
-                                <div class="input-group">
-                                    <div class="input-group-btn">
-                                        <select style="font-size: 15px;height: 34px;" (change)="filterChange($event.target.value)">
-                                            <option value="username">Username</option>
-                                            <option value="mobile_number">Mobile Number</option>
-                                            <option value="area">Area</option>
-                                        </select>
-                                    </div>
-                                    <!-- /btn-group -->
-                                    <input type="text" class="form-control" aria-label="..." placeholder="Search Recent Invoices" (input)="quickSearch($event.target.value)">
-                                </div>
-                                <!-- /input-group -->
-                            </div>
-                        </div>
-                        <br><br>
-                        <!-- /.row -->
-                        <!-- /.row -->
+              <!-- Modal for Partially payment -->
+              <div class="modal fade" id="partiallyPaymentModal" tabindex="-1" role="dialog"
+                   aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                      <h2 class="modal-title" id="myModalLabel">Partially Payment</h2>
                     </div>
+                    <div class="modal-body" *ngIf="partialInvoice">
+                      <h4 style="text-align: center">Total: {{ partialInvoice?.total }} BDT</h4>
+                      <h4 style="text-align: center">Due: {{ partialInvoice?.amount_due }} BDT</h4>
+                      <br>
+                      <form class="form-horizontal" *ngIf="partialInvoice">
+                        <!--amoount partially paid-->
+                        <div class="form-group">
+                          <label for="amount_partially_paid " class="col-sm-2 control-label ">Amount Partially Paid
+                            (BDT) </label>
+                          <div class="col-sm-10">
+                            <input type="text" name="partialPay" [(ngModel)]="partialPay" class="form-control "
+                                   id="amount_partially_paid " placeholder="amount partially paid">
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                      <button type="button" class="btn btn-primary" (click)="savePartialPay(partialInvoice)"
+                              data-dismiss="modal">Save changes
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding" *ngIf="invoiceList">
-                    <table class="table table-hover">
-                        <tbody>
-                            <tr>
-                                <th>Username</th>
-                                <th>Fullname</th>
-                                <th>Mobile</th>
-                                <th>Area</th>
-                                <th>Product</th>
-                                <th>Due (BDT)</th>
-                                <th>Paid (BDT)</th>
-                                <th>Total (BDT)</th>
-                                <th>Status</th>
-                                <th>Transaction Date</th>
-                                <th>Change Status</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr *ngFor="let invoice of invoiceList | paginate: { itemsPerPage: 30, currentPage: p }">
-                                <td>{{ invoice.customerData?.username }}</td>
-                                <td>{{ invoice.customerData?.fullname }}</td>
-                                <td>{{ invoice.customerData?.mobile_primary }}</td>
-                                <td>{{ invoice.customerData?.areaData?.name }}</td>
-                                <!--<td><span *ngIf="invoice.customerData?.productData?.length>0"> {{ invoice.customerData?.productData[0]?.name }} - <em *ngIf="invoice.customerData?.productData[0]?.rate">{{ invoice.customerData?.productData[0]?.rate }} BDT/month</em> </span>
-                                    <small class="label bg-blue">{{ invoice.customerData?.productData.length }}</small>
-                                </td>-->
-                                <td><small class="label bg-blue">{{ invoice.customerData?.productData?.length }}</small></td>
-                                <td>{{ invoice?.amount_due }}</td>
-                                <td>{{ invoice?.total - invoice?.amount_due }}</td>
-                                <td>{{ invoice?.total }}</td>
-                                <td>
-                                    <label class="label label-danger" *ngIf="invoice.status=='Due'"> {{ invoice.status }} </label>
-                                    <label class="label label-success" *ngIf="invoice.status=='Paid'"> {{ invoice.status }} </label>
-                                    <label class="label label-warning" *ngIf="invoice.status=='Partially Paid'"> {{ invoice.status }} </label>
-                                </td>
-                                <td *ngIf="invoice?.status=='Due' || invoice?.status=='Partially Paid'">
-                                    {{ invoice?.payment_due_date | date }}
-                                </td>
-                                <td *ngIf="invoice?.status=='Paid'">
-                                    {{ invoice?.paid_date | date }}
-                                </td>
-                                <td>
-                                    <button class="btn btn-success btn-xs" (click)="changeStatus('Paid',invoice)"> Paid</button>
-                                    <button type="button" class="btn btn-warning btn-xs" (click)="changeStatus('Partially Paid',invoice)" data-toggle="modal" data-target="#partiallyPaymentModal"> Partially Paid</button>
-                                    <button class="btn btn-danger btn-xs" (click)="changeStatus('Due',invoice)"> Due</button>
-                                </td>
-                                <td>
-                                    <a type="button" class="btn btn-primary btn-xs" (click)="editInvoice(invoice)"> View</a>
-                                </td>
+              </div>
+            </tr>
+            </tbody>
 
-                                <!-- Modal for Partially payment -->
-                                <div class="modal fade" id="partiallyPaymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h2 class="modal-title" id="myModalLabel">Partially Payment</h2>
-                                            </div>
-                                            <div class="modal-body" *ngIf="partialInvoice">
-                                                <h4 style="text-align: center">Total: {{ partialInvoice?.total }} BDT</h4>
-                                                <h4 style="text-align: center">Due: {{ partialInvoice?.amount_due }} BDT</h4>
-                                                <br>
-                                                <form class="form-horizontal" *ngIf="partialInvoice">
-                                                    <!--amoount partially paid-->
-                                                    <div class="form-group">
-                                                        <label for="amount_partially_paid " class="col-sm-2 control-label ">Amount Partially Paid (BDT) </label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" name="partialPay" [(ngModel)]="partialPay" class="form-control " id="amount_partially_paid " placeholder="amount partially paid">
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                                                <button type="button" class="btn btn-primary" (click)="savePartialPay(partialInvoice)" data-dismiss="modal">Save changes</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </tr>
-                        </tbody>
-
-                    </table>
-                </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-            <div class="col-md-offset-4">
-                <pagination-controls (pageChange)="p = $event"></pagination-controls>
-            </div>
+          </table>
         </div>
-    </section>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+      <div class="col-md-offset-4">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+  </section>
 </div>
