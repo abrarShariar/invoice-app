@@ -8,7 +8,7 @@ import {Invoice} from '../invoice';
 import {ProductService} from '../../product/product.service';
 import {AreaService} from '../../area/area.service';
 import {CustomerService} from '../../customer/customer.service';
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {FormGroup, FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-invoice-recent',
@@ -134,13 +134,13 @@ export class InvoiceRecentComponent implements OnInit {
       )
   }
 
-  saveRecentInvoice(invoice:Invoice){
+  saveRecentInvoice(invoice: Invoice) {
     this.invoiceService.saveRecentInvoice(invoice)
       .subscribe(
-        (res)=>{
+        (res) => {
           console.log(res);
         },
-        (err)=>{
+        (err) => {
 
         }
       )

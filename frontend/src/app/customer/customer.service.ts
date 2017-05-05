@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CustomHttpService } from "../custom-http.service";
 import { environment } from "../../environments/environment";
-import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -54,10 +53,5 @@ export class CustomerService {
   getCustomerByArea(data: any) {
     let url = this.customerUrl + 'search/customerByArea/';
     return this.http.post(url, data).map((res) => res.json());
-  }
-
-  getCustomerIdByUsername(username) {
-    let url = this.customerUrl + 'id/username=' + username;
-    return this.http.get(url).map((res) => res.json());
   }
 }

@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { CustomerDetailComponent } from './customer-detail/customer-detail.component';
+import { RouterModule } from "@angular/router";
 
 const customerUploadRoutes = [
 ];

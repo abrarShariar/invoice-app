@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { CustomerModel } from '../database/models/customer.model';
-import { Observable } from 'rxjs/Rx';
 import * as _ from 'underscore';
 import { AreaModel } from '../database/models/area.model';
 

@@ -1,11 +1,9 @@
-import { Component, OnInit, ElementRef, AfterContentInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { FormGroup, FormBuilder } from "@angular/forms";
 import { CustomerService } from '../customer.service';
 import * as _ from 'underscore';
 import { Customer } from '../customer';
 import { ProductService } from '../../product/product.service';
-import { Product } from '../../product/product';
-import { Area } from '../../area/area';
 import { AreaService } from '../../area/area.service';
 
 @Component({
@@ -21,12 +19,11 @@ export class CustomerCreateComponent implements OnInit {
   public customerCreateForm: FormGroup;
   public productList: any[] = [];
   public areaList: any[] = [];
-  public numbers;
   public allProductCounter = 1;
   public allProducts: any[] = [];
 
 
-  constructor(private elementRef: ElementRef, private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
+  constructor(private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
 
   ngOnInit() {
     this.buildForm();
@@ -145,9 +142,6 @@ export class CustomerCreateComponent implements OnInit {
     this.allProducts[index] = event.target.value;
   }
 
-  checkProductList() {
-    console.log(this.allProducts);
-  }
 
   createRange(number) {
     let items: number[] = [];

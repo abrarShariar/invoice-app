@@ -1,55 +1,55 @@
 <section class="content-header">
-    <div class="col-xs-12">
-        <h1>
-            All Products
-        </h1>
-    </div>
+  <div class="col-xs-12">
+    <h2>
+      All Products
+    </h2>
+  </div>
 </section>
 <section class="content">
-    <!--  Page Content Here -->
+  <!--  Page Content Here -->
 
-    <div class="col-xs-12">
-        <div class="box box-primary">
-            <div class="box-header">
-                <h3 class="box-title">List Of All Products</h3>
-                <br>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-                <table class="table table-hover">
-                    <tbody>
-                        <tr>
-                            <th>Name</th>
-                            <th>Rate &nbsp;(BDT/month) </th>
-                            <th>VAT(%)</th>
-                            <th>Description</th>
-                            <th>Action</th>
+  <div class="col-xs-12">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">List Of All Products</h3>
+        <br>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body table-responsive no-padding">
+        <table class="table table-hover">
+          <tbody>
+          <tr>
+            <th>Name</th>
+            <th>Rate &nbsp;(BDT/month)</th>
+            <th>VAT(%)</th>
+            <th>Description</th>
+            <th>Action</th>
 
-                        </tr>
-                        <tr *ngFor="let product of products | paginate: { itemsPerPage: 10, currentPage: p }">
-                            <td>{{ product.name }}</td>
-                            <td>{{ product.rate }} </td>
-                            <td>{{ product.vat }}</td>
-                            <td>{{ product.description }}</td>
-                            <!--<td *ngIf="product.status">
-                                <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(product._id,product.status)"> Active</button>
-                            </td>
-                            <td *ngIf="!product.status">
-                                <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(product._id,product.status)"> Inactive</button>
-                            </td>-->
-                            <td>
-                                <a type="button" class="btn btn-primary btn-xs" (click)="editProduct(product._id)"> Edit</a>
-                            </td>
-                        </tr>
-                    </tbody>
+          </tr>
+          <tr *ngFor="let product of products | paginate: { itemsPerPage: 10, currentPage: p }">
+            <td>{{ product.name }}</td>
+            <td>{{ product.rate }}</td>
+            <td>{{ product.vat }}</td>
+            <td>{{ product.description }}</td>
+            <!--<td *ngIf="product.status">
+                <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(product._id,product.status)"> Active</button>
+            </td>
+            <td *ngIf="!product.status">
+                <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(product._id,product.status)"> Inactive</button>
+            </td>-->
+            <td>
+              <a type="button" class="btn btn-primary btn-xs" (click)="editProduct(product._id)"> Edit</a>
+            </td>
+          </tr>
+          </tbody>
 
-                </table>
-            </div>
-            <!-- /.box-body -->
-        </div>
-        <!-- /.box -->
-        <div class="col-md-offset-4">
-            <pagination-controls (pageChange)="p = $event"></pagination-controls>
-        </div>
+        </table>
+      </div>
+      <!-- /.box-body -->
     </div>
+    <!-- /.box -->
+    <div class="col-md-offset-4">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
 </section>

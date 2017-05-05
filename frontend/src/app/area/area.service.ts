@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CustomHttpService } from "../custom-http.service";
 import { environment } from "../../environments/environment";
-import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -36,5 +35,5 @@ export class AreaService {
     return this.http.put(url, data).map((res) => res.json());
   }
 
-  
+
 }

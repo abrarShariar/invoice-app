@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import * as _ from 'underscore';
-import { AreaService } from '../area.service';
-import { Area } from '../area';
-import { AreaAllComponent } from '../area-all/area-all.component';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {AreaService} from '../area.service';
+import {Area} from '../area';
 
 @Component({
   selector: 'app-area-create',
@@ -17,9 +15,11 @@ export class AreaCreateComponent implements OnInit {
   public areaCreateForm: FormGroup;
   public areas: Area[] = [];
   editMode: boolean = false;
+  createMode: boolean = false;
   private id: any;
 
-  constructor(private areaService: AreaService, private fb: FormBuilder) { }
+  constructor(private areaService: AreaService, private fb: FormBuilder) {
+  }
 
   ngOnInit() {
     this.buildForm();
@@ -44,35 +44,34 @@ export class AreaCreateComponent implements OnInit {
     if (!this.editMode) {
       this.areaService.createArea(data)
         .subscribe(
-        (res) => {
-          if (res.status) {
-            this.getAllArea();
-            this.showSuccess = true;
-            this.areaCreateForm.reset();
-          } else {
+          (res) => {
+            if (res.status) {
+              this.getAllArea();
+              this.showSuccess = true;
+              this.areaCreateForm.reset();
+            } else {
+              this.showError = true;
+            }
+          },
+          (err) => {
+            console.log("ERROR from createArea");
             this.showError = true;
           }
-        },
-        (err) => {
-          console.log("ERROR from createArea");
-          this.showError = true;
-        }
         )
     } else {
       this.areaService.updateArea(data)
         .subscribe(
-        (res) => {
-          // console.log(res);
-          this.getAllArea();
-          this.areaCreateForm.reset();
-          this.editMode = false;
-        },
-        (err) => {
+          (res) => {
+            // console.log(res);
+            this.getAllArea();
+            this.areaCreateForm.reset();
+            this.editMode = false;
+          },
+          (err) => {
 
-        }
+          }
         )
     }
-
 
 
   }
@@ -81,12 +80,12 @@ export class AreaCreateComponent implements OnInit {
   getAllArea() {
     this.areaService.getAllArea()
       .subscribe(
-      (res) => {
-        this.areas = res;
-      },
-      (err) => {
-        console.log(err);
-      }
+        (res) => {
+          this.areas = res;
+        },
+        (err) => {
+          console.log(err);
+        }
       )
   }
 
@@ -94,27 +93,35 @@ export class AreaCreateComponent implements OnInit {
     this.getAllArea();
   }
 
-   cancelEdit() {
+  cancelEdit() {
     this.editMode = false;
+    this.createMode = false;
     this.areaCreateForm.reset();
     this.getAllArea();
   }
 
 
-   showEditForm(event) {
+  showEditForm(event) {
     this.editMode = true;
+    this.createMode = false;
     this.id = event;
     this.areaService.getAreaById(event)
       .subscribe(
-      (res) => {
-        this.areaCreateForm.patchValue({
-          name: [res.name]
-        });
-      },
-      (err) => {
+        (res) => {
+          this.areaCreateForm.patchValue({
+            name: [res.name]
+          });
+        },
+        (err) => {
 
-      }
+        }
       )
+  }
+
+  createModeOn(){
+    this.editMode = false;
+    this.createMode = true;
+    this.areaCreateForm.reset();
   }
 
 

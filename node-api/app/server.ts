@@ -1,12 +1,9 @@
 import * as express from 'express';
 import { ApiRoute } from './routing/api.routes';
 import { connectMongoDB } from './database/db.config';
-import { connect } from 'mongoose';
-
 
 const app: express.Application = express();
 const port: number = process.env.PORT || 5000;
-
 
 // Add headers
 app.use(function (req, res, next) {

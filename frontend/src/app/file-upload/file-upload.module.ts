@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { FileUploadRoutingModule } from "./file-upload-routing.module";
-import { FileSelectDirective, FileUploader } from 'ng2-file-upload';
+import { FileSelectDirective } from 'ng2-file-upload';
 // components
 import { ExcelFileUploaderComponent } from './excel-file-uploader/excel-file-uploader.component';
 //service

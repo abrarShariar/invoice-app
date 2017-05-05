@@ -1,16 +1,13 @@
-import { ProductRoutingModule } from '../../product/product-routing.module';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../customer.service';
 import * as _ from 'underscore';
 import { Customer } from '../customer';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Product } from '../../product/product';
+import { FormGroup, FormBuilder } from "@angular/forms";
 import { ProductService } from '../../product/product.service';
 import { AreaService } from '../../area/area.service';
-import { Area } from '../../area/area';
 
 @Component({
   selector: 'app-customer-detail',
@@ -102,7 +99,7 @@ export class CustomerDetailComponent implements OnInit {
       status: this.customerDetailForm.value.status,
       productList: this.customer.productList
     }
-    
+
     this.customerService.updateCustomer(data)
       .subscribe(
       (res) => {

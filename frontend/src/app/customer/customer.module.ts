@@ -10,7 +10,6 @@ import { CustomerDetailComponent } from './customer-detail/customer-detail.compo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomerCreateComponent } from './customer-create/customer-create.component';
 import { ProductService } from '../product/product.service';
-import { AreaService } from '../area/area.service';
 
 
 @NgModule({

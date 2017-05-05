@@ -1,70 +1,78 @@
 <div class="content-wrapper" style="height:1000px">
-    <section class=" content-header ">
-        <div class="col-xs-12">
-            <h1 *ngIf="!editMode">
-                Create New Product
-            </h1>
-            <h1 *ngIf="editMode">
-                Update Product
-            </h1>
-            <ol class="breadcrumb ">
-                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
-                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Product</a></li>
-                <li class="active ">New</li>
-            </ol>
-        </div>
-    </section>
-    <section class="content">
-        <div class="col-md-offset-3 col-md-6">
-            <div class="box box-primary">
-                <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Product Created Successfully !!</div>
-                <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
-                <!--  Page Content Here -->
-                <form class="form-horizontal " [formGroup]="productCreateForm" (submit)="submitCreateProductForm()">
-                    <!--name-->
-                    <div class=" form-group">
-                        <label for="name" class="col-sm-2 control-label ">Name</label>
-                        <div class="col-sm-10 ">
-                            <input formControlName="name" type="text " class="form-control" id="name" placeholder="product name ">
-                        </div>
-                    </div>
-                    <!--rate-->
-                    <div class="form-group">
-                        <label for="rate" class="col-sm-2 control-label ">Rate</label>
-                        <div class="col-sm-10 ">
-                            <input formControlName="rate" type="text" class="form-control" id="rate" placeholder="monthly rate in BDT">
-                        </div>
-                    </div>
-                    <!--VAT %-->
-                    <div class="form-group">
-                        <label for="rate" class="col-sm-2 control-label ">VAT (%)</label>
-                        <div class="col-sm-10 ">
-                            <input formControlName="vat" type="text" class="form-control" id="vat" placeholder="VAT (%)">
-                        </div>
-                    </div>
-                    <!--description-->
-                    <div class="form-group">
-                        <label for="rate" class="col-sm-2 control-label ">Description</label>
-                        <div class="col-sm-10 ">
-                            <textarea formControlName="description" class="form-control"></textarea>
-                        </div>
-                    </div>
+  <div class="col-xs-12">
+    <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Product Created Successfully !!</div>
+    <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
+    <ol class="breadcrumb ">
+      <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
+      <li><a [routerLink]="[ '/dashboard/product' ] "><i class="fa fa-dashboard "></i> Product</a></li>
+      <li class="active ">New</li>
+    </ol>
+  </div>
+  <section class="content-header">
+    <div class="col-md-12">
+      <button class="btn btn-primary" type="button"
+              (click)="createModeOn()">
+        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;New Product
+      </button>
+      <h2 *ngIf="!editMode && createMode">
+        Create New Product
+      </h2>
+      <h2 *ngIf="editMode && !createMode">
+        Update Product
+      </h2>
+    </div>
+  </section>
 
-                    <div class="form-group ">
-                        <div class="col-sm-offset-2 col-sm-10 ">
-                            <button type="submit" class="btn btn-success" *ngIf="!editMode">Save</button>
-                            <button type="submit" class="btn btn-warning" *ngIf="editMode">Update</button>
-                            <button type="button" class="btn btn-danger" *ngIf="editMode" (click)="cancelEdit()">Cancel</button>
-                        </div>
-                    </div>
+  <section class="content" *ngIf="createMode || editMode">
+    <div class="col-md-12">
 
-                </form>
+      <div class="box box-primary">
+        <!--  Page Content Here -->
+        <form class="form-horizontal " [formGroup]="productCreateForm" (submit)="submitCreateProductForm()">
+          <!--name-->
+          <div class=" form-group">
+            <label for="name" class="col-sm-2 control-label ">Name</label>
+            <div class="col-sm-10 ">
+              <input formControlName="name" type="text " class="form-control" id="name" placeholder="product name ">
             </div>
-        </div>
-        <div class="col-md-6"></div>
-        <div class="col-md-12">
-            <app-product-all (showEditForm)="showEditForm($event)" (statusChange)="statusChanged($event)" [products]="products"></app-product-all>
-        </div>
+          </div>
+          <!--rate-->
+          <div class="form-group">
+            <label for="rate" class="col-sm-2 control-label ">Rate</label>
+            <div class="col-sm-10 ">
+              <input formControlName="rate" type="text" class="form-control" id="rate"
+                     placeholder="monthly rate in BDT">
+            </div>
+          </div>
+          <!--VAT %-->
+          <div class="form-group">
+            <label for="rate" class="col-sm-2 control-label ">VAT (%)</label>
+            <div class="col-sm-10 ">
+              <input formControlName="vat" type="text" class="form-control" id="vat" placeholder="VAT (%)">
+            </div>
+          </div>
+          <!--description-->
+          <div class="form-group">
+            <label for="rate" class="col-sm-2 control-label ">Description</label>
+            <div class="col-sm-10 ">
+              <textarea formControlName="description" class="form-control"></textarea>
+            </div>
+          </div>
 
-    </section>
+          <div class="form-group ">
+            <div class="col-sm-offset-2 col-sm-10 ">
+              <button type="submit" class="btn btn-success" *ngIf="!editMode">Save</button>
+              <button type="submit" class="btn btn-warning" *ngIf="editMode">Update</button>
+              <button type="button" class="btn btn-danger" *ngIf="editMode || createMode" (click)="cancelEdit()">
+                Cancel
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </section>
+  <app-product-all (showEditForm)="showEditForm($event)" (statusChange)="statusChanged($event)"
+                   [products]="products"></app-product-all>
 </div>

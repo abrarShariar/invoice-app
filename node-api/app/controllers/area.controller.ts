@@ -1,6 +1,4 @@
 import { Router, Request, Response } from 'express';
-import { Observable } from 'rxjs/Rx';
-import * as _ from 'underscore';
 import { AreaModel } from '../database/models/area.model';
 
 
@@ -9,7 +7,6 @@ export class AreaController {
 
     //create new areas
     static create(res: Response, data: any) {
-        let isDataInserted: boolean = false;
         let area = new AreaModel({
             name: data.name,
             status: true

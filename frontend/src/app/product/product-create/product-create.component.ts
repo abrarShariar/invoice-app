@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import * as _ from 'underscore';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
-import { ProductAllComponent } from '../product-all/product-all.component';
 
 @Component({
   selector: 'app-product-create',
@@ -16,7 +14,9 @@ export class ProductCreateComponent implements OnInit {
   showSuccess: boolean = false;
   showError: boolean = false;
   editMode: boolean = false;
+  createMode: boolean = false;
   private id: any;
+  updateSuccess : boolean = false;
 
   constructor(private fb: FormBuilder, private productService: ProductService) { }
 
@@ -99,6 +99,7 @@ export class ProductCreateComponent implements OnInit {
 
   showEditForm(event) {
     this.editMode = true;
+    this.createMode = false;
     this.id = event;
     this.productService.getProductById(event)
       .subscribe(
@@ -119,8 +120,15 @@ export class ProductCreateComponent implements OnInit {
 
   cancelEdit() {
     this.editMode = false;
+    this.createMode = false;
     this.productCreateForm.reset();
     this.getAllProduct();
+  }
+
+  createModeOn(){
+    this.editMode = false;
+    this.createMode = true;
+    this.productCreateForm.reset();
   }
 
 }

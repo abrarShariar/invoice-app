@@ -1,4 +1,3 @@
-import {FileItem} from 'ng2-file-upload/file-upload/file-item.class';
 import {Component, OnInit} from '@angular/core';
 import {CustomerService} from '../customer.service';
 import {Customer} from '../customer';

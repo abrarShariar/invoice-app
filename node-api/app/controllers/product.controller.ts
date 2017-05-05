@@ -1,8 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { Observable } from 'rxjs/Rx';
-import * as _ from 'underscore';
 import { ProductModel } from '../database/models/product.model';
-
 
 export class ProductController {
     constructor() { }
