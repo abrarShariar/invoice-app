@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { InvoiceService } from '../invoice.service';
 import { Router } from "@angular/router";
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from "rxjs";
 import { Invoice } from '../invoice';
 import { CustomerService } from '../../customer/customer.service';
@@ -24,7 +24,8 @@ export class InvoiceHtmlComponent implements OnInit {
   private subscription: Subscription;
   public invoice: Invoice;
 
-  constructor(private productService:ProductService,private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute, private router: Router) { }
+
+  constructor(private productService:ProductService,private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.subscription = this.route.params.subscribe(params => {
@@ -64,7 +65,7 @@ export class InvoiceHtmlComponent implements OnInit {
                 }
               )
         });
-        
+
         //get customer data
         this.customerService.getCustomerDetails(this.invoice.customer_id)
           .subscribe(

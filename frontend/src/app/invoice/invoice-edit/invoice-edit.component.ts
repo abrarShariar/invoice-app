@@ -1,15 +1,15 @@
-import { DatePipe } from '@angular/common/src/pipes/date_pipe';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { InvoiceService } from '../invoice.service';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription } from "rxjs";
-import { Invoice } from '../invoice';
-import { Router } from "@angular/router";
-import { SelectItem } from 'primeng/primeng';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { ProductService } from '../../product/product.service';
+import {DatePipe} from '@angular/common/src/pipes/date_pipe';
+import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
+import {InvoiceService} from '../invoice.service';
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from "rxjs";
+import {Invoice} from '../invoice';
+import {Router} from "@angular/router";
+import {FormGroup, FormBuilder} from "@angular/forms";
+import {ProductService} from '../../product/product.service';
+import {CustomerService} from '../../customer/customer.service';
 import * as _ from 'underscore';
-import { Product } from '../../product/product';
+import {AreaService} from '../../area/area.service';
 
 @Component({
   selector: 'app-invoice-edit',
@@ -19,13 +19,11 @@ import { Product } from '../../product/product';
 export class InvoiceEditComponent implements OnInit {
   @ViewChild('productSelectBox') productSelectBox: ElementRef;
 
-  cities: SelectItem[];
   public productList: any[] = [];
   public additionalProducts: any[] = [];
   public addProductCounter: number = 0;
   public allProductsAdd: any[] = [];
 
-  selectedCity: string;
 
   public productSuggestions: any[] = [];
 
@@ -36,42 +34,80 @@ export class InvoiceEditComponent implements OnInit {
   public currentDate: number = Date.now();
   public datePipe: DatePipe = new DatePipe('en-US');
   public paymentStatus: string = 'Due';
+  public showForm: boolean = false;
 
-  constructor(private elementRef: ElementRef, private productService: ProductService, private fb: FormBuilder, private invoiceService: InvoiceService, private route: ActivatedRoute, private router: Router) {
+  constructor(private areaService: AreaService, private customerService: CustomerService, private elementRef: ElementRef, private productService: ProductService, private fb: FormBuilder, private invoiceService: InvoiceService, private route: ActivatedRoute, private router: Router) {
 
   }
 
   ngOnInit() {
     this.getProductList();
     this.subscription = this.route.params.subscribe(params => {
-      let data = this.route.queryParams["_value"].invoice;
-      this.invoice = JSON.parse(data);
-      this.allProductsAdd = this.invoice.productList;
-      this.buildForm();
+      this.id = params['id'];
+      if (this.id) {
+        this.invoiceService.getInvoiceById(this.id)
+          .subscribe(
+            (res) => {
+              this.invoice = res;
+              this.allProductsAdd = this.invoice.productList;
+              this.buildForm();
+            },
+            (err) => {
+
+            }
+          )
+      }
     });
   }
 
   buildForm() {
-    let invoice_created_date = this.datePipe.transform(this.invoice.invoice_created_date, 'y-MM-dd');
-    let payment_due_date = this.datePipe.transform(this.invoice.payment_due_date, 'y-MM-dd')
-    this.invoiceDetailForm = this.fb.group({
-      username: [this.invoice.customerData.username],
-      email: [this.invoice.customerData.email],
-      fullname: [this.invoice.customerData.fullname],
-      location: [this.invoice.customerData.location],
-      area: [this.invoice.customerData.areaData.name],
-      city: [this.invoice.customerData.city],
-      mobile_primary: [this.invoice.customerData.mobile_primary],
-      mobile_secondary: [this.invoice.customerData.mobile_secondary],
-      payment_due_date: [payment_due_date],
-      amount_due: [this.invoice.amount_due],
-      status: [this.invoice.status],
-      total: [this.invoice.total],
-      discount: [this.invoice.discount],
-      invoice_created_date: [invoice_created_date],
-      paid_date: [''],
-      amount_partially_paid: ['']
-    })
+    this.customerService.getCustomerDetails(this.invoice.customer_id)
+      .subscribe(
+        (res) => {
+          this.invoice.customerData = res;
+          this.invoice.customerData.productData = [];
+          let total_partially_paid = 0;
+          _.each(this.invoice.productList, (item) => {
+            this.productService.getProductById(item)
+              .subscribe(
+                (res) => {
+                  this.invoice.customerData.productData.push(res);
+                }
+              )
+            total_partially_paid += item['amount'];
+          });
+
+          this.invoiceDetailForm = this.fb.group({
+            username: [res['username']],
+            email: [res['email']],
+            fullname: [res['fullname']],
+            location: [res['location']],
+            area: [''],
+            city: [res['city']],
+            mobile_primary: [res['mobile_primary']],
+            mobile_secondary: [res['mobile_secondary']],
+            payment_due_date: [this.invoice['payment_due_date']],
+            amount_due: [this.invoice['amount_due']],
+            status: [this.invoice['status']],
+            total: [this.invoice['total']],
+            discount: [this.invoice['discount']],
+            invoice_created_date: [this.invoice['invoice_created_date']],
+            paid_date: [this.invoice['paid_date']],
+            amount_partially_paid: total_partially_paid
+          });
+
+          this.areaService.getAreaById(res['area'])
+            .subscribe(
+              (res) => {
+                this.invoiceDetailForm.patchValue({
+                  area: res['name']
+                });
+              }
+            )
+          this.showForm = true;
+        }
+      )
+
   }
 
   getProductSuggestions(event: any) {
@@ -81,12 +117,12 @@ export class InvoiceEditComponent implements OnInit {
 
     this.productService.searchByName(data)
       .subscribe(
-      (res) => {
-        this.productSuggestions = res;
-      },
-      (err) => {
+        (res) => {
+          this.productSuggestions = res;
+        },
+        (err) => {
 
-      }
+        }
       )
   }
 
@@ -94,16 +130,16 @@ export class InvoiceEditComponent implements OnInit {
     this.productList = [];
     this.productService.getAllProduct()
       .subscribe(
-      (res) => {
-        _.each(res, (item) => {
-          if (item['status']) {
-            this.productList.push(item);
-          }
-        });
-      },
-      (err) => {
-        console.log("ERROR from productList");
-      }
+        (res) => {
+          _.each(res, (item) => {
+            if (item['status']) {
+              this.productList.push(item);
+            }
+          });
+        },
+        (err) => {
+          console.log("ERROR from productList");
+        }
       )
   }
 
@@ -132,27 +168,22 @@ export class InvoiceEditComponent implements OnInit {
   submitInvoiceEditForm() {
     let data = {};
     data = {
-      customer_id: this.invoice.customerData['_id'],
-      payment_due_date: this.invoiceDetailForm.value.payment_due_date,
+      id: this.id,
       amount_due: this.invoiceDetailForm.value.amount_due,
-      status: this.invoiceDetailForm.value.status,
       total: this.invoiceDetailForm.value.total,
       discount: this.invoiceDetailForm.value.discount,
-      invoice_created_date: this.invoiceDetailForm.value.invoice_created_date,
-      paid_date: this.invoiceDetailForm.value.paid_date,
-      amount_partially_paid: this.invoiceDetailForm.value.amount_partially_paid,
       productList: this.allProductsAdd,
-      action: 'Not Downloaded'
+      amount_partially_paid: this.invoice.amount_partially_paid
     }
-    
-    this.invoiceService.storeInvoice(data)
-      .subscribe(
-      (res) => {
-        this.router.navigate(['dashboard/invoice/display',res.id]);
-      },
-      (err) => {
 
-      }
+    this.invoiceService.preGenerateInvoiceUpdate(data)
+      .subscribe(
+        (res) => {
+          this.router.navigate(['dashboard/invoice/display',this.id]);
+        },
+        (err) => {
+          console.log('Error in Pre Generator');
+        }
       )
   }
 
@@ -167,14 +198,12 @@ export class InvoiceEditComponent implements OnInit {
     }
   }
 
-
   getPartiallyPaid(event: any) {
     this.invoiceDetailForm.patchValue({
       amount_partially_paid: event.target.value,
       amount_due: this.invoice.amount_due - event.target.value
     });
   }
-
 
   getDiscount(event: any) {
     this.invoiceDetailForm.patchValue({
@@ -185,7 +214,7 @@ export class InvoiceEditComponent implements OnInit {
   updatePayments() {
     let total = 0;
     _.each(this.allProductsAdd, (item) => {
-      let product = _.findWhere(this.productList, { _id: item });
+      let product = _.findWhere(this.productList, {_id: item});
       total += product.rate;
     });
 

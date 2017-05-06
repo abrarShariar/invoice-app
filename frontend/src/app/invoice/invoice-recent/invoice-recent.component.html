@@ -16,8 +16,8 @@
       </ol>
       <!--<button (click)="resetInvoiceAll()" data-toggle="tooltip" title="Reset Invoices" class="btn btn-danger" style="float:right;margin-bottom: 15px;margin-top:10px;margin-left:10px"><i class="fa fa-refresh" aria-hidden="true" style="font-size: xx-large"></i></button>-->
       <!--<button (click)="saveInvoiceAll()" data-toggle="tooltip" title="Save Invoices" class="btn btn-success"-->
-              <!--style="float:right;margin-bottom: 15px;margin-top:10px"><i class="fa fa-floppy-o" aria-hidden="true"-->
-                                                                         <!--style="font-size: xx-large"></i></button>-->
+      <!--style="float:right;margin-bottom: 15px;margin-top:10px"><i class="fa fa-floppy-o" aria-hidden="true"-->
+      <!--style="font-size: xx-large"></i></button>-->
     </div>
   </section>
 
@@ -116,7 +116,7 @@
                 <button class="btn btn-danger btn-xs" (click)="changeStatus('Due',invoice)"> Due</button>
               </td>
               <td>
-                <a type="button" class="btn btn-primary btn-xs" (click)="editInvoice(invoice)"> View</a>
+                <a type="button" class="btn btn-primary btn-xs" [routerLink]="['view',invoice?._id]"> View</a>
               </td>
 
               <!-- Modal for Partially payment -->
@@ -130,8 +130,20 @@
                       <h2 class="modal-title" id="myModalLabel">Partially Payment</h2>
                     </div>
                     <div class="modal-body" *ngIf="partialInvoice">
-                      <h4 style="text-align: center">Total: {{ partialInvoice?.total }} BDT</h4>
-                      <h4 style="text-align: center">Due: {{ partialInvoice?.amount_due }} BDT</h4>
+                      <div class="col-md-12">
+                        <div class="col-md-6">
+                          <h4 style="text-align: center">Total: {{ partialInvoice?.total }} BDT</h4>
+                          <h4 style="text-align: center">Due: {{ partialInvoice?.amount_due }} BDT</h4>
+                        </div>
+                        <div class="col-md-6">
+                          <div *ngFor="let x of partialInvoice?.amount_partially_paid">
+                            <h4 style="text-align: center">Date: {{ x?.date | date }} BDT</h4>
+                            <h4 style="text-align: center">Partial Pay: {{ x?.amount }} BDT</h4>
+                            <br>
+                          </div>
+
+                        </div>
+                      </div>
                       <br>
                       <form class="form-horizontal" *ngIf="partialInvoice">
                         <!--amoount partially paid-->

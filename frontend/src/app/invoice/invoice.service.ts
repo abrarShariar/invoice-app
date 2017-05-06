@@ -66,25 +66,29 @@ export class InvoiceService {
     return this.http.get(url).map(res => res.json());
   }
 
-  changeInvoiceStatus(data:any) {
+  changeInvoiceStatus(data: any) {
     let url = this.invoiceUrl + 'change_status';
-    return this.http.put(url,data).map((res)=>res.json());
+    return this.http.put(url, data).map((res) => res.json());
   }
 
   //get total of all products in product list
-  getTotal(data:any){
+  getTotal(data: any) {
     let url = this.invoiceUrl + 'product_list/total';
-    return this.http.post(url,data).map((res)=>res.json());
+    return this.http.post(url, data).map((res) => res.json());
   }
 
-  buildAndSaveRecentInvoice(){
+  buildAndSaveRecentInvoice() {
     let url = this.invoiceUrl + 'recent/build_and_save';
-    return this.http.get(url).map((res)=>res.json());
+    return this.http.get(url).map((res) => res.json());
   }
 
-  savePartialPay(data:any){
+  savePartialPay(data: any) {
     let url = this.invoiceUrl + 'recent/partial_pay/save';
-    return this.http.post(url,data).map((res)=>res.json());
+    return this.http.post(url, data).map((res) => res.json());
   }
 
+  preGenerateInvoiceUpdate(data: any) {
+    let url = this.invoiceUrl + 'pre_generate_update';
+    return this.http.post(url, data).map((res) => res.json());
+  }
 }

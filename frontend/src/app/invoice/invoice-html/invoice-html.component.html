@@ -12,19 +12,19 @@
         </div>
     </section>
     <section class="content " *ngIf="invoice">
-        <div class="col-md-offset-1 col-md-7" id="invoice_main">
+        <div class="col-md-offset-2 col-md-8" id="invoice_main">
             <!--invoice display starts here-->
             <div class="container" id="invoice_box" style="margin-top:10px" #invoiceBox>
-                <div class=" col-md-12 ">
+                <div class="col-md-12">
                     <!--head row-->
                     <div class="row ">
                         <!--left section-->
                         <div class="col-md-6">
-                            <img src="/assets/dist/img/company_logo.png" id="company_logo">
+                            <img src="/assets/dist/img/company_logo_2.png" id="company_logo">
                         </div>
                         <!--right section-->
-                        <div class="col-md-offset-2 col-md-4" style="text-align: -webkit-right">
-                            <h1>INVOICE</h1><br>
+                        <div class="col-md-6" style="text-align: -webkit-right">
+                            <h1 style="font-size: 70px;">INVOICE</h1><br>
                             <div>
                                 <strong>Cyber Solutions BD</strong><br>
                                 <span>1st Floor, Boro Kalibari Market</span><br>
@@ -49,20 +49,20 @@
                             <span> {{ invoice.customerData?.location }} </span><br>
                             <!--<span> {{ invoice.customerData?.area }} </span><br>-->
                             <span> {{ invoice.customerData?.city }} </span><br>
-                            <span> Bangladesh </span><br><br>
+                            <span> Bangladesh </span><br>
 
                             <span> {{ invoice.customerData?.mobile_primary }} </span><br>
                             <span> {{ invoice.customerData?.email }} </span><br>
                         </div>
                         <!--right section-->
                         <div class="col-md-offset-2 col-md-4" style="">
-                            <span> <strong>Invoice Code: </strong> {{ id }}</span><br><br>
-                            <span> <strong>Invoice Date: </strong> {{ invoice.invoice_created_date }} </span><br><br>
-                            <span> <strong>Payment Due: </strong> {{ invoice.payment_due_date }}</span><br><br>
-                            <span> <strong>Amount Due (BDT): </strong> tk. {{ invoice.amount_due }}</span><br><br>
+                            <span> <strong>Invoice Code: </strong> #001</span><br>
+                            <span> <strong>Invoice Date: </strong> {{ invoice.created_on | date }} </span><br>
+                            <span> <strong>Payment Due: </strong> {{ invoice.payment_due_date | date }}</span><br>
+                            <span> <strong>Amount Due (BDT): </strong> tk. {{ invoice.amount_due }}</span><br>
                         </div>
                     </div>
-                    <br><br>
+                    <br>
 
                     <!--table section-->
                     <table class="table" *ngIf="invoice.productData">

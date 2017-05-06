@@ -1,197 +1,218 @@
-<div class="content-wrapper" style="height: 2000px;">
-    <section class=" content-header " *ngIf="invoice">
-        <div class="col-xs-12">
-            <h1>
-                Invoice Details of <em>{{ invoice.customerData.username }}</em> <small>for the month of {{currentDate | date:'MMMM'}} </small>
-            </h1>
-            <ol class="breadcrumb ">
-                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
-                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Invoice</a></li>
-                <li class="active ">Edit</li>
-            </ol>
-        </div>
-    </section>
-    <section class="content ">
-        <div class="col-md-offset-1 col-md-10">
-            <div class="box box-primary" *ngIf="invoice">
-                <div class="alert alert-success" role="alert" *ngIf="showSuccess">Invoice Data Updated Successfully !!</div>
-                <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
-                <!--  Page Content Here -->
-                <form class="form-horizontal " [formGroup]="invoiceDetailForm" *ngIf="invoice" (submit)="submitInvoiceEditForm()">
-                    <div class="col-md-6">
-                        <!--username-->
-                        <div class=" form-group ">
-                            <label for="username " class="col-sm-2 control-label ">Username</label>
-                            <div class="col-sm-10 ">
-                                <input formControlName="username" type="text " class="form-control " id="username " placeholder="Username " readonly>
-                            </div>
-                        </div>
-                        <!--email-->
-                        <div class="form-group ">
-                            <label for="email " class="col-sm-2 control-label ">Email</label>
-                            <div class="col-sm-10 ">
-                                <input formControlName="email" type="email " class="form-control " id="email " placeholder="Email " readonly>
-                            </div>
-                        </div>
-                        <!--fullname-->
-                        <div class="form-group ">
-                            <label for="fullname " class="col-sm-2 control-label ">Fullname</label>
-                            <div class="col-sm-10 ">
-                                <input formControlName="fullname" type="text " class="form-control " id="fullname " placeholder="Fullname " readonly>
-                            </div>
-                        </div>
-
-                        <!--mobile_primary-->
-                        <div class="form-group ">
-                            <label for="mobile_primary " class="col-sm-2 control-label ">Mobile Primary</label>
-                            <div class="col-sm-10 ">
-                                <input formControlName="mobile_primary" type="text " class="form-control " id="mobile_primary " placeholder="Mobile primary " readonly>
-                            </div>
-                        </div>
-
-                        <!--mobile_secondary-->
-                        <div class="form-group ">
-                            <label for="mobile_secondary " class="col-sm-2 control-label ">Mobile Secondary</label>
-                            <div class="col-sm-10 ">
-                                <input formControlName="mobile_secondary" type="text " class="form-control " id="mobile_secondary " placeholder="Mobile secondary " readonly>
-                            </div>
-                        </div>
-
-                        <!--location-->
-                        <div class="form-group ">
-                            <label for="location " class="col-sm-2 control-label ">Location</label>
-                            <div class="col-sm-10">
-                                <input type="text " formControlName="location" class="form-control " id="location " placeholder="location " readonly>
-                            </div>
-                        </div>
-
-                        <!--area-->
-                        <div class="form-group ">
-                            <label for="area " class="col-sm-2 control-label ">Area</label>
-                            <div class="col-sm-10">
-                                <input type="text " formControlName="area" class="form-control " id="area " placeholder="area " readonly>
-                            </div>
-                        </div>
-
-                        <!--city-->
-                        <div class="form-group ">
-                            <label for="city " class="col-sm-2 control-label ">City</label>
-                            <div class="col-sm-10">
-                                <input type="text " formControlName="city" class="form-control " id="city " placeholder="city " readonly>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <!--choose status-->
-                        <div class="form-group ">
-                            <label for="status " class="col-sm-2 control-label ">Payment Status</label>
-                            <div class="col-sm-10">
-                                <label class="radio-inline"><input formControlName="status" type="radio" name="status" value="Due" (change)="changeStatus($event)">Due</label>
-                                <label class="radio-inline"><input formControlName="status" type="radio" name="status" value="Paid" (change)="changeStatus($event)">Paid</label>
-                                <label class="radio-inline"><input formControlName="status" type="radio" name="status" value="Partially Paid" (change)="changeStatus($event)">Partially Paid</label>
-                            </div>
-                        </div>
-
-                        <!--invoice_created_date-->
-                        <div class="form-group ">
-                            <label for="invoice_created_date " class="col-sm-2 control-label ">Invoice created on</label>
-                            <div class="col-sm-10">
-                                <input type="date" formControlName="invoice_created_date">
-                            </div>
-                        </div>
-
-                        <!--payment_due_date-->
-                        <!--<div class="form-group " *ngIf="paymentStatus=='Due'">
-                            <label for="payment_due_date " class="col-sm-2 control-label ">Payment Due Date</label>
-                            <div class="col-sm-10">
-                                <input type="date" formControlName="payment_due_date" value="currentDate.toString('Y-m-d')">
-                            </div>
-                        </div>-->
-
-                        <!--payment paid / partially paid date-->
-                        <div class="form-group " *ngIf="invoice.status=='Paid' && paymentStatus!='Due'">
-                            <label for="paid " class="col-sm-2 control-label ">Payment Paid Date</label>
-                            <div class="col-sm-10">
-                                <input type="date" formControlName="paid_date">
-                            </div>
-                        </div>
-
-                        <!--amoount partially paid-->
-                        <div class="form-group " *ngIf="invoice.status=='Partially Paid'">
-                            <label for="amount_partially_paid " class="col-sm-2 control-label ">Amount Partially Paid (BDT) </label>
-                            <div class="col-sm-10">
-                                <input type="text " (keyup)="getPartiallyPaid($event)" formControlName="amount_partially_paid" class="form-control " id="amount_partially_paid " placeholder="amount partially paid">
-                            </div>
-                        </div>
-
-                        <!--amount_due-->
-                        <div class="form-group " *ngIf="invoice.status!='Paid'">
-                            <label for="amount_due " class="col-sm-2 control-label ">Amount Due (BDT) </label>
-                            <div class="col-sm-10">
-                                <input *ngIf="invoice.status=='Due'" type="text " formControlName="amount_due" class="form-control " id="amount_due " placeholder="amount due" readonly>
-                                <input *ngIf="invoice.status=='Partially Paid'" type="text " formControlName="amount_due" class="form-control " id="amount_due " placeholder="amount due" readonly>
-                            </div>
-                        </div>
-
-
-
-                        <!--discount-->
-                        <div class="form-group ">
-                            <label for="discount " class="col-sm-2 control-label">Discount (BDT) </label>
-                            <div class="col-sm-10">
-                                <input (keyup)="getDiscount($event)" type="text" formControlName="discount" class="form-control " id="discount " placeholder="discount">
-                            </div>
-                        </div>
-
-                        <!--total-->
-                        <div class="form-group ">
-                            <label for="discount " class="col-sm-2 control-label ">Total (BDT) </label>
-                            <div class="col-sm-10">
-                                <input *ngIf="invoice.status!='Paid'" type="text " formControlName="total" class="form-control " id="total " placeholder="total">
-                                <input *ngIf="invoice.status=='Paid'" type="text " formControlName="total" class="form-control " id="total " placeholder="total" readonly>
-                            </div>
-                        </div>
-                        <div>
-                            <!--for products already list-->
-                            <div class="form-group " *ngFor="let myProduct of invoice.customerData?.productData;let i=index">
-                                <label for="" class="col-sm-2 control-label ">Product [{{ i+1 }}]</label>
-                                <div class="col-sm-10 ">
-                                    <div class="productSelectBox">
-                                        <select (change)="onProductChange($event,i,'my')" required *ngIf="productList" class="form-control" style="margin-bottom:10px">
-                                                <option [selected]="product._id == myProduct._id" *ngFor="let product of productList" value="{{ product._id }}">
-                                                {{ product.name }} - <em> {{ product.rate }} BDT/month </em>
-                                                </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!--for new additional products-->
-                            <div class="form-group " *ngFor="let newProduct of additionalProducts;let i=index">
-                                <label for="" class="col-sm-2 control-label ">Product  [{{ i+invoice.customerData?.productData.length+1 }}]</label>
-                                <div class="col-sm-10 ">
-                                    <div class="productSelectBox">
-                                        <select (change)="onProductChange($event,i,'add')" required *ngIf="productList" class="form-control" style="margin-bottom:10px">
-                                                    <option *ngFor="let product of productList" value="{{ product._id }}">
-                                                        {{ product.name }} - <em> {{ product.rate }} BDT/month </em> </option>
-                                        </select>
-                                        <button *ngIf="invoice.status!='Paid'" type="button" class="pull-right btn btn-danger btn-xs" (click)="removeProduct(i)"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <button *ngIf="invoice.status!='Paid'" (click)="addProduct()" type="button" class="pull-right btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Add Product</button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-1 col-sm-10 " style="margin-top:10px">
-                            <!--<button type="submit " class="btn btn-success">Save</button>-->
-                            <button type="submit" class="btn btn-info btn-lg">Generate Invoice</button>
-                            <a type="button" class="btn btn-primary btn-lg" [routerLink]="['/invoice/recent']">Back</a>
-                        </div>
-                    </div>
-                </form>
+<div *ngIf="showForm" class="content-wrapper" style="height: 2000px;">
+  <section class=" content-header ">
+    <div class="col-xs-12">
+      <h1>
+        Invoice Details of <em>{{ invoice.customerData?.username }}</em>
+        <small>for the month of {{currentDate | date:'MMMM'}}</small>
+      </h1>
+      <ol class="breadcrumb ">
+        <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
+        <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Invoice</a></li>
+        <li class="active ">Edit</li>
+      </ol>
+    </div>
+  </section>
+  <section class="content ">
+    <div class="col-md-offset-1 col-md-10">
+      <div class="box box-primary" *ngIf="invoice">
+        <div class="alert alert-success" role="alert" *ngIf="showSuccess">Invoice Data Updated Successfully !!</div>
+        <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
+        <!--  Page Content Here -->
+        <form class="form-horizontal " [formGroup]="invoiceDetailForm" *ngIf="invoice"
+              (submit)="submitInvoiceEditForm()">
+          <div class="col-md-6">
+            <!--username-->
+            <div class=" form-group ">
+              <label for="username " class="col-sm-2 control-label ">Username</label>
+              <div class="col-sm-10 ">
+                <input formControlName="username" type="text " class="form-control " id="username "
+                       placeholder="Username " readonly>
+              </div>
             </div>
-        </div>
-    </section>
+            <!--email-->
+            <div class="form-group ">
+              <label for="email " class="col-sm-2 control-label ">Email</label>
+              <div class="col-sm-10 ">
+                <input formControlName="email" type="email " class="form-control " id="email " placeholder="Email "
+                       readonly>
+              </div>
+            </div>
+            <!--fullname-->
+            <div class="form-group ">
+              <label for="fullname " class="col-sm-2 control-label ">Fullname</label>
+              <div class="col-sm-10 ">
+                <input formControlName="fullname" type="text " class="form-control " id="fullname "
+                       placeholder="Fullname " readonly>
+              </div>
+            </div>
+
+            <!--mobile_primary-->
+            <div class="form-group ">
+              <label for="mobile_primary " class="col-sm-2 control-label ">Mobile Primary</label>
+              <div class="col-sm-10 ">
+                <input formControlName="mobile_primary" type="text " class="form-control " id="mobile_primary "
+                       placeholder="Mobile primary " readonly>
+              </div>
+            </div>
+
+            <!--mobile_secondary-->
+            <div class="form-group ">
+              <label for="mobile_secondary " class="col-sm-2 control-label ">Mobile Secondary</label>
+              <div class="col-sm-10 ">
+                <input formControlName="mobile_secondary" type="text " class="form-control " id="mobile_secondary "
+                       placeholder="Mobile secondary " readonly>
+              </div>
+            </div>
+
+            <!--location-->
+            <div class="form-group ">
+              <label for="location " class="col-sm-2 control-label ">Location</label>
+              <div class="col-sm-10">
+                <input type="text " formControlName="location" class="form-control " id="location "
+                       placeholder="location " readonly>
+              </div>
+            </div>
+
+            <!--area-->
+            <div class="form-group ">
+              <label for="area " class="col-sm-2 control-label ">Area</label>
+              <div class="col-sm-10">
+                <input type="text " formControlName="area" class="form-control " id="area " placeholder="area "
+                       readonly>
+              </div>
+            </div>
+
+            <!--city-->
+            <div class="form-group ">
+              <label for="city " class="col-sm-2 control-label ">City</label>
+              <div class="col-sm-10">
+                <input type="text " formControlName="city" class="form-control " id="city " placeholder="city "
+                       readonly>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <!--choose status-->
+            <div class="form-group ">
+              <label for="status " class="col-sm-2 control-label ">Payment Status</label>
+              <div class="col-sm-10">
+                <label class="label label-warning" *ngIf="invoice.status=='Partially Paid'">{{ invoice.status }}</label>
+                <label class="label label-danger" *ngIf="invoice.status=='Due'">{{ invoice.status }}</label>
+                <label class="label label-success" *ngIf="invoice.status=='Paid'">{{ invoice.status }}</label>
+              </div>
+            </div>
+
+            <!--invoice_created_date-->
+            <!--<div class="form-group ">-->
+            <!--<label for="invoice_created_date " class="col-sm-2 control-label ">Invoice created on</label>-->
+            <!--<div class="col-sm-10">-->
+            <!--<input type="date" formControlName="invoice_created_date">-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--payment_due_date-->
+            <!--<div class="form-group " *ngIf="paymentStatus=='Due'">
+                <label for="payment_due_date " class="col-sm-2 control-label ">Payment Due Date</label>
+                <div class="col-sm-10">
+                    <input type="date" formControlName="payment_due_date" value="currentDate.toString('Y-m-d')">
+                </div>
+            </div>-->
+
+            <!--payment paid / partially paid date-->
+            <div class="form-group " *ngIf="invoice.status=='Paid' && paymentStatus!='Due'">
+              <label for="paid " class="col-sm-2 control-label ">Payment Paid Date</label>
+              <div class="col-sm-10">
+                <input type="date" formControlName="paid_date">
+              </div>
+            </div>
+
+            <!--amoount partially paid-->
+            <!--<div class="form-group " *ngIf="invoice.status=='Partially Paid'">-->
+            <!--<label for="amount_partially_paid " class="col-sm-2 control-label ">Amount Partially Paid (BDT) </label>-->
+            <!--<div class="col-sm-10">-->
+            <!--<input type="text " (keyup)="getPartiallyPaid($event)" formControlName="amount_partially_paid" class="form-control " id="amount_partially_paid " placeholder="amount partially paid">-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--amount_due-->
+            <div class="form-group " *ngIf="invoice.status!='Paid'">
+              <label for="amount_due " class="col-sm-2 control-label ">Amount Due (BDT) </label>
+              <div class="col-sm-10">
+                <input *ngIf="invoice.status=='Due'" type="text " formControlName="amount_due" class="form-control "
+                       id="amount_due " placeholder="amount due" readonly>
+                <input *ngIf="invoice.status=='Partially Paid'" type="text " formControlName="amount_due"
+                       class="form-control " id="amount_due " placeholder="amount due" readonly>
+              </div>
+            </div>
+
+
+            <!--discount-->
+            <div class="form-group ">
+              <label for="discount " class="col-sm-2 control-label">Discount (BDT) </label>
+              <div class="col-sm-10">
+                <input (keyup)="getDiscount($event)" type="text" formControlName="discount" class="form-control "
+                       id="discount " placeholder="discount">
+              </div>
+            </div>
+
+            <!--total-->
+            <div class="form-group ">
+              <label for="discount " class="col-sm-2 control-label ">Total (BDT) </label>
+              <div class="col-sm-10">
+                <input *ngIf="invoice.status!='Paid'" type="text " formControlName="total" class="form-control "
+                       id="total " placeholder="total">
+                <input *ngIf="invoice.status=='Paid'" type="text " formControlName="total" class="form-control "
+                       id="total " placeholder="total" readonly>
+              </div>
+            </div>
+            <div>
+              <!--for products already list-->
+              <div class="form-group " *ngFor="let myProduct of invoice.customerData?.productData;let i=index">
+                <label for="" class="col-sm-2 control-label ">Product [{{ i+1 }}]</label>
+                <div class="col-sm-10 ">
+                  <div class="productSelectBox">
+                    <select (change)="onProductChange($event,i,'my')" required *ngIf="productList" class="form-control"
+                            style="margin-bottom:10px">
+                      <option [selected]="product._id == myProduct._id" *ngFor="let product of productList"
+                              value="{{ product._id }}">
+                        {{ product.name }} - <em> {{ product.rate }} BDT/month </em>
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!--for new additional products-->
+              <div class="form-group " *ngFor="let newProduct of additionalProducts;let i=index">
+                <label for="" class="col-sm-2 control-label ">Product  [{{ i+invoice.customerData?.productData.length+1 }}]</label>
+                <div class="col-sm-10 ">
+                  <div class="productSelectBox">
+                    <select (change)="onProductChange($event,i,'add')" required *ngIf="productList" class="form-control"
+                            style="margin-bottom:10px">
+                      <option *ngFor="let product of productList" value="{{ product._id }}">
+                        {{ product.name }} - <em> {{ product.rate }} BDT/month </em></option>
+                    </select>
+                    <button *ngIf="invoice.status!='Paid'" type="button" class="pull-right btn btn-danger btn-xs"
+                            (click)="removeProduct(i)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                  </div>
+                </div>
+              </div>
+              <button *ngIf="invoice.status!='Paid'" (click)="addProduct()" type="button"
+                      class="pull-right btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Add
+                Product
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-10 " style="margin-top:10px">
+              <!--<button type="submit " class="btn btn-success">Save</button>-->
+              <button type="submit" class="btn btn-info btn-lg">Generate Invoice</button>
+              <a type="button" class="btn btn-primary btn-lg" [routerLink]="['/invoice/recent']">Back</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
 </div>

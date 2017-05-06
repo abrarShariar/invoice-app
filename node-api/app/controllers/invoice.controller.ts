@@ -55,10 +55,8 @@ export class InvoiceController {
     }
 
     static getInvoiceById(res: Response, id) {
-        AllInvoiceModel.findById(id, function (err, data) {
-            if (!err) {
-                res.send(data);
-            }
+        RecentInvoiceModel.findById(id, function (err, data) {
+            res.send(data);
         })
     }
 
@@ -228,26 +226,64 @@ export class InvoiceController {
             date: Date.now(),
             amount: data['amount_partially_paid']
         };
-
         RecentInvoiceModel.findByIdAndUpdate(
             data['id'],
             {$push: {"amount_partially_paid": {date: pay_data['date'], amount: pay_data['amount']}}},
             {safe: true, upsert: true, new: true},
             function (err, docs) {
-                RecentInvoiceModel.update({_id: data['id']}, {
-                    $set: {
-                        status: 'Partially Paid',
-                        amount_due: docs['total'] - pay_data['amount']
-                    }
-                }, function (err) {
-                    if (err) {
-                        res.send({status: false});
-                    } else {
-                        res.send({status: true});
-                    }
+                let total_partial_pay = 0;
+                _.each(docs['amount_partially_paid'], (item) => {
+                    total_partial_pay += item['amount'];
                 });
+                if (total_partial_pay >= docs['total']) {
+                    RecentInvoiceModel.update({_id: data['id']}, {
+                        $set: {
+                            status: 'Paid',
+                            amount_due: 0,
+                            paid_date: Date.now()
+                        }
+                    }, function (err) {
+                        if (err) {
+                            res.send({status: false});
+                        } else {
+                            res.send({status: true});
+                        }
+                    });
+                } else {
+                    RecentInvoiceModel.update({_id: data['id']}, {
+                        $set: {
+                            status: 'Partially Paid',
+                            amount_due: docs['total'] - total_partial_pay
+                        }
+                    }, function (err) {
+                        if (err) {
+                            res.send({status: false});
+                        } else {
+                            res.send({status: true});
+                        }
+                    });
+                }
+
             }
         );
+    }
+
+    static preGenerateUpdate(res: Response, data: any) {
+        RecentInvoiceModel.update({_id: data.id}, {
+            $set: {
+                amount_due: data.amount_due,
+                discount: data.discount,
+                productList: data.productList,
+                total: data.total,
+                amount_partially_paid: data.amount_partially_paid
+            }
+        }, function (err) {
+            if (err) {
+                res.send({status: false});
+            } else {
+                res.send({status: true});
+            }
+        });
     }
 
 }

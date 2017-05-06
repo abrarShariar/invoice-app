@@ -1,12 +1,12 @@
 /*
-* API endpoints are defined here 
-* all routes start with /api
-*/
-import { Router, Request, Response } from 'express';
-import { CustomerController } from '../controllers/customer.controller';
-import { ProductController } from '../controllers/product.controller';
-import { AreaController } from '../controllers/area.controller';
-import { InvoiceController } from '../controllers/invoice.controller';
+ * API endpoints are defined here
+ * all routes start with /api
+ */
+import {Router, Request, Response} from 'express';
+import {CustomerController} from '../controllers/customer.controller';
+import {ProductController} from '../controllers/product.controller';
+import {AreaController} from '../controllers/area.controller';
+import {InvoiceController} from '../controllers/invoice.controller';
 
 const router: Router = Router();
 
@@ -155,34 +155,38 @@ router.get('/invoice/drop/recent/all', (req: Request, res: Response) => {
 });
 
 //check if recent invoices exists
-router.get('/invoice/recent_invoice/exists',(req:Request, res:Response)=>{
+router.get('/invoice/recent_invoice/exists', (req: Request, res: Response) => {
     InvoiceController.checkRecentInvoiceExists(res);
 });
 
 // get invoice from db
-router.get('/invoice/recent_invoice_db',(req:Request, res:Response)=>{
+router.get('/invoice/recent_invoice_db', (req: Request, res: Response) => {
     InvoiceController.getRecentInvoiceDB(res);
 });
 
 // clean and nuke recent invoices
-router.get('/invoice/clean_invoice',(req:Request, res:Response)=>{
+router.get('/invoice/clean_invoice', (req: Request, res: Response) => {
     InvoiceController.cleanInvoice(res);
 });
 
-router.put('/invoice/change_status',(req:Request, res:Response)=>{
+router.put('/invoice/change_status', (req: Request, res: Response) => {
     InvoiceController.changeStatus(res, req.body);
 });
 
-router.post('/invoice/product_list/total',(req:Request, res:Response)=>{
+router.post('/invoice/product_list/total', (req: Request, res: Response) => {
     ProductController.getTotal(res, req.body);
 });
 
-router.get('/invoice/recent/build_and_save',(req:Request, res:Response)=>{
-   InvoiceController.buildAndSaveRecentInvoice(res);
+router.get('/invoice/recent/build_and_save', (req: Request, res: Response) => {
+    InvoiceController.buildAndSaveRecentInvoice(res);
 });
 
-router.post('/invoice/recent/partial_pay/save',(req:Request, res:Response)=>{
-    InvoiceController.savePartialPay(res,req.body);
+router.post('/invoice/recent/partial_pay/save', (req: Request, res: Response) => {
+    InvoiceController.savePartialPay(res, req.body);
+});
+
+router.post('/invoice/pre_generate_update', (req: Request, res: Response) => {
+    InvoiceController.preGenerateUpdate(res, req.body);
 });
 
 export const ApiRoute: Router = router;
