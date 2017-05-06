@@ -173,5 +173,9 @@ router.put('/invoice/change_status',(req:Request, res:Response)=>{
     InvoiceController.changeStatus(res, req.body);
 });
 
+router.post('/invoice/product_list/total',(req:Request, res:Response)=>{
+    ProductController.getTotal(res, req.body);
+});
+
 
 export const ApiRoute: Router = router;

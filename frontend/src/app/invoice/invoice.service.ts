@@ -71,4 +71,10 @@ export class InvoiceService {
     return this.http.put(url,data).map((res)=>res.json());
   }
 
+  //get total of all products in product list
+  getTotal(data:any){
+    let url = this.invoiceUrl + 'product_list/total';
+    return this.http.post(url,data).map((res)=>res.json());
+  }
+
 }

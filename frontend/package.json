@@ -23,6 +23,7 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.22",
     "@types/jquery": "^2.0.42",
     "@types/underscore": "^1.8.0",
+    "async": "^2.4.0",
     "bootstrap": "^3.3.7",
     "chart.js": "^2.5.0",
     "core-js": "^2.4.1",

@@ -25,6 +25,7 @@ export class InvoiceRecentComponent implements OnInit {
   public partialPay: any;
   public isInvoiceSaved: boolean = false;
   public isInvoiceError: boolean = false;
+  private tempInvoice: Invoice;
 
   constructor(private fb: FormBuilder, private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) {
   }
@@ -38,7 +39,6 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.cleanInvoice()
       .subscribe(
         (res) => {
-          console.log(res);
           if (res.status) {
             this.generateNewInvoice();
           } else {
@@ -105,11 +105,10 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.getRecentInvoice()
       .subscribe(
         (res: Customer[]) => {
-          let tempInvoice: Invoice;
           _.each(res, (customer: Customer) => {
             let date = new Date();
             let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-            tempInvoice = {
+            this.tempInvoice = {
               customer_id: customer['_id'],
               productList: customer.productList,
               payment_due_date: firstDay,
@@ -120,31 +119,38 @@ export class InvoiceRecentComponent implements OnInit {
               amount_partially_paid: 0
             };
 
-            _.each(customer.productList, (item) => {
-              this.productService.getProductById(item)
-                .subscribe(
-                  (res: Product) => {
-                    tempInvoice['total'] = tempInvoice.total + res.rate;
-                    tempInvoice['amount_due'] = tempInvoice.total;
-                  }
-                )
-            });
-            this.saveRecentInvoice(tempInvoice);
+            this.getTotal(customer.productList);
+            // this.saveRecentInvoice(this.tempInvoice);
           });
           this.getRecentInvoiceDB();
         }
       )
   }
 
+
   saveRecentInvoice(invoice: Invoice) {
     this.invoiceService.saveRecentInvoice(invoice)
       .subscribe(
         (res) => {
-          console.log(res);
         },
         (err) => {
 
         }
+      )
+  }
+
+
+//  get total pay of all product list
+  getTotal(productList){
+    let data = {
+      "productList" : productList
+    };
+    this.invoiceService.getTotal(data)
+      .subscribe(
+        (res)=>{
+          console.log(res);
+        }
+
       )
   }
 
@@ -212,7 +218,6 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.changeInvoiceStatus(invoice)
       .subscribe(
         (res) => {
-          console.log(res);
         }
       )
   }
