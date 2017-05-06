@@ -2,13 +2,15 @@ import {Router, Request, Response} from 'express';
 import * as _ from 'underscore';
 import {CustomerModel} from '../database/models/customer.model';
 import {AllInvoiceModel, RecentInvoiceModel} from '../database/models/invoice.model';
-
 declare var Date: any;
+import {ProductModel} from '../database/models/product.model';
+
+
 export class InvoiceController {
     constructor() {
     }
 
-    static getRecentInvoice(res: Response) {
+    static getRecentInvoiceCustomers(res: Response) {
         CustomerModel.find({
             $and: [
                 {status: true},
@@ -144,7 +146,7 @@ export class InvoiceController {
 
                     invoice.save(function (err, newData) {
                         if (!err) {
-                            RecentInvoiceModel.find({'_id': newData['id']}).remove(function (err, removed) {
+                            RecentInvoiceModel.find({'_id': newData['id']}).remove(function (err) {
                                 if (!err) {
                                     isClean = true;
                                 }
@@ -177,11 +179,76 @@ export class InvoiceController {
             if (err) {
                 res.send({status: false});
             } else {
-                res.send({status:true});
+                res.send({status: true});
             }
         })
     }
 
+    static buildAndSaveRecentInvoice(res: Response) {
+        CustomerModel.find({
+            $and: [
+                {status: true},
+                {
+                    productList: {
+                        $exists: true, $not: {$size: 0}
+                    }
+                }
+            ]
+        }, function (err, data) {
+            let date = new Date();
+            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            _.each(data, (customer) => {
+                let invoice = new RecentInvoiceModel({
+                    customer_id: customer['_id'],
+                    payment_due_date: firstDay,
+                    amount_due: 0,
+                    status: 'Due',
+                    total: 0,
+                    discount: 0,
+                    amount_partially_paid: [],
+                    productList: customer['productList']
+                });
+
+                ProductModel.find({"_id": {"$in": customer['productList']}}, function (err, docs) {
+                    _.each(docs, (item) => {
+                        invoice['total'] += item['rate'];
+                    });
+                    invoice['amount_due'] = invoice['total'];
+                    invoice.save(function () {
+                        // console.log(data);
+                    });
+                });
+            });
+            res.send({status: true});
+        }
+    }
+
+    static savePartialPay(res: Response, data: any) {
+        let pay_data = {
+            date: Date.now(),
+            amount: data['amount_partially_paid']
+        };
+
+        RecentInvoiceModel.findByIdAndUpdate(
+            data['id'],
+            {$push: {"amount_partially_paid": {date: pay_data['date'], amount: pay_data['amount']}}},
+            {safe: true, upsert: true, new: true},
+            function (err, docs) {
+                RecentInvoiceModel.update({_id: data['id']}, {
+                    $set: {
+                        status: 'Partially Paid',
+                        amount_due: docs['total'] - pay_data['amount']
+                    }
+                }, function (err) {
+                    if (err) {
+                        res.send({status: false});
+                    } else {
+                        res.send({status: true});
+                    }
+                });
+            }
+        );
+    }
 
 }
 

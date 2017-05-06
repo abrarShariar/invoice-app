@@ -8,7 +8,6 @@ export class ProductController {
 
     //create new product
     static create(res: Response, data: any) {
-        let isDataInserted: boolean = false;
         let product = new ProductModel({
             name: data.name,
             rate: data.rate,
@@ -26,7 +25,6 @@ export class ProductController {
         });
     }
 
-
     //get all product
     static getAllProduct(res: Response) {
         ProductModel.find({}, (err, products) => {
@@ -35,7 +33,6 @@ export class ProductController {
             }
         })
     }
-
 
     //changing status - active/inactive
     static changeStatus(res: Response, data: any) {
@@ -87,12 +84,12 @@ export class ProductController {
     // get total of all products of productList
     static getTotal(res: Response, data: any) {
         let total = 0;
-        _.each(data['productList'], (item) => {
-            ProductModel.findOne({_id: item}, function (err, result) {
-                total += result['rate'];
+        ProductModel.find({"_id": {"$in": data['productList']}}, function (err, docs) {
+            _.each(docs, (item) => {
+                total += item['rate'];
             });
+            res.send({total:total});
         });
-        res.send({total:total});
     }
 
 }

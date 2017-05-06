@@ -6,12 +6,12 @@ export let invoiceSchema = new Schema({
     id: String,
     customer_id: String,
     payment_due_date: String,
-    amount_due: String,
+    amount_due: Number,
     status: String,
-    total: String,
-    discount: String,
+    total: Number,
+    discount: Number,
     paid_date: String,
-    amount_partially_paid: String,
+    amount_partially_paid: [{date:Date,amount:Number}],
     productList: [String],
     created_on: { type: Date, default: Date.now }
 });

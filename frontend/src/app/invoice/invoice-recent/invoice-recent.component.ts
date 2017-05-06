@@ -8,7 +8,7 @@ import {Invoice} from '../invoice';
 import {ProductService} from '../../product/product.service';
 import {AreaService} from '../../area/area.service';
 import {CustomerService} from '../../customer/customer.service';
-import {FormGroup, FormBuilder} from "@angular/forms";
+import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-invoice-recent',
@@ -20,21 +20,18 @@ export class InvoiceRecentComponent implements OnInit {
   public invoiceList: Invoice[] = [];
   public searchMode = 'username';
   public partialInvoice: Invoice;
-  public partialPaymentForm: FormGroup;
   public paymentStatus: string;
   public partialPay: any;
   public isInvoiceSaved: boolean = false;
   public isInvoiceError: boolean = false;
-  private tempInvoice: Invoice;
 
-  constructor(private fb: FormBuilder, private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) {
+  constructor(private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) {
   }
 
   ngOnInit() {
     this.wakeUpInvoiceDemon();
   }
 
-  // New methods ---- New plans
   wakeUpInvoiceDemon() {
     this.invoiceService.cleanInvoice()
       .subscribe(
@@ -44,9 +41,6 @@ export class InvoiceRecentComponent implements OnInit {
           } else {
             this.getRecentInvoiceDB();
           }
-        },
-        (err) => {
-          console.log("Error in clean Invoice");
         }
       )
   }
@@ -55,7 +49,7 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.dropRecentInvoice()
       .subscribe(
         (res) => {
-          this.buildRecentInvoice();
+          this.buildAndSaveRecentInvoice();
         }
       )
   }
@@ -101,37 +95,25 @@ export class InvoiceRecentComponent implements OnInit {
       )
   }
 
-  buildRecentInvoice() {
-    this.invoiceService.getRecentInvoice()
+  buildAndSaveRecentInvoice() {
+    this.invoiceService.buildAndSaveRecentInvoice()
       .subscribe(
-        (res: Customer[]) => {
-          _.each(res, (customer: Customer) => {
-            let date = new Date();
-            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-            this.tempInvoice = {
-              customer_id: customer['_id'],
-              productList: customer.productList,
-              payment_due_date: firstDay,
-              status: 'Due',
-              discount: 0,
-              total: 0,
-              amount_due: 0,
-              amount_partially_paid: 0
-            };
-
-            this.getTotal(customer.productList);
-            // this.saveRecentInvoice(this.tempInvoice);
-          });
-          this.getRecentInvoiceDB();
+        (res) => {
+          if (res['status']) {
+            this.getRecentInvoiceDB();
+          }
+        },
+        (err) => {
+          console.log('Error in build and save');
         }
       )
   }
-
 
   saveRecentInvoice(invoice: Invoice) {
     this.invoiceService.saveRecentInvoice(invoice)
       .subscribe(
         (res) => {
+          console.log(res);
         },
         (err) => {
 
@@ -139,34 +121,14 @@ export class InvoiceRecentComponent implements OnInit {
       )
   }
 
-
-//  get total pay of all product list
-  getTotal(productList){
-    let data = {
-      "productList" : productList
-    };
-    this.invoiceService.getTotal(data)
-      .subscribe(
-        (res)=>{
-          console.log(res);
-        }
-
-      )
-  }
-
-//change search filter
   filterChange(event: any) {
     this.searchMode = event;
   }
 
-//quick search
   quickSearch(event: any) {
     if (event == '') {
       this.getRecentInvoiceDB();
       return;
-    }
-    let data = {
-      text: event
     }
     let reg = new RegExp(event, "i");
     let resArray = [];
@@ -196,7 +158,6 @@ export class InvoiceRecentComponent implements OnInit {
     }
   }
 
-//edit invoice
   editInvoice(invoice: Invoice) {
     let navextras: NavigationExtras = {
       queryParams: {"invoice": JSON.stringify(invoice)}
@@ -222,12 +183,6 @@ export class InvoiceRecentComponent implements OnInit {
       )
   }
 
-  submitPartialPaymentForm() {
-    let data = {
-      amount_partially_paid: this.partialPaymentForm.value.amount_partially_paid
-    };
-  }
-
   toggleSearchStatus(event: any) {
     this.getRecentInvoiceDB();
     this.paymentStatus = event.target.value;
@@ -243,60 +198,22 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceList = resArray;
   }
 
-  savePartialPay(invoice: Invoice) {
-    invoice.status = 'Partially Paid';
-    if (this.partialPay <= invoice.total) {
-      invoice.amount_due = invoice.total - this.partialPay;
-      invoice.partially_paid = this.partialPay;
+  savePartialPay() {
+    let data = {
+      id: this.partialInvoice['_id'],
+      amount_partially_paid: this.partialPay
     }
-    if (this.partialPay == invoice.total) {
-      invoice.status = 'Paid';
-      invoice.paid_date = Date.now();
-    }
-    this.partialPay = 0;
-  }
 
-  saveInvoiceAll() {
-    //first clean recent invoices
-    this.invoiceService.dropRecentInvoice()
+    this.invoiceService.savePartialPay(data)
       .subscribe(
         (res) => {
+          if(res['status']){}
+          this.getRecentInvoiceDB();
         },
         (err) => {
-          console.log("ERR");
+
         }
       )
-
-    let data = {};
-    _.each(this.invoiceList, (item) => {
-      data = {
-        customer_id: item['customerData']['_id'],
-        payment_due_date: item['payment_due_date'],
-        amount_due: item['amount_due'],
-        status: item['status'],
-        total: item['total'],
-        discount: item['discount'],
-        invoice_created_date: item['invoice_created_date'],
-        paid_date: item['paid_date'],
-        amount_partially_paid: item['partially_paid'],
-        productList: item['productList'],
-        action: 'Not Downloaded'
-      }
-
-      this.invoiceService.saveRecentInvoice(data)
-        .subscribe(
-          (res) => {
-            if (res.status) {
-              this.isInvoiceSaved = true;
-            } else {
-              this.isInvoiceError = true;
-            }
-          },
-          (err) => {
-            this.isInvoiceError = true;
-          }
-        )
-    });
   }
 
 }

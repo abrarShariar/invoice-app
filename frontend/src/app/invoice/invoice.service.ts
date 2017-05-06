@@ -77,4 +77,14 @@ export class InvoiceService {
     return this.http.post(url,data).map((res)=>res.json());
   }
 
+  buildAndSaveRecentInvoice(){
+    let url = this.invoiceUrl + 'recent/build_and_save';
+    return this.http.get(url).map((res)=>res.json());
+  }
+
+  savePartialPay(data:any){
+    let url = this.invoiceUrl + 'recent/partial_pay/save';
+    return this.http.post(url,data).map((res)=>res.json());
+  }
+
 }

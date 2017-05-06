@@ -14,7 +14,5 @@ export class Invoice {
   total?: number;
   discount?: number;
   invoice_created_date?: any;
-  action?: string;
-  partially_paid?: number;
-  amount_partially_paid?: number;
+  amount_partially_paid?: any[] = [];
 }

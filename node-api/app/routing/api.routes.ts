@@ -115,8 +115,8 @@ router.get('/customer/id/username=:username', (req: Request, res: Response) => {
 });
 
 //get recent invoices (this month)
-router.get('/invoice/recent', (req: Request, res: Response) => {
-    InvoiceController.getRecentInvoice(res);
+router.get('/invoice/recent/customers', (req: Request, res: Response) => {
+    InvoiceController.getRecentInvoiceCustomers(res);
 });
 
 //search all products data by name
@@ -177,5 +177,12 @@ router.post('/invoice/product_list/total',(req:Request, res:Response)=>{
     ProductController.getTotal(res, req.body);
 });
 
+router.get('/invoice/recent/build_and_save',(req:Request, res:Response)=>{
+   InvoiceController.buildAndSaveRecentInvoice(res);
+});
+
+router.post('/invoice/recent/partial_pay/save',(req:Request, res:Response)=>{
+    InvoiceController.savePartialPay(res,req.body);
+});
 
 export const ApiRoute: Router = router;
