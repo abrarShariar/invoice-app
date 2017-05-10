@@ -8,7 +8,6 @@ import {Invoice} from '../invoice';
 import {ProductService} from '../../product/product.service';
 import {AreaService} from '../../area/area.service';
 import {CustomerService} from '../../customer/customer.service';
-import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-invoice-recent',
@@ -113,7 +112,6 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.saveRecentInvoice(invoice)
       .subscribe(
         (res) => {
-          console.log(res);
         },
         (err) => {
 
@@ -209,11 +207,27 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.savePartialPay(data)
       .subscribe(
         (res) => {
-          if(res['status']){
+          if (res['status']) {
             this.partialPay = 0;
             this.getRecentInvoiceDB();
           }
+        },
+        (err) => {
 
+        }
+      )
+  }
+
+
+  remove(id) {
+    this.invoiceService.deleteById(id)
+      .subscribe(
+        (res) => {
+          if (res['status']) {
+            this.invoiceList = _.without(this.invoiceList, _.findWhere(this.invoiceList, {
+              _id: id
+            }));
+          }
         },
         (err) => {
 

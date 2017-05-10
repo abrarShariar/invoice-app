@@ -1,131 +1,159 @@
 <div class="content-wrapper" style="height: 2000px;">
-    <section class=" content-header">
-        <div class="col-xs-12">
-            <h1>
-                Invoice Display
-            </h1>
-            <ol class="breadcrumb ">
-                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
-                <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Invoice</a></li>
-                <li class="active ">Display</li>
-            </ol>
-        </div>
-    </section>
-    <section class="content " *ngIf="invoice">
-        <div class="col-md-offset-2 col-md-8" id="invoice_main">
-            <!--invoice display starts here-->
-            <div class="container" id="invoice_box" style="margin-top:10px" #invoiceBox>
-                <div class="col-md-12">
-                    <!--head row-->
-                    <div class="row ">
-                        <!--left section-->
-                        <div class="col-md-6">
-                            <img src="/assets/dist/img/company_logo_2.png" id="company_logo">
-                        </div>
-                        <!--right section-->
-                        <div class="col-md-6" style="text-align: -webkit-right">
-                            <h1 style="font-size: 70px;">INVOICE</h1><br>
-                            <div>
-                                <strong>Cyber Solutions BD</strong><br>
-                                <span>1st Floor, Boro Kalibari Market</span><br>
-                                <span>Boro Kalibari Road</span><br>
-                                <span>Tangail, 1900</span><br>
-                                <span>Bangladesh</span><br><br>
-
-                                <span>Phone: 01612859201</span><br>
-                                <span>Mobile: 01738291879</span><br>
-                                <span>cybersolutionsbd.com</span>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-
-                    <!--middle row-->
-                    <div class="row">
-                        <!--left section-->
-                        <div class="col-md-6">
-                            <span> BILL TO: </span><br>
-                            <strong> {{ invoice.customerData?.fullname }} </strong><br>
-                            <span> {{ invoice.customerData?.location }} </span><br>
-                            <!--<span> {{ invoice.customerData?.area }} </span><br>-->
-                            <span> {{ invoice.customerData?.city }} </span><br>
-                            <span> Bangladesh </span><br>
-
-                            <span> {{ invoice.customerData?.mobile_primary }} </span><br>
-                            <span> {{ invoice.customerData?.email }} </span><br>
-                        </div>
-                        <!--right section-->
-                        <div class="col-md-offset-2 col-md-4" style="">
-                            <span> <strong>Invoice Code: </strong> #001</span><br>
-                            <span> <strong>Invoice Date: </strong> {{ invoice.created_on | date }} </span><br>
-                            <span> <strong>Payment Due: </strong> {{ invoice.payment_due_date | date }}</span><br>
-                            <span> <strong>Amount Due (BDT): </strong> tk. {{ invoice.amount_due }}</span><br>
-                        </div>
-                    </div>
-                    <br>
-
-                    <!--table section-->
-                    <table class="table" *ngIf="invoice.productData">
-                        <thead style="background-color: rgba(0, 183, 219, 0.68);">
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>VAT(%)</th>
-                            <th>Quantity</th>
-                            <th>Amount</th>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let product of invoice.productData;let i=index" [ngClass]="i==invoice.productData.length-1 ? 'row-divide' : '' ">
-                                <td>{{ product?.name }}</td>
-                                <td>tk. {{ product?.rate }}</td>
-                                <td> {{ product?.vat }}%</td>
-                                <td>1</td>
-                                <td>tk. {{ product?.rate * 1 }}</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <strong>Total: </strong>
-                                </td>
-                                <td>
-                                    tk. {{ invoice.total }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style="border-bottom: 4px solid #d2d6de;">
-                                    Discount
-                                </td>
-                                <td style="border-bottom: 4px solid #d2d6de;">
-                                    tk. {{ invoice.discount }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <strong>Amount Due</strong>
-                                </td>
-                                <td>
-                                    <strong>tk. {{ invoice.amount_due }}</strong>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+  <section class=" content-header">
+    <div class="col-xs-12">
+      <h1>
+        Invoice Display
+      </h1>
+      <ol class="breadcrumb ">
+        <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
+        <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Invoice</a></li>
+        <li class="active ">Display</li>
+      </ol>
+    </div>
+  </section>
+  <section class="content " *ngIf="invoice">
+    <div class="col-xs-12" id="invoice_main">
+      <!--invoice display starts here-->
+      <div class="" id="invoice_box" style="margin-top:10px" #invoiceBox>
+        <div class="">
+          <!--head row-->
+          <div class="row ">
+            <!--left section-->
+            <div class="col-md-6">
+              <img src="/assets/dist/img/company_logo_2.png" id="company_logo">
             </div>
-            <div style="margin-top:15px">
-                <button type="button" class="btn btn-success" (click)="downloadPDF()"><i class="fa fa-download" aria-hidden="true"></i>&nbsp;Download as PDF</button>
-                <button type="button" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;Export as CSV</button>
+            <!--right section-->
+            <div class="col-md-6" style="text-align: -webkit-right">
+              <h1 style="font-size: 70px;">INVOICE</h1><br>
+              <div>
+                <strong>Cyber Solutions BD</strong><br>
+                <span>1st Floor, Boro Kalibari Market</span><br>
+                <span>Boro Kalibari Road</span><br>
+                <span>Tangail, 1900</span><br>
+                <span>Bangladesh</span><br><br>
+
+                <span>Phone: 01612859201</span><br>
+                <span>Mobile: 01738291879</span><br>
+                <span>cybersolutionsbd.com</span>
+              </div>
             </div>
+          </div>
+          <hr>
+
+          <!--middle row-->
+          <div class="row">
+            <!--left section-->
+            <div class="col-md-6">
+              <span> BILL TO: </span><br>
+              <strong> {{ invoice.customerData?.fullname }} </strong><br>
+              <span> {{ invoice.customerData?.location }} </span><br>
+              <!--<span> {{ invoice.customerData?.area }} </span><br>-->
+              <span> {{ invoice.customerData?.city }} </span><br>
+              <span> Bangladesh </span><br>
+
+              <span> {{ invoice.customerData?.mobile_primary }} </span><br>
+              <span> {{ invoice.customerData?.email }} </span><br>
+            </div>
+            <!--right section-->
+            <div class="col-md-offset-2 col-md-4" style="text-align: -webkit-right;;line-height: 2;">
+              <span> <strong>Invoice Number: </strong> #001</span><br>
+              <span> <strong>Invoice Date: </strong> {{ invoice.created_on | date }} </span><br>
+              <span> <strong>Payment Due: </strong> <span *ngIf="invoice.status!='Paid'">{{ invoice.payment_due_date | date }}</span> <span *ngIf="invoice.status=='Paid'"> -- </span> </span><br>
+              <span> <strong>Amount Due (BDT): </strong> tk. {{ invoice.amount_due }}</span><br>
+            </div>
+          </div>
+          <br>
+
+          <!--table section-->
+          <table class="table" *ngIf="invoice.productData">
+            <thead style="background-color: rgba(0, 183, 219, 0.68);">
+            <th>Product</th>
+            <th>Price</th>
+            <th>VAT(%)</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+            </thead>
+            <tbody>
+            <tr *ngFor="let product of invoice.productData;let i=index"
+                [ngClass]="i==invoice.productData.length-1 ? 'row-divide' : '' ">
+              <td>{{ product?.name }}</td>
+              <td>tk. {{ product?.rate }}</td>
+              <td> {{ product?.vat }}%</td>
+              <td>1</td>
+              <td>tk. {{ product?.rate * 1 }}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <strong>Total: </strong>
+              </td>
+              <td>
+                tk. {{ invoice.total }}
+              </td>
+            </tr>
+
+            <tr *ngFor="let x of invoice?.amount_partially_paid;let i = index">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <strong>Payment On : {{ x.date | date }} </strong>
+              </td>
+              <td>
+                tk. {{ x.amount }}
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td style="border-bottom: 4px solid #d2d6de;">
+                Discount
+              </td>
+              <td style="border-bottom: 4px solid #d2d6de;">
+                tk. {{ invoice.discount }}
+              </td>
+            </tr>
+            <tr *ngIf="invoice.status == 'Paid'">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <strong>Amount Paid (BDT)</strong>
+              </td>
+              <td>
+                <strong>tk. {{ invoice.total }}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <strong>Amount Due (BDT)</strong>
+              </td>
+              <td>
+                <strong>tk. {{ invoice.amount_due }}</strong>
+              </td>
+            </tr>
+
+            </tbody>
+          </table>
         </div>
-    </section>
+      </div>
+      <div style="margin-top:15px">
+        <button type="button" class="btn btn-success" (click)="downloadPDF()"><i class="fa fa-download"
+                                                                                 aria-hidden="true"></i>&nbsp;Download
+          as PDF
+        </button>
+        <button type="button" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;Export
+          as CSV
+        </button>
+      </div>
+    </div>
+  </section>
 </div>
 
-<div id="result">
-
-</div>

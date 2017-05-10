@@ -26,7 +26,7 @@
     <!--  Page Content Here -->
     <div class="col-xs-12">
       <div class="box box-primary">
-        <div class="box-header">
+        <div class="box-header" style="margin-top: 20px;margin-bottom: 20px;">
           <h3 class="box-title">List Of Recent Invoice</h3>
           <br>
           <div class="box-tools">
@@ -117,6 +117,8 @@
               </td>
               <td>
                 <a type="button" class="btn btn-primary btn-xs" [routerLink]="['view',invoice?._id]"> View</a>
+                <button class="btn btn-xs btn-danger" (click)="remove(invoice._id)"><i class="fa fa-times"
+                                                                                       aria-hidden="true"></i></button>
               </td>
 
               <!-- Modal for Partially payment -->

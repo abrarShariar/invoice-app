@@ -115,7 +115,7 @@ export class InvoiceController {
     static cleanInvoice(res: Response) {
         let isClean: boolean = false;
         let date = new Date();
-        let firstDay = new Date(date.getFullYear(), date.getMonth(), 2);
+        let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
 
         RecentInvoiceModel.find({
                 "created_on": {
@@ -282,6 +282,17 @@ export class InvoiceController {
                 res.send({status: false});
             } else {
                 res.send({status: true});
+            }
+        });
+    }
+
+
+    static deleteRecentInVoiceById(res: Response, id) {
+        RecentInvoiceModel.find({_id: id}).remove(function (err) {
+            if (!err) {
+                res.send({status: true});
+            } else {
+                res.send({status: false});
             }
         });
     }

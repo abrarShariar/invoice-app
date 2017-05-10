@@ -95,8 +95,8 @@
           <div class="col-md-6">
             <!--choose status-->
             <div class="form-group ">
-              <label for="status " class="col-sm-2 control-label ">Payment Status</label>
-              <div class="col-sm-10">
+              <label for="status " class="col-sm-6 control-label ">Payment Status</label>
+              <div class="col-sm-6">
                 <label class="label label-warning" *ngIf="invoice.status=='Partially Paid'">{{ invoice.status }}</label>
                 <label class="label label-danger" *ngIf="invoice.status=='Due'">{{ invoice.status }}</label>
                 <label class="label label-success" *ngIf="invoice.status=='Paid'">{{ invoice.status }}</label>
@@ -118,6 +118,18 @@
                     <input type="date" formControlName="payment_due_date" value="currentDate.toString('Y-m-d')">
                 </div>
             </div>-->
+
+            <!--for partial payment only-->
+            <div class="form-group " *ngIf="invoice.status=='Partially Paid' ">
+              <div *ngFor="let x of invoice?.amount_partially_paid;let i = index">
+                <label for="status " class="col-sm-6 control-label ">Partial Payment : [{{ i+1 }}] </label>
+                <div class="col-sm-6">
+                  <h5 style="text-align: center">Date: {{ x?.date | date }} BDT</h5>
+                  <h5 style="text-align: center">Partial Pay: {{ x?.amount }} BDT</h5>
+                  <br>
+                </div>
+              </div>
+            </div>
 
             <!--payment paid / partially paid date-->
             <div class="form-group " *ngIf="invoice.status=='Paid' && paymentStatus!='Due'">
@@ -185,7 +197,8 @@
 
               <!--for new additional products-->
               <div class="form-group " *ngFor="let newProduct of additionalProducts;let i=index">
-                <label for="" class="col-sm-2 control-label ">Product  [{{ i+invoice.customerData?.productData.length+1 }}]</label>
+                <label for="" class="col-sm-2 control-label ">Product [{{ i+invoice.customerData?.productData.length+1
+                  }}]</label>
                 <div class="col-sm-10 ">
                   <div class="productSelectBox">
                     <select (change)="onProductChange($event,i,'add')" required *ngIf="productList" class="form-control"

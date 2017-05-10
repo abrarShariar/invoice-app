@@ -189,4 +189,8 @@ router.post('/invoice/pre_generate_update', (req: Request, res: Response) => {
     InvoiceController.preGenerateUpdate(res, req.body);
 });
 
+router.delete('/invoice/delete/id/:id', (req: Request, res: Response) => {
+    InvoiceController.deleteRecentInVoiceById(res, req.params.id);
+});
+
 export const ApiRoute: Router = router;

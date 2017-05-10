@@ -1,19 +1,21 @@
 #invoice_box {
   background-color: #fff;
   font-size: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 #company_logo {
   margin-top: 50px;
   margin-left: 10px;
-  width: 220px;
-  height: 200px;
+  width: 210px;
+  height: 180px;
 }
 
 .row-divide {
   border-bottom: 4px solid #d2d6de;
 }
 
-#invoice_box{
-  font-weight: 500;
+#invoice_box {
+  font-weight: 550;
 }

@@ -91,4 +91,9 @@ export class InvoiceService {
     let url = this.invoiceUrl + 'pre_generate_update';
     return this.http.post(url, data).map((res) => res.json());
   }
+
+  deleteById(id) {
+    let url = this.invoiceUrl + 'delete/id/' + id;
+    return this.http.delete(url).map((res) => res.json());
+  }
 }

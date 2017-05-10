@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { InvoiceService } from '../invoice.service';
-import { Router } from "@angular/router";
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from "rxjs";
-import { Invoice } from '../invoice';
-import { CustomerService } from '../../customer/customer.service';
-import { ProductService } from '../../product/product.service';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {InvoiceService} from '../invoice.service';
+import {Router} from "@angular/router";
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from "rxjs";
+import {Invoice} from '../invoice';
+import {CustomerService} from '../../customer/customer.service';
+import {ProductService} from '../../product/product.service';
 import * as _ from 'underscore';
 
 declare let jsPDF;
@@ -25,7 +25,8 @@ export class InvoiceHtmlComponent implements OnInit {
   public invoice: Invoice;
 
 
-  constructor(private productService:ProductService,private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute) { }
+  constructor(private productService: ProductService, private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute) {
+  }
 
   ngOnInit() {
     this.subscription = this.route.params.subscribe(params => {
@@ -34,16 +35,17 @@ export class InvoiceHtmlComponent implements OnInit {
     });
 
   }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
   downloadPDF() {
     html2canvas(document.getElementById('invoice_box'), {
-      onrendered:  (canvas) => {
+      onrendered: (canvas) => {
         var imgData = canvas.toDataURL("image/jpeg", 1.0);
-        var pdf = new jsPDF("l", "mm", "a4");
-        pdf.addImage(imgData, 'JPEG', 0, 0, 300, 200);
+        var pdf = new jsPDF("p", "mm", "a4");
+        pdf.addImage(imgData, 'JPEG', 0, 0, 210, 200);
         pdf.save(this.invoice.customerData.username + "_" + this.id + ".pdf");
       }
     });
@@ -53,41 +55,39 @@ export class InvoiceHtmlComponent implements OnInit {
   getInvoiceById(id: string) {
     this.invoiceService.getInvoiceById(id)
       .subscribe(
-      (res) => {
-        this.invoice = res;
-        this.invoice.productData = [];
-        // get product data
-        _.each(this.invoice.productList,(item)=>{
-          this.productService.getProductById(item)
+        (res) => {
+          this.invoice = res;
+          console.log(this.invoice);
+          this.invoice.productData = [];
+          // get product data
+          _.each(this.invoice.productList, (item) => {
+            this.productService.getProductById(item)
               .subscribe(
-                (res)=>{
+                (res) => {
                   this.invoice.productData.push(res);
                 }
               )
-        });
+          });
 
-        //get customer data
-        this.customerService.getCustomerDetails(this.invoice.customer_id)
-          .subscribe(
-          (res) => {
-            this.invoice.customerData = res;
-          },
-          (err) => {
+          //get customer data
+          this.customerService.getCustomerDetails(this.invoice.customer_id)
+            .subscribe(
+              (res) => {
+                this.invoice.customerData = res;
+              },
+              (err) => {
 
-          },
-          ()=>{
-            console.log(this.invoice);
-          }
-          )
-      },
-      (err) => {
-        console.log(err);
-      }
+              },
+              () => {
+                console.log(this.invoice);
+              }
+            )
+        },
+        (err) => {
+          console.log(err);
+        }
       )
   }
-
-
-
 
 
 }
