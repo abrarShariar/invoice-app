@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PayChartComponent } from './pay-chart.component';
+import { PayDateChartComponent } from './pay-date-chart.component';
 
-describe('PayChartComponent', () => {
-  let component: PayChartComponent;
-  let fixture: ComponentFixture<PayChartComponent>;
+describe('PayDateChartComponent', () => {
+  let component: PayDateChartComponent;
+  let fixture: ComponentFixture<PayDateChartComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PayChartComponent ]
+      declarations: [ PayDateChartComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PayChartComponent);
+    fixture = TestBed.createComponent(PayDateChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
