@@ -193,4 +193,9 @@ router.delete('/invoice/delete/id/:id', (req: Request, res: Response) => {
     InvoiceController.deleteRecentInVoiceById(res, req.params.id);
 });
 
+// get all invoices
+router.get('/invoice/all', (req: Request, res: Response) => {
+    InvoiceController.getAllInvoices(res);
+});
+
 export const ApiRoute: Router = router;

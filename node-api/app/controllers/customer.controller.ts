@@ -1,13 +1,16 @@
-import { Router, Request, Response } from 'express';
-import { CustomerModel } from '../database/models/customer.model';
+import {Router, Request, Response} from 'express';
+import {CustomerModel} from '../database/models/customer.model';
 import * as _ from 'underscore';
-import { AreaModel } from '../database/models/area.model';
+import {AreaModel} from '../database/models/area.model';
+import {RecentInvoiceModel} from '../database/models/invoice.model';
+import {ProductModel} from '../database/models/product.model';
 
 /*
-* Controller to handle request to api/customer/ 
-*/
+ * Controller to handle request to api/customer/
+ */
 export class CustomerController {
-    constructor() { }
+    constructor() {
+    }
 
     //create a new customer
     static createNewCustomer(res: Response, data: any) {
@@ -31,11 +34,32 @@ export class CustomerController {
             productList: data.productList
         });
 
-        customer.save(function (err) {
+        customer.save(function (err, data) {
             if (err) {
-                res.send({ status: false });
+                res.send({status: false});
             } else {
-                res.send({ status: true });
+                let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                let invoice = new RecentInvoiceModel({
+                    customer_id: data['_id'],
+                    payment_due_date: firstDay,
+                    amount_due: 0,
+                    status: 'Due',
+                    total: 0,
+                    discount: 0,
+                    amount_partially_paid: [],
+                    productList: customer['productList']
+                });
+
+                ProductModel.find({"_id": {"$in": customer['productList']}}, function (err, docs) {
+                    _.each(docs, (item) => {
+                        invoice['total'] += item['rate'];
+                    });
+                    invoice['amount_due'] = invoice['total'];
+                    invoice.save(function () {
+                        // console.log(data);
+                    });
+                });
+                res.send({status:true});
             }
         });
     }
@@ -59,11 +83,11 @@ export class CustomerController {
 
     //changing status - active/inactive
     static changeStatus(res: Response, data: any) {
-        CustomerModel.update({ _id: data.id }, { $set: { status: data.status } }, function (err) {
+        CustomerModel.update({_id: data.id}, {$set: {status: data.status}}, function (err) {
             if (err) {
-                res.send({ status: false });
+                res.send({status: false});
             } else {
-                res.send({ status: true });
+                res.send({status: true});
             }
         });
     }
@@ -81,7 +105,7 @@ export class CustomerController {
 
     //update customer details data
     static updateCustomerDetails(res: Response, data: any) {
-        CustomerModel.update({ _id: data.id }, {
+        CustomerModel.update({_id: data.id}, {
             $set: {
                 username: data.username,
                 nid: data.nid,
@@ -101,9 +125,9 @@ export class CustomerController {
             }
         }, function (err) {
             if (err) {
-                res.send({ status: false });
+                res.send({status: false});
             } else {
-                res.send({ status: true });
+                res.send({status: true});
             }
         })
     }
@@ -111,7 +135,7 @@ export class CustomerController {
 
     //search customers list by username
     static searchByUsername(res: Response, data: any) {
-        CustomerModel.find({ "username": { $regex: ".*" + data.text + ".*", $options: 'i' } }, function (err, data) {
+        CustomerModel.find({"username": {$regex: ".*" + data.text + ".*", $options: 'i'}}, function (err, data) {
             if (!err) {
                 res.send(data);
             }
@@ -120,7 +144,7 @@ export class CustomerController {
 
     //search customers list by mobile number
     static searchByMobileNumber(res: Response, data: any) {
-        CustomerModel.find({ "mobile_primary": { $regex: ".*" + data.text + ".*", $options: 'i' } }, function (err, data) {
+        CustomerModel.find({"mobile_primary": {$regex: ".*" + data.text + ".*", $options: 'i'}}, function (err, data) {
             if (!err) {
                 res.send(data);
             }
@@ -129,7 +153,7 @@ export class CustomerController {
 
     //search customers list by area
     static searchByArea(res: Response, data: any) {
-        AreaModel.find({ "name": { $regex: ".*" + data.text + ".*", $options: 'i' } }, function (err, data) {
+        AreaModel.find({"name": {$regex: ".*" + data.text + ".*", $options: 'i'}}, function (err, data) {
             if (!err) {
                 res.send(data);
             }
@@ -137,7 +161,7 @@ export class CustomerController {
     }
 
     static customerByArea(res: Response, data: any) {
-        CustomerModel.find({ "area": data.text }, function (err, data) {
+        CustomerModel.find({"area": data.text}, function (err, data) {
             if (!err) {
                 res.send(data);
             }
@@ -145,7 +169,7 @@ export class CustomerController {
     }
 
     static getIdByUsername(res: Response, username) {
-        CustomerModel.find({ "username": { $regex: ".*" + username + ".*", $options: 'i' } }, function (err, data) {
+        CustomerModel.find({"username": {$regex: ".*" + username + ".*", $options: 'i'}}, function (err, data) {
             if (!err) {
                 res.send(data);
             }

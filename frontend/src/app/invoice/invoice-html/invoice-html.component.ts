@@ -57,17 +57,30 @@ export class InvoiceHtmlComponent implements OnInit {
       .subscribe(
         (res) => {
           this.invoice = res;
-          console.log(this.invoice);
+          this.invoice.total = 0;
           this.invoice.productData = [];
           // get product data
           _.each(this.invoice.productList, (item) => {
             this.productService.getProductById(item)
               .subscribe(
                 (res) => {
+                  res['amount_with_vat'] = res['rate'] + (res['rate'] * (res['vat'] / 100));
                   this.invoice.productData.push(res);
+                  this.invoice.total = this.invoice.total + res['amount_with_vat'];
+                  this.invoice.amount_due = this.invoice.total;
+                }, (err) => {
+
+                }, () => {
+                  if (this.invoice.amount_partially_paid.length > 0) {
+                    _.each(this.invoice.amount_partially_paid, (data) => {
+                      this.invoice.amount_due = this.invoice.amount_due - data['amount'];
+                      console.log(data);
+                    });
+                  }
                 }
               )
           });
+
 
           //get customer data
           this.customerService.getCustomerDetails(this.invoice.customer_id)

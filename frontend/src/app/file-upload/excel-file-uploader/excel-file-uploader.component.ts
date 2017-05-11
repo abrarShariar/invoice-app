@@ -1,12 +1,9 @@
-import { CustomHttpService } from '../../custom-http.service';
-import { uploadFile } from 'webdriver-js-extender/built/lib/command_definitions';
-import { Component, OnInit, Directive } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgClass, NgStyle } from '@angular/common';
+import {Component, OnInit, Directive} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import * as _ from 'underscore';
-import { FileUploadService } from '../file-upload.service';
-import { Customer } from '../../customer/customer';
-import { CustomerService } from '../../customer/customer.service';
+import {FileUploadService} from '../file-upload.service';
+import {Customer} from '../../customer/customer';
+import {CustomerService} from '../../customer/customer.service';
 
 
 @Component({
@@ -24,7 +21,8 @@ export class ExcelFileUploaderComponent implements OnInit {
   public isFileRead: boolean;
   private allCustomerData: Customer[] = [];
 
-  constructor(private customerService:CustomerService,private fb: FormBuilder, private fileUploadService: FileUploadService) { }
+  constructor(private customerService: CustomerService, private fb: FormBuilder, private fileUploadService: FileUploadService) {
+  }
 
   ngOnInit() {
     this.createForm();
@@ -37,7 +35,8 @@ export class ExcelFileUploaderComponent implements OnInit {
     });
   }
 
-  onSubmitForm() { }
+  onSubmitForm() {
+  }
 
   getFile(event: any) {
     this.readThis(event.target);
@@ -72,12 +71,12 @@ export class ExcelFileUploaderComponent implements OnInit {
         }
         this.customerService.createNewCustomer(customer)
           .subscribe(
-          (res) => {
-            this.isFileRead = true
-          },
-          (err) => {
-            this.isFileRead = false;
-          }
+            (res) => {
+              this.isFileRead = true
+            },
+            (err) => {
+              this.isFileRead = false;
+            }
           )
       });
     }

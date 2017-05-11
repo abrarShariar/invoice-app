@@ -23,6 +23,8 @@ export class InvoiceRecentComponent implements OnInit {
   public partialPay: any;
   public isInvoiceSaved: boolean = false;
   public isInvoiceError: boolean = false;
+  public showRemoveConfirmation: boolean = false;
+  public delInvoice: any;
 
   constructor(private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) {
   }
@@ -66,26 +68,28 @@ export class InvoiceRecentComponent implements OnInit {
               this.customerService.getCustomerDetails(invoice.customer_id)
                 .subscribe(
                   (res: Customer) => {
-                    customer = res;
-                    customer.productData = [];
-                    if (invoice.productList.length > 0) {
-                      _.each(invoice.productList, (element) => {
-                        this.productService.getProductById(element)
-                          .subscribe(
-                            (res: Product) => {
-                              customer["productData"].push(res);
-                            }
-                          )
-                      });
+                    if (res['status']) {
+                      customer = res;
+                      customer.productData = [];
+                      if (invoice.productList.length > 0) {
+                        _.each(invoice.productList, (element) => {
+                          this.productService.getProductById(element)
+                            .subscribe(
+                              (res: Product) => {
+                                customer["productData"].push(res);
+                              }
+                            )
+                        });
+                      }
+                      this.areaService.getAreaById(customer.area)
+                        .subscribe(
+                          (res) => {
+                            customer["areaData"] = res;
+                          },
+                        )
+                      invoice.customerData = customer;
+                      this.invoiceList.push(invoice);
                     }
-                    this.areaService.getAreaById(customer.area)
-                      .subscribe(
-                        (res) => {
-                          customer["areaData"] = res;
-                        },
-                      )
-                    invoice.customerData = customer;
-                    this.invoiceList.push(invoice);
                   }
                 )
             });
@@ -219,20 +223,32 @@ export class InvoiceRecentComponent implements OnInit {
   }
 
 
-  remove(id) {
-    this.invoiceService.deleteById(id)
-      .subscribe(
-        (res) => {
-          if (res['status']) {
-            this.invoiceList = _.without(this.invoiceList, _.findWhere(this.invoiceList, {
-              _id: id
-            }));
-          }
-        },
-        (err) => {
+  remove(delInvoice) {
+    this.showRemoveConfirmation = true;
+    this.delInvoice = delInvoice;
+  }
 
-        }
-      )
+  removeConfirmation(status) {
+    if (status) {
+      this.invoiceService.deleteById(this.delInvoice['_id'])
+        .subscribe(
+          (res) => {
+            if (res['status']) {
+              this.invoiceList = _.without(this.invoiceList, _.findWhere(this.invoiceList, {
+                _id: this.delInvoice['_id']
+              }));
+              this.showRemoveConfirmation = false;
+            }
+          },
+          (err) => {
+
+          }
+        )
+    } else {
+      this.delInvoice = undefined;
+      this.showRemoveConfirmation = false;
+    }
+
   }
 
 }

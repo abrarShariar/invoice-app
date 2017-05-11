@@ -71,7 +71,7 @@
             <th>Price</th>
             <th>VAT(%)</th>
             <th>Quantity</th>
-            <th>Amount</th>
+            <th>Amount(+VAT)</th>
             </thead>
             <tbody>
             <tr *ngFor="let product of invoice.productData;let i=index"
@@ -80,7 +80,7 @@
               <td>tk. {{ product?.rate }}</td>
               <td> {{ product?.vat }}%</td>
               <td>1</td>
-              <td>tk. {{ product?.rate * 1 }}</td>
+              <td>tk. {{ product?.amount_with_vat * 1 }}</td>
             </tr>
             <tr>
               <td></td>
@@ -136,7 +136,7 @@
                 <strong>Amount Due (BDT)</strong>
               </td>
               <td>
-                <strong>tk. {{ invoice.amount_due }}</strong>
+                <strong>tk. {{ invoice.amount_due - invoice.discount }}</strong>
               </td>
             </tr>
 

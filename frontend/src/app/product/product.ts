@@ -5,5 +5,6 @@ export class Product {
     description:string;
     status:boolean;
     vat: string;
+    amount_with_vat?: number;
 }
 

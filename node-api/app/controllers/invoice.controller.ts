@@ -128,7 +128,6 @@ export class InvoiceController {
                 _.each(data, (obj) => {
                     isClean = true;
                     let invoice = new AllInvoiceModel({
-                        id: obj['_id'],
                         customer_id: obj['customer_id'],
                         payment_due_date: obj['payment_due_date'],
                         amount_due: obj['amount_due'],
@@ -184,41 +183,37 @@ export class InvoiceController {
 
     static buildAndSaveRecentInvoice(res: Response) {
         CustomerModel.find({
-            $and: [
-                {status: true},
-                {
-                    productList: {
-                        $exists: true, $not: {$size: 0}
-                    }
+                productList: {
+                    $exists: true, $not: {$size: 0}
                 }
-            ]
-        }, function (err, data) {
-            let date = new Date();
-            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-            _.each(data, (customer) => {
-                let invoice = new RecentInvoiceModel({
-                    customer_id: customer['_id'],
-                    payment_due_date: firstDay,
-                    amount_due: 0,
-                    status: 'Due',
-                    total: 0,
-                    discount: 0,
-                    amount_partially_paid: [],
-                    productList: customer['productList']
-                });
+            },
+            function (err, data) {
+                let date = new Date();
+                let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                _.each(data, (customer) => {
+                    let invoice = new RecentInvoiceModel({
+                        customer_id: customer['_id'],
+                        payment_due_date: firstDay,
+                        amount_due: 0,
+                        status: 'Due',
+                        total: 0,
+                        discount: 0,
+                        amount_partially_paid: [],
+                        productList: customer['productList']
+                    });
 
-                ProductModel.find({"_id": {"$in": customer['productList']}}, function (err, docs) {
-                    _.each(docs, (item) => {
-                        invoice['total'] += item['rate'];
-                    });
-                    invoice['amount_due'] = invoice['total'];
-                    invoice.save(function () {
-                        // console.log(data);
+                    ProductModel.find({"_id": {"$in": customer['productList']}}, function (err, docs) {
+                        _.each(docs, (item) => {
+                            invoice['total'] += item['rate'];
+                        });
+                        invoice['amount_due'] = invoice['total'];
+                        invoice.save(function () {
+                            // console.log(data);
+                        });
                     });
                 });
-            });
-            res.send({status: true});
-        }
+                res.send({status: true});
+            }
     }
 
     static savePartialPay(res: Response, data: any) {
@@ -286,7 +281,6 @@ export class InvoiceController {
         });
     }
 
-
     static deleteRecentInVoiceById(res: Response, id) {
         RecentInvoiceModel.find({_id: id}).remove(function (err) {
             if (!err) {
@@ -294,6 +288,12 @@ export class InvoiceController {
             } else {
                 res.send({status: false});
             }
+        });
+    }
+
+    static getAllInvoices(res: Response) {
+        AllInvoiceModel.find({}, (err, data) => {
+            res.send(data);
         });
     }
 

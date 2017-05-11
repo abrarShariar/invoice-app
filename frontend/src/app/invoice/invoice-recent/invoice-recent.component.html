@@ -14,10 +14,17 @@
         <li><a [routerLink]="[ '/' ]"><i class="fa fa-dashboard"></i> Invoice</a></li>
         <li class="active">Recent</li>
       </ol>
-      <!--<button (click)="resetInvoiceAll()" data-toggle="tooltip" title="Reset Invoices" class="btn btn-danger" style="float:right;margin-bottom: 15px;margin-top:10px;margin-left:10px"><i class="fa fa-refresh" aria-hidden="true" style="font-size: xx-large"></i></button>-->
-      <!--<button (click)="saveInvoiceAll()" data-toggle="tooltip" title="Save Invoices" class="btn btn-success"-->
-      <!--style="float:right;margin-bottom: 15px;margin-top:10px"><i class="fa fa-floppy-o" aria-hidden="true"-->
-      <!--style="font-size: xx-large"></i></button>-->
+
+      <div class="alert alert-warning" *ngIf="showRemoveConfirmation && delInvoice">
+        <h4>
+          <strong>Delete Confirmation !!</strong> <br>
+          Delete the invoice for <em>{{ delInvoice.customerData?.username }} </em>  ?
+        </h4>
+        <br>
+        <button class="btn btn-success btn-sm" (click)="removeConfirmation(true)">YES</button>
+        <button class="btn btn-danger btn-sm" (click)="removeConfirmation(false)">NO</button>
+      </div>
+
     </div>
   </section>
 
@@ -117,8 +124,8 @@
               </td>
               <td>
                 <a type="button" class="btn btn-primary btn-xs" [routerLink]="['view',invoice?._id]"> View</a>
-                <button class="btn btn-xs btn-danger" (click)="remove(invoice._id)"><i class="fa fa-times"
-                                                                                       aria-hidden="true"></i></button>
+                <button class="btn btn-xs btn-danger" (click)="remove(invoice)"><i class="fa fa-times"
+                                                                                   aria-hidden="true"></i></button>
               </td>
 
               <!-- Modal for Partially payment -->
