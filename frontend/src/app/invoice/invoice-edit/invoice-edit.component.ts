@@ -35,6 +35,7 @@ export class InvoiceEditComponent implements OnInit {
   public datePipe: DatePipe = new DatePipe('en-US');
   public paymentStatus: string = 'Due';
   public showForm: boolean = false;
+  private type: string;
 
   constructor(private areaService: AreaService, private customerService: CustomerService, private elementRef: ElementRef, private productService: ProductService, private fb: FormBuilder, private invoiceService: InvoiceService, private route: ActivatedRoute, private router: Router) {
 
@@ -44,8 +45,10 @@ export class InvoiceEditComponent implements OnInit {
     this.getProductList();
     this.subscription = this.route.params.subscribe(params => {
       this.id = params['id'];
+      this.type = params['type'];
+      console.log(this.type);
       if (this.id) {
-        this.invoiceService.getInvoiceById(this.id)
+        this.invoiceService.getInvoiceById(this.type, this.id)
           .subscribe(
             (res) => {
               this.invoice = res;
@@ -173,13 +176,14 @@ export class InvoiceEditComponent implements OnInit {
       total: this.invoiceDetailForm.value.total,
       discount: this.invoiceDetailForm.value.discount,
       productList: this.allProductsAdd,
-      amount_partially_paid: this.invoice.amount_partially_paid
+      amount_partially_paid: this.invoice.amount_partially_paid,
+      type: this.type
     }
 
     this.invoiceService.preGenerateInvoiceUpdate(data)
       .subscribe(
         (res) => {
-          this.router.navigate(['dashboard/invoice/display',this.id]);
+          this.router.navigate(['dashboard/invoice/display', this.type, this.id]);
         },
         (err) => {
           console.log('Error in Pre Generator');

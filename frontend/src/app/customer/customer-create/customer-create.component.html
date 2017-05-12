@@ -12,7 +12,7 @@
         </div>
     </section>
     <section class="content ">
-        <div class="col-md-offset-2 col-md-7">
+        <div class="col-md-12">
 
             <div class="box box-primary">
                 <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Customer Created Successfully !!</div>
@@ -140,7 +140,7 @@
                             <div class="productSelectBox">
                                 <select required *ngIf="productList" class="form-control" (change)="onProductChange($event,i)">
                                     <option *ngFor="let product of productList" value="{{ product._id }}">
-                                         {{ product.name }} - <em> {{ product.rate }} BDT/month </em> 
+                                         {{ product.name }} - <em> {{ product.rate }} BDT/month </em>
                                     </option>
                                 </select>
                                 <button *ngIf="i>0" type="button" class="pull-right btn btn-danger btn-xs" (click)="removeProduct(i)"><i class="fa fa-times" aria-hidden="true"></i></button>

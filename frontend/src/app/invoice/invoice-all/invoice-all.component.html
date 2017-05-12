@@ -103,16 +103,15 @@
                 {{ invoice?.paid_date | date }}
               </td>
               <td>
-                <label class="label label-danger" *ngIf="invoice.status == 'Due'">Due</label>
-                <label class="label label-success" *ngIf="invoice.status == 'Paid'">Paid</label>
-                <label class="label label-warning" *ngIf="invoice.status == 'Partially Paid'">Partially Paid</label>
-              </td>
-              <td>
                 <button class="btn btn-success btn-xs" (click)="changeStatus('Paid',invoice)"> Paid</button>
                 <button type="button" class="btn btn-warning btn-xs" (click)="changeStatus('Partially Paid',invoice)"
                         data-toggle="modal" data-target="#partiallyPaymentModal"> Partially Paid
                 </button>
                 <button class="btn btn-danger btn-xs" (click)="changeStatus('Due',invoice)"> Due</button>
+              </td>
+              <td>
+                <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/dashboard/invoice/view','all',invoice?._id]">
+                  View</a>
               </td>
 
               <!-- Modal for Partially payment -->

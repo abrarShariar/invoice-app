@@ -135,8 +135,8 @@ router.post('/invoice/generate/pdf', (req: Request, res: Response) => {
 });
 
 // get invoice by id
-router.get('/invoice/id/:id', (req: Request, res: Response) => {
-    InvoiceController.getInvoiceById(res, req.params.id);
+router.get('/invoice/:type/id/:id', (req: Request, res: Response) => {
+    InvoiceController.getInvoiceById(res, req.params.type, req.params.id);
 });
 
 //search all customers data by username

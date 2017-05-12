@@ -30,27 +30,29 @@ export class CustomerController {
             area: data.area,
             city: data.city,
             postal_code: data.postal_code,
-            status: true,
+            status: data.status,
             productList: data.productList
         });
-
-        customer.save(function (err, data) {
+        console.log(customer);
+        customer.save(function (err, newData) {
+            console.log(newData);
             if (err) {
                 res.send({status: false});
             } else {
+                let date = new Date();
                 let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
                 let invoice = new RecentInvoiceModel({
-                    customer_id: data['_id'],
+                    customer_id: newData['_id'],
                     payment_due_date: firstDay,
                     amount_due: 0,
                     status: 'Due',
                     total: 0,
                     discount: 0,
                     amount_partially_paid: [],
-                    productList: customer['productList']
+                    productList: newData['productList']
                 });
 
-                ProductModel.find({"_id": {"$in": customer['productList']}}, function (err, docs) {
+                ProductModel.find({"_id": {"$in": data['productList']}}, function (err, docs) {
                     _.each(docs, (item) => {
                         invoice['total'] += item['rate'];
                     });
@@ -59,9 +61,11 @@ export class CustomerController {
                         // console.log(data);
                     });
                 });
-                res.send({status:true});
+
             }
+            res.send({status: true});
         });
+
     }
 
 

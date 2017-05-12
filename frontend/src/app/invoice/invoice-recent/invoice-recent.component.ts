@@ -180,6 +180,7 @@ export class InvoiceRecentComponent implements OnInit {
       this.partialInvoice = invoice;
     }
 
+    invoice['type'] = 'recent';
     this.invoiceService.changeInvoiceStatus(invoice)
       .subscribe(
         (res) => {
@@ -221,7 +222,6 @@ export class InvoiceRecentComponent implements OnInit {
         }
       )
   }
-
 
   remove(delInvoice) {
     this.showRemoveConfirmation = true;

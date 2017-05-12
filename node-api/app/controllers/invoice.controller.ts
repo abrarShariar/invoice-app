@@ -54,10 +54,20 @@ export class InvoiceController {
         res.send(data);
     }
 
-    static getInvoiceById(res: Response, id) {
-        RecentInvoiceModel.findById(id, function (err, data) {
-            res.send(data);
-        })
+    static getInvoiceById(res: Response, type, id) {
+        if (type == 'recent') {
+            RecentInvoiceModel.findById(id, function (err, data) {
+                res.send(data);
+            })
+        }
+        else if (type == 'all') {
+            AllInvoiceModel.findById(id, function (err, data) {
+                res.send(data);
+            })
+        } else {
+            res.send({status: false});
+        }
+
     }
 
     static searchByUsername(res: Response, data: any) {
@@ -128,6 +138,7 @@ export class InvoiceController {
                 _.each(data, (obj) => {
                     isClean = true;
                     let invoice = new AllInvoiceModel({
+                        recent_id: obj['_id'],
                         customer_id: obj['customer_id'],
                         payment_due_date: obj['payment_due_date'],
                         amount_due: obj['amount_due'],
@@ -143,7 +154,7 @@ export class InvoiceController {
 
                     invoice.save(function (err, newData) {
                         if (!err) {
-                            RecentInvoiceModel.find({'_id': newData['id']}).remove(function (err) {
+                            RecentInvoiceModel.findOne({'_id': newData['recent_id']}).remove(function (err) {
                                 if (!err) {
                                     isClean = true;
                                 }
@@ -159,26 +170,49 @@ export class InvoiceController {
     }
 
     static changeStatus(res: Response, data: any) {
-        RecentInvoiceModel.update({_id: data['_id']}, {
-            $set: {
-                customer_id: data['customer_id'],
-                payment_due_date: data['payment_due_date'],
-                amount_due: data['amount_due'],
-                status: data['status'],
-                total: data['total'],
-                discount: data['discount'],
-                invoice_created_date: data['invoice_created_date'],
-                paid_date: data['paid_date'],
-                amount_partially_paid: data['amount_partially_paid'],
-                productList: data['productList']
-            }
-        }, function (err) {
-            if (err) {
-                res.send({status: false});
-            } else {
-                res.send({status: true});
-            }
-        })
+        if (data['type'] == 'recent') {
+            RecentInvoiceModel.update({_id: data['_id']}, {
+                $set: {
+                    customer_id: data['customer_id'],
+                    payment_due_date: data['payment_due_date'],
+                    amount_due: data['amount_due'],
+                    status: data['status'],
+                    total: data['total'],
+                    discount: data['discount'],
+                    invoice_created_date: data['invoice_created_date'],
+                    paid_date: data['paid_date'],
+                    amount_partially_paid: data['amount_partially_paid'],
+                    productList: data['productList']
+                }
+            }, function (err) {
+                if (err) {
+                    res.send({status: false});
+                } else {
+                    res.send({status: true});
+                }
+            })
+        } else {
+            AllInvoiceModel.update({_id: data['_id']}, {
+                $set: {
+                    customer_id: data['customer_id'],
+                    payment_due_date: data['payment_due_date'],
+                    amount_due: data['amount_due'],
+                    status: data['status'],
+                    total: data['total'],
+                    discount: data['discount'],
+                    invoice_created_date: data['invoice_created_date'],
+                    paid_date: data['paid_date'],
+                    amount_partially_paid: data['amount_partially_paid'],
+                    productList: data['productList']
+                }
+            }, function (err) {
+                if (err) {
+                    res.send({status: false});
+                } else {
+                    res.send({status: true});
+                }
+            })
+        }
     }
 
     static buildAndSaveRecentInvoice(res: Response) {
@@ -264,21 +298,43 @@ export class InvoiceController {
     }
 
     static preGenerateUpdate(res: Response, data: any) {
-        RecentInvoiceModel.update({_id: data.id}, {
-            $set: {
-                amount_due: data.amount_due,
-                discount: data.discount,
-                productList: data.productList,
-                total: data.total,
-                amount_partially_paid: data.amount_partially_paid
-            }
-        }, function (err) {
-            if (err) {
-                res.send({status: false});
-            } else {
-                res.send({status: true});
-            }
-        });
+        if (data['type'] == 'recent') {
+            RecentInvoiceModel.update({_id: data.id}, {
+                $set: {
+                    amount_due: data.amount_due,
+                    discount: data.discount,
+                    productList: data.productList,
+                    total: data.total,
+                    amount_partially_paid: data.amount_partially_paid
+                }
+            }, function (err) {
+                if (err) {
+                    res.send({status: false});
+                } else {
+                    res.send({status: true});
+                }
+            });
+        }
+        else if (data['type'] == 'all') {
+            AllInvoiceModel.update({_id: data.id}, {
+                $set: {
+                    amount_due: data.amount_due,
+                    discount: data.discount,
+                    productList: data.productList,
+                    total: data.total,
+                    amount_partially_paid: data.amount_partially_paid
+                }
+            }, function (err) {
+                if (err) {
+                    res.send({status: false});
+                } else {
+                    res.send({status: true});
+                }
+            });
+        }
+        else {
+            res.send({status: false});
+        }
     }
 
     static deleteRecentInVoiceById(res: Response, id) {

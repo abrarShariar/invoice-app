@@ -23,6 +23,7 @@ export class InvoiceHtmlComponent implements OnInit {
   private id: any;
   private subscription: Subscription;
   public invoice: Invoice;
+  private type = '';
 
 
   constructor(private productService: ProductService, private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute) {
@@ -30,8 +31,9 @@ export class InvoiceHtmlComponent implements OnInit {
 
   ngOnInit() {
     this.subscription = this.route.params.subscribe(params => {
-      this.getInvoiceById(params['id']);
       this.id = params['id'];
+      this.type = params['type'];
+      this.getInvoiceById(params['id']);
     });
 
   }
@@ -53,7 +55,7 @@ export class InvoiceHtmlComponent implements OnInit {
 
 
   getInvoiceById(id: string) {
-    this.invoiceService.getInvoiceById(id)
+    this.invoiceService.getInvoiceById(this.type, id)
       .subscribe(
         (res) => {
           this.invoice = res;
@@ -74,7 +76,6 @@ export class InvoiceHtmlComponent implements OnInit {
                   if (this.invoice.amount_partially_paid.length > 0) {
                     _.each(this.invoice.amount_partially_paid, (data) => {
                       this.invoice.amount_due = this.invoice.amount_due - data['amount'];
-                      console.log(data);
                     });
                   }
                 }

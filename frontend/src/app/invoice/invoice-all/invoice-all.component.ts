@@ -7,7 +7,6 @@ import {Product} from '../../product/product';
 import {AreaService} from '../../area/area.service';
 import {CustomerService} from '../../customer/customer.service';
 import {ProductService} from '../../product/product.service';
-
 import * as _ from 'underscore';
 
 @Component({
@@ -18,6 +17,7 @@ import * as _ from 'underscore';
 export class InvoiceAllComponent implements OnInit {
 
   public invoiceList: Invoice[] = [];
+  public partialInvoice: Invoice;
 
   constructor(private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) {
   }
@@ -41,7 +41,7 @@ export class InvoiceAllComponent implements OnInit {
                   (res: Customer) => {
                     customer = res;
                     customer.productData = [];
-                    if (invoice.productData.length > 0) {
+                    if (invoice.productList.length > 0) {
                       _.each(invoice.productList, (element) => {
                         this.productService.getProductById(element)
                           .subscribe(
@@ -84,7 +84,26 @@ export class InvoiceAllComponent implements OnInit {
   }
 
   changeStatus(status: string, invoice: Invoice) {
+    if (status == 'Paid') {
+      invoice.status = 'Paid';
+      invoice.paid_date = Date.now();
+      invoice.amount_due = 0;
+    } else if (status == 'Due') {
+      invoice.status = 'Due';
+      invoice.amount_due = invoice.total;
+      invoice.amount_partially_paid = [];
+    } else if (status == 'Partially Paid') {
+      this.partialInvoice = invoice;
+    }
 
+    invoice['type'] = 'all';
+
+    this.invoiceService.changeInvoiceStatus(invoice)
+      .subscribe(
+        (res) => {
+
+        }
+      )
   }
 
 }

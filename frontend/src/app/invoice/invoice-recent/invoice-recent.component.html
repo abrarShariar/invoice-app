@@ -123,7 +123,7 @@
                 <button class="btn btn-danger btn-xs" (click)="changeStatus('Due',invoice)"> Due</button>
               </td>
               <td>
-                <a type="button" class="btn btn-primary btn-xs" [routerLink]="['view',invoice?._id]"> View</a>
+                <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/dashboard/invoice/view','recent',invoice?._id]"> View</a>
                 <button class="btn btn-xs btn-danger" (click)="remove(invoice)"><i class="fa fa-times"
                                                                                    aria-hidden="true"></i></button>
               </td>

@@ -3,7 +3,7 @@
     <div class="col-xs-12">
       <h1>
         Invoice Details of <em>{{ invoice.customerData?.username }}</em>
-        <small>for the month of {{currentDate | date:'MMMM'}}</small>
+        <small>for the month of {{ invoice?.created_on | date:'MMMM'}}</small>
       </h1>
       <ol class="breadcrumb ">
         <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
@@ -13,7 +13,7 @@
     </div>
   </section>
   <section class="content ">
-    <div class="col-md-offset-1 col-md-10">
+    <div class="col-md-12">
       <div class="box box-primary" *ngIf="invoice">
         <div class="alert alert-success" role="alert" *ngIf="showSuccess">Invoice Data Updated Successfully !!</div>
         <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
@@ -221,7 +221,6 @@
             <div class="col-sm-offset-1 col-sm-10 " style="margin-top:10px">
               <!--<button type="submit " class="btn btn-success">Save</button>-->
               <button type="submit" class="btn btn-info btn-lg">Generate Invoice</button>
-              <a type="button" class="btn btn-primary btn-lg" [routerLink]="['/invoice/recent']">Back</a>
             </div>
           </div>
         </form>

@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import { RouterModule} from "@angular/router";
+import {RouterModule} from "@angular/router";
 // components
 import {HomeBodyComponent} from '../home/home-body/home-body.component';
 import {ExcelFileUploaderComponent} from '../file-upload/excel-file-uploader/excel-file-uploader.component';
@@ -56,13 +56,13 @@ const generalRoutes = [
     component: InvoiceRecentComponent
   },
   {
-    path: 'invoice/display/:id',
+    path: 'invoice/display/:type/:id',
     component: InvoiceHtmlComponent
   },
   {
-    path: 'invoice/recent/view/:id',
+    path: 'invoice/view/:type/:id',
     component: InvoiceEditComponent
-  }
+  },
 ];
 @NgModule({
   imports: [
