@@ -6,6 +6,7 @@ import {HomeBodyComponent} from './home-body/home-body.component';
 import {HomeChartComponent} from './home-charts/home-charts.component';
 import {PayDateChartComponent} from './pay-date-chart/pay-date-chart.component';
 import {HomeService} from './home.service';
+import {InvoiceService} from '../invoice/invoice.service';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import {HomeService} from './home.service';
     HomeBodyComponent
   ],
   providers: [
-    HomeService
+    HomeService,
+    InvoiceService
   ]
 })
 export class HomeModule {

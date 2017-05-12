@@ -169,6 +169,7 @@ export class InvoiceRecentComponent implements OnInit {
 
   changeStatus(status: string, invoice: Invoice) {
     if (status == 'Paid') {
+      this.setPaidDateCounter(invoice);
       invoice.status = 'Paid';
       invoice.paid_date = Date.now();
       invoice.amount_due = 0;
@@ -184,6 +185,18 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.changeInvoiceStatus(invoice)
       .subscribe(
         (res) => {
+        }
+      )
+  }
+
+  setPaidDateCounter(invoice: Invoice) {
+    this.invoiceService.setPaidDateCounter(invoice)
+      .subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log("Error in setpaiddatecounter");
         }
       )
   }

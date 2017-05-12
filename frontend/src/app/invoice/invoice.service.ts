@@ -96,4 +96,14 @@ export class InvoiceService {
     let url = this.invoiceUrl + 'delete/id/' + id;
     return this.http.delete(url).map((res) => res.json());
   }
+
+  setPaidDateCounter(invoice) {
+    let url = this.invoiceUrl + 'set_paid_date_counter/' + invoice['_id'];
+    return this.http.get(url).map((res) => res.json());
+  }
+
+  getPaidDateCounter() {
+    let url = this.invoiceUrl + 'get_paid_date_counter';
+    return this.http.get(url).map((res) => res.json());
+  }
 }

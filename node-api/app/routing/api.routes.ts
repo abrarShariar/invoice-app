@@ -204,4 +204,14 @@ router.get('/home/pay-date-counter/clean-build', (req: Request, res: Response) =
     PayDateCounterController.checkAndCleanPayDateCounter(res);
 });
 
+//set pay date counter
+router.get('/invoice/set_paid_date_counter/:id', (req: Request, res: Response) => {
+    PayDateCounterController.setPayDateCounter(res, req.params.id);
+});
+
+// get pay date counter
+router.get('/invoice/get_paid_date_counter', (req: Request, res: Response) => {
+    PayDateCounterController.getPayDateCounter(res);
+});
+
 export const ApiRoute: Router = router;

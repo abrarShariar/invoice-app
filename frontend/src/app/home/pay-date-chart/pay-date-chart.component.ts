@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {InvoiceService} from '../../invoice/invoice.service';
+import * as _ from 'underscore';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-pay-date-chart',
@@ -7,39 +10,10 @@ import {Component, OnInit} from '@angular/core';
 })
 export class PayDateChartComponent implements OnInit {
 
+  public datePipe = new DatePipe('en-US');
 
   public column_ChartData = [
     ['Date', 'PayCount'],
-    ['01/05/17', 500],
-    ['02/05/17', 15],
-    ['03/05/17', 1],
-    ['04/05/17', 0],
-    ['05/05/17', 90],
-    ['06/05/17', 100],
-    ['07/05/17', 101],
-    ['08/05/17', 11],
-    ['09/05/17', 191],
-    ['10/05/17', 121],
-    ['11/05/17', 111],
-    ['12/05/17', 1],
-    ['13/05/17', 0],
-    ['14/05/17', 90],
-    ['15/05/17', 100],
-    ['16/05/17', 1010],
-    ['17/05/17', 1011],
-    ['18/05/17', 11],
-    ['19/05/17', 141],
-    ['20/05/17', 101],
-    ['21/05/17', 11],
-    ['22/05/17', 100],
-    ['23/05/17', 1010],
-    ['24/05/17', 1011],
-    ['25/05/17', 11],
-    ['26/05/17', 112],
-    ['27/05/17', 101],
-    ['28/05/17', 114],
-    ['29/05/17', 1146],
-    ['30/05/17', 1134],
   ];
 
 
@@ -53,11 +27,49 @@ export class PayDateChartComponent implements OnInit {
   };
 
 
-
-  constructor() {
+  constructor(private invoiceService: InvoiceService) {
   }
 
   ngOnInit() {
+    let date = new Date();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let day = date.getDate();
+    let limit = 0;
+    if (month % 2 == 0) {
+      limit = 30;
+    } else {
+      limit = 31;
+    }
+    for (let i = 1; i <= limit; i++) {
+      let data = [];
+      if (i < 10) {
+        data[0] = '0' + i + '/' + month + '/' + year;
+      } else {
+        data[0] = i + '/' + month + '/' + year;
+      }
+      data[1] = 0;
+      this.column_ChartData.push(data);
+    }
+    this.getPayDateCounter();
+  }
+
+  getPayDateCounter() {
+    this.invoiceService.getPaidDateCounter()
+      .subscribe(
+        (res) => {
+          _.each(res, (element) => {
+            for (let i = 0; i < this.column_ChartData.length; i++) {
+              if (this.column_ChartData[i][0].split('/')[0] == this.datePipe.transform(element['date'], 'dd/MM/yyyy').split('/')[0]) {
+                this.column_ChartData[i][1] = element['invoice_id'].length;
+                break;
+              }
+            }
+          });
+        },
+        (err) => {
+        }
+      )
   }
 
 }
