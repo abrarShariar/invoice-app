@@ -7,6 +7,7 @@ import {CustomerController} from '../controllers/customer.controller';
 import {ProductController} from '../controllers/product.controller';
 import {AreaController} from '../controllers/area.controller';
 import {InvoiceController} from '../controllers/invoice.controller';
+import {PayDateCounterController} from '../controllers/payDateCounter.controller';
 
 const router: Router = Router();
 
@@ -196,6 +197,11 @@ router.delete('/invoice/delete/id/:id', (req: Request, res: Response) => {
 // get all invoices
 router.get('/invoice/all', (req: Request, res: Response) => {
     InvoiceController.getAllInvoices(res);
+});
+
+//pay date coounter clean
+router.get('/home/pay-date-counter/clean-build', (req: Request, res: Response) => {
+    PayDateCounterController.checkAndCleanPayDateCounter(res);
 });
 
 export const ApiRoute: Router = router;

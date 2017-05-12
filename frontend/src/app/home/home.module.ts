@@ -4,7 +4,8 @@ import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HomeRoutingModule} from "./home-routing.module";
 import {HomeBodyComponent} from './home-body/home-body.component';
 import {HomeChartComponent} from './home-charts/home-charts.component';
-import { PayDateChartComponent } from './pay-date-chart/pay-date-chart.component';
+import {PayDateChartComponent} from './pay-date-chart/pay-date-chart.component';
+import {HomeService} from './home.service';
 
 @NgModule({
   imports: [
@@ -21,7 +22,9 @@ import { PayDateChartComponent } from './pay-date-chart/pay-date-chart.component
   exports: [
     HomeBodyComponent
   ],
-  providers: []
+  providers: [
+    HomeService
+  ]
 })
 export class HomeModule {
 }

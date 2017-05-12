@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {HomeService} from '../home.service';
 
 @Component({
   selector: 'app-home-body',
@@ -7,10 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeBodyComponent implements OnInit {
 
-  constructor() { }
+  constructor(private homeService: HomeService) {
+  }
 
   ngOnInit() {
-    console.log("Hello WOrld");
+    this.wakeUpPayDateCounter();
+  }
+
+  wakeUpPayDateCounter() {
+    this.homeService.buildPayDateCounter()
+      .subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      )
   }
 
 }
