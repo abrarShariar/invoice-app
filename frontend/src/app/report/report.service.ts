@@ -15,4 +15,14 @@ export class ReportService {
     return this.http.get(url).map((res) => res.json());
   }
 
+  getCustomerByArea(id) {
+    let url = this.reportUrl + 'customer_by_area/' + id;
+    return this.http.get(url).map((res) => res.json());
+  }
+
+  getReport(id) {
+    let url = this.reportUrl + 'report_for_customers/' + id;
+    return this.http.get(url).map((res) => res.json());
+  }
+
 }

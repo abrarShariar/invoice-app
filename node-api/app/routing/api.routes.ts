@@ -215,9 +215,14 @@ router.get('/invoice/get_paid_date_counter', (req: Request, res: Response) => {
     PayDateCounterController.getPayDateCounter(res);
 });
 
-//build and sent area based report
-router.get('/report/build_show_area_report/:id', (req: Request, res: Response) => {
-    ReportController.buildAndSendAreaReport(res, req.params.id);
+//get customer by area
+router.get('/report/customer_by_area/:id', (req: Request, res: Response) => {
+    ReportController.getCustomerByArea(res, req.params.id);
+});
+
+// generate report for a list of customers
+router.get('/report/report_for_customers/:id', (req: Request, res: Response) => {
+    ReportController.getReportForCustomers(res, req.params.id);
 });
 
 export const ApiRoute: Router = router;

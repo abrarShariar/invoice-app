@@ -27,6 +27,30 @@
         <div class="box-header">
 
         </div>
+        <div class="box-body table-responsive no-padding" *ngIf="reportList.length>0">
+          <table class="table table-hover">
+            <tbody>
+            <tr>
+              <th>Username</th>
+              <th>Mobile No.</th>
+              <th>Location</th>
+              <th>Current Due (BDT)</th>
+              <th>Previous Due (BDT)</th>
+              <th>Total Due (BDT)</th>
+            </tr>
+            <tr *ngFor="let report of reportList | paginate: { itemsPerPage: 10, currentPage: p }">
+              <td>{{ report.username }}</td>
+              <td>{{ report.mobile_no }}</td>
+              <td>{{ report.location }}</td>
+              <td>{{ report.current_due }}</td>
+              <td>{{ report.previous_due }}</td>
+              <td>{{ report.total_due }}</td>
+            </tr>
+            </tbody>
+
+          </table>
+        </div>
+
       </div>
     </div>
   </section>

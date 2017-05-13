@@ -4,6 +4,7 @@ import * as _ from 'underscore';
 import {AreaModel} from '../database/models/area.model';
 import {AllInvoiceModel, RecentInvoiceModel} from '../database/models/invoice.model';
 import {ProductModel} from '../database/models/product.model';
+import * as async from 'async';
 
 class Report {
     username: string;
@@ -17,53 +18,74 @@ class Report {
 
 export class ReportController {
 
-    static buildAndSendAreaReport(res: Response, id) {
-        let reportList: Report[] = [];
-        var query = CustomerModel.find({'area': id});
-        query.exec(function (err, data) {
+    // public reportList: Report[] = [];
+
+    static getCustomerByArea(res: Response, id) {
+        CustomerModel.find({'area': id}, function (err, data) {
             if (!err) {
-                _.each(data, (customer) => {
-                    let id = customer['_id'];
-                    let report = new Report();
-                    report.username = customer['username'];
-                    report.mobile_no = customer['mobile_primary'];
-                    report.location = customer['location'];
-                    //get current due
-                    RecentInvoiceModel.findOne({
-                        $and: [
-                            {
-                                "customer_id": id
-                            },
-                            {
-                                "status": "Due"
-                            }
-                        ]
-                    }, function (err, recentinvoice) {
-                        if (recentinvoice) {
-                            report.current_due = recentinvoice['amount_due'];
-                            //get all previous due
-                            AllInvoiceModel.find({
-                                $and: [
-                                    {
-                                        "customer_id": id
-                                    },
-                                    {
-                                        "status": "Due"
-                                    }
-                                ]
-                            }, function (err, allInvoice) {
-                                _.each(allInvoice, (item) => {
-                                    report.previous_due += item['amount_due'];
-                                });
-                                reportList.push(report);
-                            });
-                        }
-                    });
-                });
-                res.send(reportList);
+                res.send(data);
             } else {
                 res.send({status: false});
             }
+        })
+    }
+
+    static getReportForCustomers(res: Response, id) {
+        let result = {
+            current_due: 0,
+            previous_due: 0,
+            total_due: 0
+        };
+        RecentInvoiceModel.findOne({
+            $and: [
+                {
+                    customer_id: id
+                },
+                {
+                    $or: [
+                        {
+                            status: "Due"
+                        },
+                        {
+                            status: "Partially Paid"
+                        }
+                    ]
+
+                }
+            ]
+
+        }, function (err, recentInvoice) {
+            if (recentInvoice) {
+                result['current_due'] = recentInvoice['amount_due'];
+            }
+            AllInvoiceModel.find({
+                $and: [
+                    {
+                        customer_id: id
+                    },
+                    {
+                        $or: [
+                            {
+                                status: "Due"
+                            },
+                            {
+                                status: "Partially Paid"
+                            }
+                        ]
+
+                    }
+                ]
+            }, function (err, allInvoice) {
+                if (allInvoice) {
+                    _.each(allInvoice, (item) => {
+                        result['previous_due'] += item['amount_due'];
+                    });
+                }
+                result['total_due'] = result['previous_due'] + result['current_due'];
+                res.send(result);
+            });
         });
     }
+
+
 }
