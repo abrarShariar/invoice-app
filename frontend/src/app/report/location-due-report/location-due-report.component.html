@@ -1,0 +1,33 @@
+<div class="content-wrapper" style="height: 2000px;">
+  <section class="content-header">
+    <div class="col-xs-12">
+      <h1>
+        Report
+        <small>Area based report</small>
+      </h1>
+
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> InvoiceApp</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Report</a></li>
+        <li class="active">Area based report</li>
+      </ol>
+    </div>
+  </section>
+  <section class="content">
+    <div class="col-md-12">
+      <div class="input-group">
+        <select style="font-size: 15px;height: 34px,width: 500px;" (change)="filterChange($event.target.value)">
+          <option value="default">Select Area</option>
+          <option *ngFor="let area of areaList" value="{{ area._id }}">{{ area.name }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="box box-primary">
+        <div class="box-header">
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
