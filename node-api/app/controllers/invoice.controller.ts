@@ -136,6 +136,7 @@ export class InvoiceController {
                     res.send({"status": false});
                 }
                 _.each(data, (obj) => {
+                    // clean from recent and push to all
                     isClean = true;
                     let invoice = new AllInvoiceModel({
                         recent_id: obj['_id'],
@@ -157,6 +158,39 @@ export class InvoiceController {
                             RecentInvoiceModel.findOne({'_id': newData['recent_id']}).remove(function (err) {
                                 if (!err) {
                                     isClean = true;
+                                    CustomerModel.findOne({
+                                            $and: [
+                                                {
+                                                    '_id': newData['customer_id']
+                                                },
+                                                {
+                                                    'status': 'Active'
+                                                }
+                                            ]
+                                        }, function (err, customer) {
+                                            let date = new Date();
+                                            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                                            let newInvoice = new RecentInvoiceModel({
+                                                customer_id: customer['_id'],
+                                                payment_due_date: firstDay,
+                                                amount_due: 0,
+                                                status: 'Due',
+                                                total: 0,
+                                                discount: 0,
+                                                amount_partially_paid: [],
+                                                productList: customer['productList']
+                                            });
+                                            ProductModel.find({"_id": {"$in": customer['productList']}}, function (err, docs) {
+                                                _.each(docs, (item) => {
+                                                    newInvoice['total'] += item['rate'];
+                                                });
+                                                newInvoice['amount_due'] = newInvoice['total'];
+                                                newInvoice.save(function () {
+                                                    // console.log(data);
+                                                });
+                                            });
+                                        }
+                                    );
                                 }
                             });
                         }
