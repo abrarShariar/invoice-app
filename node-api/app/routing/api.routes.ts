@@ -8,6 +8,7 @@ import {ProductController} from '../controllers/product.controller';
 import {AreaController} from '../controllers/area.controller';
 import {InvoiceController} from '../controllers/invoice.controller';
 import {PayDateCounterController} from '../controllers/payDateCounter.controller';
+import {ReportController} from '../controllers/report.controller';
 
 const router: Router = Router();
 
@@ -212,6 +213,11 @@ router.get('/invoice/set_paid_date_counter/:id', (req: Request, res: Response) =
 // get pay date counter
 router.get('/invoice/get_paid_date_counter', (req: Request, res: Response) => {
     PayDateCounterController.getPayDateCounter(res);
+});
+
+//build and sent area based report
+router.get('/report/build_show_area_report/:id', (req: Request, res: Response) => {
+    ReportController.buildAndSendAreaReport(res, req.params.id);
 });
 
 export const ApiRoute: Router = router;

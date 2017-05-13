@@ -54,7 +54,6 @@ export class ProductController {
 
     //update product
     static update(res: Response, data: any) {
-        console.log(data);
         ProductModel.update({_id: data.id}, {
             $set: {
                 name: data.name,
@@ -88,7 +87,7 @@ export class ProductController {
             _.each(docs, (item) => {
                 total += item['rate'];
             });
-            res.send({total:total});
+            res.send({total: total});
         });
     }
 

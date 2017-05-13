@@ -1,5 +1,4 @@
 import {Router, Request, Response} from 'express';
-import * as _ from 'underscore';
 declare var Date: any;
 import {PayDateCounterModel} from '../database/models/payDateCounter.model';
 

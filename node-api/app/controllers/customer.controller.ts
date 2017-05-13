@@ -33,9 +33,7 @@ export class CustomerController {
             status: data.status,
             productList: data.productList
         });
-        console.log(customer);
         customer.save(function (err, newData) {
-            console.log(newData);
             if (err) {
                 res.send({status: false});
             } else {
@@ -58,7 +56,6 @@ export class CustomerController {
                     });
                     invoice['amount_due'] = invoice['total'];
                     invoice.save(function () {
-                        // console.log(data);
                     });
                 });
 
