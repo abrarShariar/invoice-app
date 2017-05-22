@@ -5,6 +5,11 @@
   padding-right: 20px;
 }
 
+#invoice_table{
+  background-color: #fff;
+  font-size: 20px;
+}
+
 #company_logo {
   margin-top: 50px;
   margin-left: 10px;
