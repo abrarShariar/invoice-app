@@ -94,7 +94,7 @@
                   }} </label>
               </td>
               <td>
-                {{ invoice?.created_on | date: 'MMMM' }}
+                {{ invoice?.created_on | date: 'yMMMd' }}
               </td>
               <td *ngIf="invoice?.status=='Due' || invoice?.status=='Partially Paid'">
                 {{ invoice?.payment_due_date | date }}
