@@ -205,11 +205,28 @@ export class CustomerAllComponent implements OnInit {
     });
   }
 
-
   //change search filter
   filterChange(event: any) {
     this.searchMode = event;
   }
 
+  checkGenerateInvoice(customer) {
+    let data = {
+      id: customer['_id'],
+      isGenerateInvoiceMonthly: !customer['isGenerateInvoiceMonthly']
+    };
+
+    this.customerService.setCheckGenerateInvoice(data)
+      .subscribe(
+        (res) => {
+          if (res['status']) {
+            customer['isGenerateInvoiceMonthly'] = !customer['isGenerateInvoiceMonthly'];
+          }
+        },
+        (err) => {
+          console.log("Error in setCheckGenerateInvoice");
+        }
+      );
+  }
 
 }

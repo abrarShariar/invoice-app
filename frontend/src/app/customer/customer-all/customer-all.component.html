@@ -57,6 +57,7 @@
               <th>City</th>
               <th>Status</th>
               <th>Action</th>
+              <th>Generate <br> invoice monthly</th>
             </tr>
             <tr *ngFor="let customer of customers | paginate: { itemsPerPage: 30, currentPage: p }">
               <td>{{ customer.username }}</td>
@@ -79,6 +80,10 @@
               <td>
                 <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/customer/detail',customer._id]">
                   Edit</a>
+              </td>
+              <td>
+                <input checked="true" style="zoom: 1.5;margin-left: 10px;" type="checkbox"
+                       name="customer._id" value="customer._id" (click)="checkGenerateInvoice(customer)">
               </td>
             </tr>
             </tbody>

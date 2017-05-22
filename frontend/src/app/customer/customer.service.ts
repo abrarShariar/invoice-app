@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { CustomHttpService } from "../custom-http.service";
-import { environment } from "../../environments/environment";
+import {Injectable} from '@angular/core';
+import {CustomHttpService} from "../custom-http.service";
+import {environment} from "../../environments/environment";
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -8,7 +8,8 @@ export class CustomerService {
 
   private customerUrl = environment.api_server + 'customer/';
 
-  constructor(private http: CustomHttpService) { }
+  constructor(private http: CustomHttpService) {
+  }
 
   getAllCustomers() {
     let url = this.customerUrl + 'all/';
@@ -55,5 +56,8 @@ export class CustomerService {
     return this.http.post(url, data).map((res) => res.json());
   }
 
-
+  setCheckGenerateInvoice(data: any) {
+    let url = this.customerUrl + 'check_change_generate_invoice_monthly';
+    return this.http.post(url, data).map((res) => res.json());
+  }
 }

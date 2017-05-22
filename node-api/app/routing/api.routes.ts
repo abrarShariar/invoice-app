@@ -225,4 +225,9 @@ router.get('/report/report_for_customers/:id', (req: Request, res: Response) => 
     ReportController.getReportForCustomers(res, req.params.id);
 });
 
+// check status change for generate invoice monthly
+router.post('/customer/check_change_generate_invoice_monthly', (req: Request, res: Response) => {
+    CustomerController.setCheckGenerateInvoice(res, req.body);
+});
+
 export const ApiRoute: Router = router;

@@ -177,4 +177,15 @@ export class CustomerController {
         });
     }
 
+
+    static setCheckGenerateInvoice(res: Response, data: any){
+        CustomerModel.update({_id: data.id}, {$set: {isGenerateInvoiceMonthly: data.isGenerateInvoiceMonthly}}, function (err) {
+            if (err) {
+                res.send({status: false});
+            } else {
+                res.send({status: true});
+            }
+        });
+    }
+
 }
