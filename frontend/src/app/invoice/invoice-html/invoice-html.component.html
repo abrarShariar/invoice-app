@@ -13,8 +13,9 @@
   </section>
   <section class="content " *ngIf="invoice">
     <div class="col-xs-12" id="invoice_main">
-      <!--invoice display starts here-->
-      <div class="" id="invoice_box" style="margin-top:10px" #invoiceBox>
+      <div id="invoice_body">
+        <!--invoice display starts here-->
+        <div class="" id="invoice_box" style="margin-top:10px" #invoiceBox>
           <!--head row-->
           <div class="row ">
             <!--left section-->
@@ -57,52 +58,51 @@
             <div class="col-md-offset-2 col-md-4" style="text-align: -webkit-right;;line-height: 2;">
               <span> <strong>Invoice Number: </strong> #001</span><br>
               <span> <strong>Invoice Date: </strong> {{ invoice.created_on | date }} </span><br>
-              <span> <strong>Payment Due: </strong> <span *ngIf="invoice.status!='Paid'">{{ invoice.payment_due_date | date }}</span> <span *ngIf="invoice.status=='Paid'"> -- </span> </span><br>
-              <span> <strong>Amount Due (BDT): </strong> tk. {{ invoice.amount_due }}</span><br>
+              <span> <strong>Payment Due: </strong> {{ invoice.created_on | date }}</span> <br>
+              <span> <strong>Amount Due (BDT): </strong> Tk. {{ invoice.amount_due }}</span><br>
             </div>
           </div>
           <br>
-      </div>
-
-    <!--table section-->
-      <div id="invoice_table">
+        </div>
+        <!--table section-->
+        <div id="invoice_table">
           <table class="table" *ngIf="invoice.productData">
             <thead style="background-color: rgba(0, 183, 219, 0.68);">
             <th style="height:40px;padding-left:20px">Product</th>
             <th>Price</th>
-            <th>VAT(%)</th>
-            <th>Quantity</th>
-            <th>Amount(+VAT)</th>
+            <!--<th>VAT(%)</th>-->
+            <th style="padding-left: 200px;">Quantity</th>
+            <th style="padding-left: 200px;">Amount</th>
             </thead>
             <tbody>
             <tr *ngFor="let product of invoice.productData;let i=index"
                 [ngClass]="i==invoice.productData.length-1 ? 'row-divide' : '' ">
               <td style="padding-left:20px">{{ product?.name }}</td>
-              <td>tk. {{ product?.rate }}</td>
-              <td> {{ product?.vat }}%</td>
-              <td>1</td>
-              <td>tk. {{ product?.amount_with_vat * 1 }}</td>
+              <td>Tk. {{ product?.rate }}</td>
+              <!--<td> {{ product?.vat }}%</td>-->
+              <td style="padding-left: 200px;">1</td>
+              <td style="padding-left: 200px;">Tk. {{ product?.amount_with_vat * 1 }}</td>
             </tr>
             <tr>
               <td></td>
               <td></td>
-              <td></td>
-              <td>
+              <!--<td></td>-->
+              <td style="padding-left: 200px;">
                 <strong>Total: </strong>
               </td>
-              <td>
-                tk. {{ invoice.total }}
+              <td style="padding-left: 200px;">
+                Tk. {{ invoice.total }}
               </td>
             </tr>
 
             <tr *ngFor="let x of invoice?.amount_partially_paid;let i = index">
               <td></td>
               <td></td>
-              <td></td>
-              <td>
+              <!--<td></td>-->
+              <td style="padding-left: 200px;">
                 <strong>Payment On : {{ x.date | date }} </strong>
               </td>
-              <td>
+              <td style="padding-left: 200px;">
                 tk. {{ x.amount }}
               </td>
             </tr>
@@ -110,39 +110,50 @@
             <tr>
               <td></td>
               <td></td>
-              <td></td>
-              <td style="border-bottom: 4px solid #d2d6de;">
+              <!--<td></td>-->
+              <td style="border-bottom: 4px solid #d2d6de;padding-left: 200px;">
                 Discount
               </td>
-              <td style="border-bottom: 4px solid #d2d6de;">
-                tk. {{ invoice.discount }}
+              <td style="border-bottom: 4px solid #d2d6de;padding-left: 200px;">
+                Tk. {{ invoice.discount }}
               </td>
             </tr>
             <tr *ngIf="invoice.status == 'Paid'">
               <td></td>
               <td></td>
-              <td></td>
-              <td>
+              <!--<td></td>-->
+              <td style="padding-left: 200px;">
                 <strong>Amount Paid (BDT)</strong>
               </td>
-              <td>
-                <strong>tk. {{ invoice.total }}</strong>
+              <td style="padding-left: 200px;">
+                <strong>Tk. {{ invoice.total }}</strong>
               </td>
             </tr>
             <tr>
               <td></td>
               <td></td>
-              <td></td>
-              <td>
+              <!--<td></td>-->
+              <td style="padding-left: 200px;">
                 <strong>Amount Due (BDT)</strong>
               </td>
-              <td>
-                <strong>tk. {{ finalTotal }}</strong><br>
-                <strong>tk. {{ finalTotalWords }} Only</strong>
+              <td style="padding-left: 200px;">
+                <strong>Tk. {{ finalTotal }}</strong><br>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <!--<td></td>-->
+              <td style="padding-left: 200px;">
+                <strong>Total(in words)</strong>
+              </td>
+              <td style="padding-left: 200px;">
+                <strong style="text-transform: capitalize;"> {{ finalTotalWords }} Tk only</strong>
               </td>
             </tr>
             </tbody>
           </table>
+        </div>
       </div>
       <div style="margin-top:15px">
         <button type="button" class="btn btn-success" (click)="downloadPDF()"><i class="fa fa-download"
