@@ -206,8 +206,8 @@ router.get('/home/pay-date-counter/clean-build', (req: Request, res: Response) =
 });
 
 //set pay date counter
-router.get('/invoice/set_paid_date_counter/:id', (req: Request, res: Response) => {
-    PayDateCounterController.setPayDateCounter(res, req.params.id);
+router.post('/invoice/set_paid_date_counter', (req: Request, res: Response) => {
+    PayDateCounterController.setPayDateCounter(res, req.body);
 });
 
 // get pay date counter

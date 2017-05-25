@@ -1,6 +1,9 @@
 import * as express from 'express';
-import { ApiRoute } from './routing/api.routes';
-import { connectMongoDB } from './database/db.config';
+import {ApiRoute} from './routing/api.routes';
+import {connectMongoDB} from './database/db.config';
+import * as schedule from 'node-schedule';
+import {DeamonController} from './controllers/deamon.controller';
+
 
 const app: express.Application = express();
 const port: number = process.env.PORT || 5000;
@@ -22,6 +25,12 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 
 // api router endpoint
 app.use('/api', ApiRoute);
+
+// handling a daemon job
+let rule = {hour: 12, minute: 26, dayOfMonth: 23, month: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]};
+schedule.scheduleJob(rule, function () {
+    DeamonController.autoGenerateInvoice();
+});
 
 app.listen(port, () => {
     connectMongoDB();

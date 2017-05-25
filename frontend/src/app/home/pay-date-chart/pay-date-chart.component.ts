@@ -13,7 +13,7 @@ export class PayDateChartComponent implements OnInit {
   public datePipe = new DatePipe('en-US');
 
   public column_ChartData = [
-    ['Date', 'PayCount'],
+    ['Date', 'Pay Amount', 'Pay Count']
   ];
 
 
@@ -24,6 +24,16 @@ export class PayDateChartComponent implements OnInit {
       title: 'Payments vs Date',
       subtitle: 'Payments done this month'
     },
+    series: {
+      0: {axis: 'pay_amount'}, // Bind series 0 to an axis named 'distance'.
+      1: {axis: 'pay_count'} // Bind series 1 to an axis named 'brightness'.
+    },
+    axes: {
+      y: {
+        pay_amount: {label: 'parsecs'}, // Left y-axis.
+        pay_count: {side: 'right', label: 'apparent magnitude'} // Right y-axis.
+      }
+    }
   };
 
 
@@ -48,6 +58,7 @@ export class PayDateChartComponent implements OnInit {
       } else {
         data[0] = i + '/' + month + '/' + year;
       }
+      data[2] = 0;
       data[1] = 0;
       this.column_ChartData.push(data);
     }
@@ -58,10 +69,12 @@ export class PayDateChartComponent implements OnInit {
     this.invoiceService.getPaidDateCounter()
       .subscribe(
         (res) => {
+          console.log(this.column_ChartData);
           _.each(res, (element) => {
             for (let i = 0; i < this.column_ChartData.length; i++) {
               if (this.column_ChartData[i][0].split('/')[0] == this.datePipe.transform(element['date'], 'dd/MM/yyyy').split('/')[0]) {
-                this.column_ChartData[i][1] = element['invoice_id'].length;
+                this.column_ChartData[i][1] = element['amount'];
+                this.column_ChartData[i][2] = element['invoice_id'].length;
                 break;
               }
             }

@@ -57,7 +57,7 @@
               <th>City</th>
               <th>Status</th>
               <th>Action</th>
-              <th>Generate <br> invoice monthly</th>
+              <th>Auto generate <br> invoice monthly</th>
             </tr>
             <tr *ngFor="let customer of customers | paginate: { itemsPerPage: 30, currentPage: p }">
               <td>{{ customer.username }}</td>
@@ -82,7 +82,7 @@
                   Edit</a>
               </td>
               <td>
-                <input checked="true" style="zoom: 1.5;margin-left: 10px;" type="checkbox"
+                <input [attr.checked]="customer.isGenerateInvoiceMonthly ? 'checked' : null" style="zoom: 1.5;margin-left: 10px;" type="checkbox"
                        name="customer._id" value="customer._id" (click)="checkGenerateInvoice(customer)">
               </td>
             </tr>

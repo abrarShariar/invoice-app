@@ -4,5 +4,6 @@ let Schema = mongoose.Schema;
 
 export let payDateCounterSchema = new Schema({
     date: {type: Date},
-    invoice_id: [String]
+    invoice_id: [String],
+    amount: Number
 });

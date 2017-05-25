@@ -98,8 +98,8 @@ export class InvoiceService {
   }
 
   setPaidDateCounter(invoice) {
-    let url = this.invoiceUrl + 'set_paid_date_counter/' + invoice['_id'];
-    return this.http.get(url).map((res) => res.json());
+    let url = this.invoiceUrl + 'set_paid_date_counter';
+    return this.http.post(url, invoice).map((res) => res.json());
   }
 
   getPaidDateCounter() {

@@ -46,7 +46,6 @@ export class InvoiceEditComponent implements OnInit {
     this.subscription = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.type = params['type'];
-      console.log(this.type);
       if (this.id) {
         this.invoiceService.getInvoiceById(this.type, this.id)
           .subscribe(

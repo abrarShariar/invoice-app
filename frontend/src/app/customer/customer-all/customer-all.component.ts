@@ -99,7 +99,6 @@ export class CustomerAllComponent implements OnInit {
     this.display = true;
   }
 
-
   getCustomerDetails(id) {
     this.customerService.getCustomerDetails(id)
       .subscribe(
@@ -167,7 +166,6 @@ export class CustomerAllComponent implements OnInit {
         )
     }
   }
-
 
   buildSearchResult(customerList: Customer[]) {
     this.customers = [];

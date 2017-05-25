@@ -7,7 +7,7 @@ export class PayDateCounterController {
     constructor() {
     }
 
-    static setPayDateCounter(res: Response, id) {
+    static setPayDateCounter(res: Response, invoice) {
         let date = new Date();
         let current_date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         PayDateCounterModel.findOne({
@@ -18,8 +18,8 @@ export class PayDateCounterController {
             if (!data) {
                 let payDataCounter = new PayDateCounterModel({
                     date: current_date,
-                    invoice_id: [id],
-
+                    invoice_id: [invoice["_id"]],
+                    amount: invoice["total"]
                 });
                 payDataCounter.save(function (err, docs) {
                     if (!err) {
@@ -30,7 +30,8 @@ export class PayDateCounterController {
                 });
             } else {
                 PayDateCounterModel.update({date: current_date}, {
-                    $addToSet: {invoice_id: id}
+                    $addToSet: {invoice_id: data["_id"]},
+                    amount: data["amount"] + invoice["total"]
                 }, function (err, docs) {
                     if (!err) {
                         res.send({status: true});

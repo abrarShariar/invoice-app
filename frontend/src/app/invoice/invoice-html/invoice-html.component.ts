@@ -7,6 +7,8 @@ import {Invoice} from '../invoice';
 import {CustomerService} from '../../customer/customer.service';
 import {ProductService} from '../../product/product.service';
 import * as _ from 'underscore';
+import {DatePipe} from '@angular/common/src/pipes/date_pipe';
+
 
 declare let jsPDF;
 declare let html2canvas;
@@ -26,6 +28,8 @@ export class InvoiceHtmlComponent implements OnInit {
   private type = '';
   private finalTotal;
   private finalTotalWords;
+  public currentDate: number = Date.now();
+  public datePipe: DatePipe = new DatePipe('en-US');
 
 
   constructor(private productService: ProductService, private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute) {
@@ -50,7 +54,7 @@ export class InvoiceHtmlComponent implements OnInit {
         var imgData = canvas.toDataURL("image/jpeg", 1.0);
         var pdf = new jsPDF("p", "mm", "a4");
         pdf.addImage(imgData, 'JPEG', 0, 0, 210, 200);
-        pdf.save(this.invoice.customerData.username + "_" + this.id + ".pdf");
+        pdf.save(this.invoice.customerData.username + "_" + this.datePipe.transform(Date.now(), 'MMMM') + ".pdf");
       }
     });
   }
@@ -80,11 +84,11 @@ export class InvoiceHtmlComponent implements OnInit {
                       this.invoice.amount_due = this.invoice.amount_due - data['amount'];
                     });
                   }
-                  if(this.invoice.status == 'Paid'){
+                  if (this.invoice.status == 'Paid') {
                     this.invoice.amount_due = 0;
                   }
                   this.finalTotal = this.invoice.amount_due - this.invoice.discount;
-                  this.finalTotalWords = this.numberToEnglish(this.invoice.total,'');
+                  this.finalTotalWords = this.numberToEnglish(this.invoice.total, '');
                 }
               )
           });
@@ -194,10 +198,6 @@ export class InvoiceHtmlComponent implements OnInit {
       }
 
     }
-
     return words.reverse().join(' ');
-
   }
-
-
 }

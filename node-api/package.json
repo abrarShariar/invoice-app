@@ -18,6 +18,7 @@
     "express": "^4.15.2",
     "html-pdf": "^2.1.0",
     "mongoose": "^4.9.2",
+    "node-schedule": "^1.2.3",
     "rxjs": "^5.2.0",
     "underscore": "^1.8.3"
   },
