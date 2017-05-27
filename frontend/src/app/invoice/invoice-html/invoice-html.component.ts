@@ -7,8 +7,7 @@ import {Invoice} from '../invoice';
 import {CustomerService} from '../../customer/customer.service';
 import {ProductService} from '../../product/product.service';
 import * as _ from 'underscore';
-import {DatePipe} from '@angular/common/src/pipes/date_pipe';
-
+import {DatePipe} from '@angular/common';
 
 declare let jsPDF;
 declare let html2canvas;

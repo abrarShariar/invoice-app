@@ -1,13 +1,22 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class AuthService {
-  private loggedIn:boolean = true;
+  private loggedIn: boolean = false;
 
-  constructor() { }
+  constructor() {
+  }
 
-  isLoggedIn(){
-      return this.loggedIn;
+  isLoggedIn() {
+    if (localStorage.getItem('csbd-username') == 'admin' && localStorage.getItem('csbd-password') == 'admin') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  setLogin(status: boolean) {
+    this.loggedIn = status;
   }
 
 

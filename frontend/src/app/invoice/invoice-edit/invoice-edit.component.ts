@@ -1,4 +1,4 @@
-import {DatePipe} from '@angular/common/src/pipes/date_pipe';
+import {DatePipe} from '@angular/common';
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {InvoiceService} from '../invoice.service';
 import {ActivatedRoute} from '@angular/router';
