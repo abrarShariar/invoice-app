@@ -17,6 +17,6 @@ export class NavbarComponent implements OnInit {
   logout() {
     localStorage.setItem('csbd-username', '');
     localStorage.setItem('csbd-password', '');
-    this.router.navigate(['/']);
+    this.router.navigate(['']);
   }
 }
