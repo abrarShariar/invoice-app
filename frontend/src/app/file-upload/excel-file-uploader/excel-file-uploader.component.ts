@@ -4,6 +4,8 @@ import * as _ from 'underscore';
 import {FileUploadService} from '../file-upload.service';
 import {Customer} from '../../customer/customer';
 import {CustomerService} from '../../customer/customer.service';
+import {environment} from '../../../environments/environment';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
 
 
 @Component({
@@ -20,8 +22,10 @@ export class ExcelFileUploaderComponent implements OnInit {
   private fileSize: number;
   public isFileRead: boolean;
   private allCustomerData: Customer[] = [];
+  public env = environment;
+  public file: File;
 
-  constructor(private customerService: CustomerService, private fb: FormBuilder, private fileUploadService: FileUploadService) {
+  constructor(private http: Http, private customerService: CustomerService, private fb: FormBuilder, private fileUploadService: FileUploadService) {
   }
 
   ngOnInit() {
@@ -39,54 +43,44 @@ export class ExcelFileUploaderComponent implements OnInit {
   }
 
   getFile(event: any) {
-    this.readThis(event.target);
+    let fileList: FileList = event.target.files;
+    this.file = fileList[0];
   }
 
-  readThis(inputValue: any) {
-    let allStatus = [];
-    let file: File = inputValue.files[0];
+  uploadFile() {
     let reader = new FileReader();
     reader.onload = (e) => {
       let csv = reader.result;
       let allTextLines = csv.split(/\r\n|\n/);
-      let customer: Customer;
 
-      _.each(allTextLines, (line: string) => {
-        let data = line.split(',');
-        customer = {
-          username: data[0],
-          email: data[1],
-          fullname: data[2] + " " + data[3],
-          customer_currency: data[4],
-          mobile_primary: data[5],
-          mobile_secondary: data[6],
-          website: data[7],
-          country: data[8],
-          location: data[9],
-          area: "",
-          city: data[11],
-          postal_code: data[12],
-          status: true,
-          productList: []
+      allTextLines.map((element, index, array) => {
+        if (index > 0) {
+          let data = {
+            content: element
+          };
+          this.customerService.uploadFileContents(data)
+            .subscribe(
+              (res) => {
+                if (res.status) {
+                  this.isUploadSuccess = true;
+                } else {
+                  this.isUploadSuccess = false;
+                }
+              },
+              (err) => {
+                console.log('Error in uploadFile');
+              }
+            );
         }
-        this.customerService.createNewCustomer(customer)
-          .subscribe(
-            (res) => {
-              this.isFileRead = true
-            },
-            (err) => {
-              this.isFileRead = false;
-            }
-          )
       });
     }
-
-    reader.readAsText(file);
+    reader.readAsText(this.file);
   }
 
   errorHandler(event) {
     this.isFileRead = false;
     console.log("Error in uploading file");
   }
+
 
 }

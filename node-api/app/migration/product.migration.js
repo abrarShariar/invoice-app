@@ -18,13 +18,14 @@ db.on('error', function () {
 
 db.once('open', function () {
     var data_array = [
-        new Product({name: '256 Kbps', rate: 500, description: '', status: true, vat: '10'}),
-        new Product({name: '512 Kbps', rate: 600, description: '', status: true, vat: '10'}),
-        new Product({name: '1 Mbps', rate: 1000, description: '', status: true, vat: '10'}),
-        new Product({name: '2 Mbps', rate: 2000, description: '', status: true, vat: '10'}),
-        new Product({name: '3 Mbps', rate: 3000, description: '', status: true, vat: '10'}),
-        new Product({name: '4 Mbps', rate: 4000, description: '', status: true, vat: '10'}),
-        new Product({name: '5 Mbps', rate: 5000, description: '', status: true, vat: '10'})
+        new Product({name: '256Kbps', rate: 500, description: '', status: true, vat: '10'}),
+        new Product({name: '512Kbps', rate: 600, description: '', status: true, vat: '10'}),
+        new Product({name: '1Mbps', rate: 1000, description: '', status: true, vat: '10'}),
+        new Product({name: '2Mbps', rate: 2000, description: '', status: true, vat: '10'}),
+        new Product({name: '3Mbps', rate: 3000, description: '', status: true, vat: '10'}),
+        new Product({name: '3Mbps', rate: 3000, description: '', status: true, vat: '10'}),
+        new Product({name: '4Mbps', rate: 4000, description: '', status: true, vat: '10'}),
+        new Product({name: '5Mbps', rate: 5000, description: '', status: true, vat: '10'})
     ];
 
     data_array.map(function (product) {

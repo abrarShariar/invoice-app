@@ -69,7 +69,6 @@ export class PayDateChartComponent implements OnInit {
     this.invoiceService.getPaidDateCounter()
       .subscribe(
         (res) => {
-          console.log(this.column_ChartData);
           _.each(res, (element) => {
             for (let i = 0; i < this.column_ChartData.length; i++) {
               if (this.column_ChartData[i][0].split('/')[0] == this.datePipe.transform(element['date'], 'dd/MM/yyyy').split('/')[0]) {

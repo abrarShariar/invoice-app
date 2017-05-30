@@ -114,12 +114,15 @@ export class InvoiceController {
         });
     }
 
-    static getRecentInvoiceDB(res: Response) {
-        RecentInvoiceModel.find({}, (err, data) => {
+    static getRecentInvoiceDB(res: Response, paginationCount: number) {
+        let skip_count = (paginationCount - 1) * 30;
+        RecentInvoiceModel.find({}).skip(skip_count).limit(30).exec((err, data) => {
             if (!err) {
                 res.send(data);
+            } else {
+                res.send({status: false});
             }
-        });
+        })
     }
 
     static cleanInvoice(res: Response) {

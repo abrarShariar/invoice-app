@@ -89,7 +89,7 @@
               <th>Change Status</th>
               <th>Action</th>
             </tr>
-            <tr *ngFor="let invoice of invoiceList | paginate: { itemsPerPage: 30, currentPage: p }">
+            <tr *ngFor="let invoice of invoiceList | paginate: { itemsPerPage: 30, currentPage: p, totalItems:totalCustomerCount }">
               <td>{{ invoice.customerData?.username }}</td>
               <td>{{ invoice.customerData?.fullname }}</td>
               <td>{{ invoice.customerData?.mobile_primary }}</td>
@@ -184,7 +184,7 @@
       </div>
       <!-- /.box -->
       <div class="col-md-offset-4">
-        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        <pagination-controls (pageChange)="onPaginate($event);p=$event"></pagination-controls>
       </div>
     </div>
   </section>

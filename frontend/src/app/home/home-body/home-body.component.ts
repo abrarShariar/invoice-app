@@ -19,10 +19,10 @@ export class HomeBodyComponent implements OnInit {
     this.homeService.buildPayDateCounter()
       .subscribe(
         (res) => {
-          console.log(res);
+          // console.log(res);
         },
         (err) => {
-          console.log(err);
+          console.log("error in buildPayDateCounter");
         }
       )
   }

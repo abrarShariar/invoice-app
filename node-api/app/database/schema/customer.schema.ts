@@ -4,11 +4,11 @@ let Schema = mongoose.Schema;
 
 export let customerSchema = new Schema({
     username: {type: String, unique: true, dropDups: true},
-    nid: {type: Number, unique: true, dropDups: true},
+    nid: {type: String},
     email: String,
     fullname: String,
     customer_currency: String,
-    mobile_primary: {type: String, unique: true, dropDups: true},
+    mobile_primary: String,
     mobile_secondary: String,
     website: String,
     country: String,

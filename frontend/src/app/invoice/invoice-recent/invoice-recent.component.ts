@@ -25,11 +25,19 @@ export class InvoiceRecentComponent implements OnInit {
   public isInvoiceError: boolean = false;
   public showRemoveConfirmation: boolean = false;
   public delInvoice: any;
+  public paginator = 1;
+  totalCustomerCount: number = 0;
 
   constructor(private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) {
   }
 
   ngOnInit() {
+    this.customerService.getTotalCustomerCount()
+      .subscribe(
+        (res) => {
+          this.totalCustomerCount = res.count;
+        }
+      )
     this.wakeUpInvoiceDemon();
   }
 
@@ -57,7 +65,7 @@ export class InvoiceRecentComponent implements OnInit {
 
   getRecentInvoiceDB() {
     this.invoiceList = [];
-    this.invoiceService.getRecentInvoiceDB()
+    this.invoiceService.getRecentInvoiceDB(this.paginator)
       .subscribe(
         (res: Invoice[]) => {
           if (res.length == 0) {
@@ -102,9 +110,7 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.buildAndSaveRecentInvoice()
       .subscribe(
         (res) => {
-          if (res['status']) {
-            this.getRecentInvoiceDB();
-          }
+          this.getRecentInvoiceDB();
         },
         (err) => {
           console.log('Error in build and save');
@@ -261,7 +267,12 @@ export class InvoiceRecentComponent implements OnInit {
       this.delInvoice = undefined;
       this.showRemoveConfirmation = false;
     }
+  }
 
+  //  for pagination
+  onPaginate(event: any) {
+    this.paginator = event;
+    this.getRecentInvoiceDB();
   }
 
 }

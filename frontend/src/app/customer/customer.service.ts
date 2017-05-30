@@ -11,8 +11,8 @@ export class CustomerService {
   constructor(private http: CustomHttpService) {
   }
 
-  getAllCustomers() {
-    let url = this.customerUrl + 'all/';
+  getAllCustomers(paginator) {
+    let url = this.customerUrl + 'all/' + 'page=' + paginator;
     return this.http.get(url).map((res) => res.json());
   }
 
@@ -59,5 +59,15 @@ export class CustomerService {
   setCheckGenerateInvoice(data: any) {
     let url = this.customerUrl + 'check_change_generate_invoice_monthly';
     return this.http.post(url, data).map((res) => res.json());
+  }
+
+  uploadFileContents(data: any) {
+    let url = this.customerUrl + 'upload-file-contents';
+    return this.http.post(url, data).map((res) => res.json());
+  }
+
+  getTotalCustomerCount(){
+    let url = this.customerUrl + 'customer-count';
+    return this.http.get(url).map((res) => res.json());
   }
 }

@@ -12,6 +12,80 @@ export class CustomerController {
     constructor() {
     }
 
+
+    static getFileContents(res: Response, obj: any) {
+        let data = obj['content'].split(',');
+        let isDataInserted: boolean = false;
+        let timestamp = Date.now();
+        let status: boolean = false;
+        if (data[15]) {
+            status = true;
+        }
+
+        AreaModel.findOneAndUpdate({name: data[10]},
+            {
+                $set: {
+                    name: data[10]
+                }
+            },
+            {
+                upsert: true,
+                new: true
+            }, (err, docs) => {
+                if (!err) {
+                    let area_id = docs['_id'];
+                    //get product id
+                    ProductModel.findOneAndUpdate({name: data[14]},
+                        {
+                            $set: {
+                                name: data[14],
+                                rate: 0,
+                                description: '',
+                                status: true,
+                                vat: ''
+                            }
+                        },
+                        {
+                            upsert: true,
+                            new: true
+                        }, (err, pdocs) => {
+                            if (!err) {
+                                let product_id = pdocs['_id'];
+                                let customer = new CustomerModel({
+                                    username: data[0],
+                                    nid: "",
+                                    email: data[1],
+                                    fullname: data[2] + " " + data[3],
+                                    customer_currency: data[4],
+                                    mobile_primary: '+880' + data[5],
+                                    mobile_secondary: '+880' + data[6],
+                                    website: data[7],
+                                    country: data[8],
+                                    location: "",
+                                    area: area_id,
+                                    city: data[12],
+                                    postal_code: data[13],
+                                    status: status,
+                                    productList: [product_id]
+                                });
+                                customer.save((err, cdocs) => {
+                                    if (!err) {
+                                        res.send({status: true});
+                                    } else {
+                                        res.send({status: false});
+                                    }
+                                })
+                            }
+                        })
+                }
+            })
+    }
+
+    static uploadFile(res: Response, data: any) {
+        console.log(data);
+        res.send(true);
+    }
+
     //create a new customer
     static createNewCustomer(res: Response, data: any) {
         let isDataInserted: boolean = false;
@@ -55,7 +129,10 @@ export class CustomerController {
                         invoice['total'] += item['rate'];
                     });
                     invoice['amount_due'] = invoice['total'];
-                    invoice.save(function () {
+                    invoice.save(function (err) {
+                        if (!err) {
+                            console.log('Invoice created allright');
+                        }
                     });
                 });
 
@@ -67,8 +144,9 @@ export class CustomerController {
 
 
     //get all customers
-    static getAllCustomers(res: Response) {
-        CustomerModel.find({}).sort('-created_on').exec((err, customers) => {
+    static getAllCustomers(res: Response, paginationCount: number) {
+        let skip_count = (paginationCount - 1) * 30;
+        CustomerModel.find({}).sort('-created_on').skip(skip_count).limit(30).exec((err, customers) => {
             let allCustomers = [];
             if (!err) {
                 _.each(customers, (item) => {
@@ -178,7 +256,7 @@ export class CustomerController {
     }
 
 
-    static setCheckGenerateInvoice(res: Response, data: any){
+    static setCheckGenerateInvoice(res: Response, data: any) {
         CustomerModel.update({_id: data.id}, {$set: {isGenerateInvoiceMonthly: data.isGenerateInvoiceMonthly}}, function (err) {
             if (err) {
                 res.send({status: false});
@@ -186,6 +264,16 @@ export class CustomerController {
                 res.send({status: true});
             }
         });
+    }
+
+    static getTotalCustomerCount(res: Response) {
+        CustomerModel.count((err, c) => {
+            if (!err) {
+                res.send({count: c});
+            } else[
+                res.send({count: 0})
+            ]
+        })
     }
 
 }

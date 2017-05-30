@@ -13,7 +13,7 @@ import {InvoiceRecentComponent} from '../invoice/invoice-recent/invoice-recent.c
 import {InvoiceEditComponent} from '../invoice/invoice-edit/invoice-edit.component';
 import {InvoiceHtmlComponent} from '../invoice/invoice-html/invoice-html.component';
 import {LocationDueReportComponent} from '../report/location-due-report/location-due-report.component';
-
+import {InvoiceCreateComponent} from '../invoice/invoice-create/invoice-create.component';
 const generalRoutes = [
   {
     path: '',
@@ -51,6 +51,10 @@ const generalRoutes = [
   {
     path: 'invoice/all',
     component: InvoiceAllComponent
+  },
+  {
+    path: 'invoice/create',
+    component: InvoiceCreateComponent
   },
   {
     path: 'invoice/recent',

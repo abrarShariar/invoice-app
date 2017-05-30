@@ -1,4 +1,4 @@
-<div class="content-wrapper" style="height: 1800px;">
+<div class="content-wrapper" style="height: 3500px;">
   <section class="content-header">
     <div class="col-xs-12">
       <h1>
@@ -32,7 +32,7 @@
                   </div>
                   <!-- /btn-group -->
                   <input type="text" class="form-control" aria-label="..." placeholder="Search Customers List"
-                         (input)="quickSearch($event.target.value)">
+                         (keyup)="quickSearch($event.target.value)">
                 </div>
                 <!-- /input-group -->
               </div>
@@ -59,7 +59,8 @@
               <th>Action</th>
               <th>Auto generate <br> invoice monthly</th>
             </tr>
-            <tr *ngFor="let customer of customers | paginate: { itemsPerPage: 30, currentPage: p }">
+            <tr
+              *ngFor="let customer of customers | paginate: { itemsPerPage: 30, currentPage: p,totalItems:totalCustomerCount }">
               <td>{{ customer.username }}</td>
               <td>{{ customer.email }}</td>
               <td>{{ customer.fullname }}</td>
@@ -82,7 +83,8 @@
                   Edit</a>
               </td>
               <td>
-                <input [attr.checked]="customer.isGenerateInvoiceMonthly ? 'checked' : null" style="zoom: 1.5;margin-left: 10px;" type="checkbox"
+                <input [attr.checked]="customer.isGenerateInvoiceMonthly ? 'checked' : null"
+                       style="zoom: 1.5;margin-left: 10px;" type="checkbox"
                        name="customer._id" value="customer._id" (click)="checkGenerateInvoice(customer)">
               </td>
             </tr>
@@ -94,7 +96,7 @@
       </div>
       <!-- /.box -->
       <div class="col-md-offset-4">
-        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        <pagination-controls (pageChange)="onPaginate($event);p=$event"></pagination-controls>
       </div>
     </div>
   </section>

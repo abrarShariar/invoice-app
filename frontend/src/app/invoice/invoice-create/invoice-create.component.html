@@ -1,3 +1,50 @@
-<p>
-  invoice-create works!
-</p>
+<div class="content-wrapper" style="height: 1500px;">
+  <section class=" content-header ">
+    <div class="col-xs-12">
+      <h1>
+        Create New Invoice
+      </h1>
+      <ol class="breadcrumb ">
+        <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> InvoiceApp</a></li>
+        <li><a [routerLink]="[ '/' ] "><i class="fa fa-dashboard "></i> Invoices</a></li>
+        <li class="active ">Create</li>
+      </ol>
+    </div>
+  </section>
+  <section class="content ">
+    <div class="col-md-12">
+
+      <div class="box box-primary">
+        <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Invoice Created Successfully !!</div>
+        <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
+        <!--  Page Content Here -->
+        <form class="form-horizontal " [formGroup]="invoiceCreateForm" (submit)="submitInvoiceCreateForm()">
+          <!--customer list-->
+
+          <div class=" form-group ">
+            <label class="col-sm-2 control-label ">Customer: </label>
+            <div class="col-sm-10 ">
+              <div class="">
+                <select required *ngIf="customerList" class="form-control">
+                  <option *ngFor="let customer of customerList" value="{{ customer._id }}">
+                    <strong> {{ customer.username }} </strong> - <em> {{ customer.fullname }} </em>
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          
+
+
+          <div class="form-group ">
+            <div class="col-sm-offset-2 col-sm-10 ">
+              <button type="submit" class="btn btn-success ">Save</button>
+              <a type="button" class="btn btn-primary " [routerLink]="['/customer/all']">Back</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>

@@ -22,8 +22,8 @@ router.post('/customer/create', (req: Request, res: Response) => {
 });
 
 //all customers
-router.get('/customer/all', (req: Request, res: Response) => {
-    CustomerController.getAllCustomers(res);
+router.get('/customer/all/page=:paginator', (req: Request, res: Response) => {
+    CustomerController.getAllCustomers(res, req.params.paginator);
 });
 
 //set active/inactive status
@@ -162,8 +162,8 @@ router.get('/invoice/recent_invoice/exists', (req: Request, res: Response) => {
 });
 
 // get invoice from db
-router.get('/invoice/recent_invoice_db', (req: Request, res: Response) => {
-    InvoiceController.getRecentInvoiceDB(res);
+router.get('/invoice/recent_invoice_db/paginator=:paginator', (req: Request, res: Response) => {
+    InvoiceController.getRecentInvoiceDB(res, req.params.paginator);
 });
 
 // clean and nuke recent invoices
@@ -229,5 +229,17 @@ router.get('/report/report_for_customers/:id', (req: Request, res: Response) => 
 router.post('/customer/check_change_generate_invoice_monthly', (req: Request, res: Response) => {
     CustomerController.setCheckGenerateInvoice(res, req.body);
 });
+
+router.post('/upload-file', (req: Request, res: Response) => {
+    CustomerController.uploadFile(res, req.body);
+});
+
+router.post('/customer/upload-file-contents', (req: Request, res: Response) => {
+    CustomerController.getFileContents(res, req.body);
+});
+
+router.get('/customer/customer-count', (req: Request, res: Response) => {
+    CustomerController.getTotalCustomerCount(res);
+})
 
 export const ApiRoute: Router = router;

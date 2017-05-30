@@ -19,6 +19,8 @@ export class CustomerAllComponent implements OnInit {
   display: boolean = false;
   public productList: Product[] = [];
   public searchMode = 'username';
+  totalCustomerCount: number = 0;
+  public paginator = 1;
 
   // public tempCustomer:Customer;
 
@@ -26,34 +28,35 @@ export class CustomerAllComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAllCustomer();
+    this.customerService.getTotalCustomerCount()
+      .subscribe(
+        (res) => {
+          this.totalCustomerCount = res.count;
+        }
+      )
+    this.getAllCustomer(this.paginator);
   }
 
-  getAllCustomer() {
+  getAllCustomer(paginator: number) {
     this.customers = [];
-    this.customerService.getAllCustomers()
+    this.customerService.getAllCustomers(paginator)
       .subscribe(
         (res) => {
           let data: Customer[] = [];
           data = res;
-
           // getting products
           _.each(data, (item: Customer) => {
             item.productData = [];
-
-            if (item.productList.length > 0) {
-              _.each(item.productList, (element) => {
-                this.productService.getProductById(element)
-                  .subscribe(
-                    (res: Product) => {
-                      item.productData.push(res);
-                    },
-                    (err) => {
-                    }
-                  )
-              });
-            }
-
+            _.each(item.productList, (element) => {
+              this.productService.getProductById(element)
+                .subscribe(
+                  (res: Product) => {
+                    item.productData.push(res);
+                  },
+                  (err) => {
+                  }
+                )
+            });
 
             if (item.area) {
               this.areaService.getAreaById(item.area)
@@ -113,22 +116,30 @@ export class CustomerAllComponent implements OnInit {
 
   quickSearch(event: any) {
     if (event == '') {
-      this.getAllCustomer();
+      this.getAllCustomer(this.paginator);
       return;
     }
     let data = {
       text: event
     }
+    let reg = new RegExp(event, "i");
+    let resArray = [];
     if (this.searchMode == 'username') {
-      this.customerService.searchByUsername(data)
-        .subscribe(
-          (res) => {
-            this.buildSearchResult(res);
-          },
-          (err) => {
-            console.log(err);
-          }
-        )
+      _.each(this.customers, (item) => {
+        if (reg.test(item['username'])) {
+          resArray.push(item);
+        }
+      });
+      this.customers = resArray;
+      // this.customerService.searchByUsername(data)
+      //   .subscribe(
+      //     (res) => {
+      //       this.buildSearchResult(res);
+      //     },
+      //     (err) => {
+      //       console.log(err);
+      //     }
+      //   )
     }
     else if (this.searchMode == 'mobile_number') {
       this.customerService.searchByMobileNumber(data)
@@ -173,20 +184,16 @@ export class CustomerAllComponent implements OnInit {
     _.each(customerList, (item: Customer) => {
       item.productData = [];
 
-      if (item.productList.length > 0) {
-        _.each(item.productList, (element) => {
-          this.productService.getProductById(element)
-            .subscribe(
-              (res: Product) => {
-                item.productData.push(res);
-              },
-              (err) => {
-              }
-            )
-        });
-
-
-      }
+      _.each(item.productList, (element) => {
+        this.productService.getProductById(element)
+          .subscribe(
+            (res: Product) => {
+              item.productData.push(res);
+            },
+            (err) => {
+            }
+          )
+      });
 
       if (item.area) {
         this.areaService.getAreaById(item.area)
@@ -227,4 +234,10 @@ export class CustomerAllComponent implements OnInit {
       );
   }
 
+
+//  for pagination
+  onPaginate(event: any) {
+    this.paginator = event;
+    this.getAllCustomer(this.paginator);
+  }
 }

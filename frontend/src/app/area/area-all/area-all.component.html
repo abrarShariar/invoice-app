@@ -1,3 +1,4 @@
+
 <section class="content-header">
     <div class="col-xs-12">
         <h2>
@@ -23,7 +24,7 @@
                             <!--<th>Status</th>-->
                             <th>Action</th>
                         </tr>
-                        <tr *ngFor="let area of areas | paginate: { itemsPerPage: 20, currentPage: p }">
+                        <tr *ngFor="let area of areas | paginate: { itemsPerPage: 15, currentPage: p }">
                             <td>{{ area.name }}</td>
                             <!--<td *ngIf="area.status">
                                 <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(area._id,area.status)"> Active</button>

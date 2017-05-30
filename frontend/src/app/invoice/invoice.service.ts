@@ -56,8 +56,8 @@ export class InvoiceService {
     return this.http.get(url).map(res => res.json());
   }
 
-  getRecentInvoiceDB() {
-    let url = this.invoiceUrl + 'recent_invoice_db';
+  getRecentInvoiceDB(paginator: number) {
+    let url = this.invoiceUrl + 'recent_invoice_db/paginator=' + paginator;
     return this.http.get(url).map(res => res.json());
   }
 
