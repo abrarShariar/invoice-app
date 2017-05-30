@@ -13,38 +13,129 @@
   </section>
   <section class="content ">
     <div class="col-md-12">
-
       <div class="box box-primary">
         <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Invoice Created Successfully !!</div>
         <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
         <!--  Page Content Here -->
-        <form class="form-horizontal " [formGroup]="invoiceCreateForm" (submit)="submitInvoiceCreateForm()">
-          <!--customer list-->
-
-          <div class=" form-group ">
-            <label class="col-sm-2 control-label ">Customer: </label>
-            <div class="col-sm-10 ">
-              <div class="">
-                <select required *ngIf="customerList" class="form-control">
-                  <option *ngFor="let customer of customerList" value="{{ customer._id }}">
-                    <strong> {{ customer.username }} </strong> - <em> {{ customer.fullname }} </em>
-                  </option>
-                </select>
+        <br>
+        <!--customer list-->
+        <form class="form-horizontal ">
+          <div class="col-md-12">
+            <div class=" form-group ">
+              <label class="col-sm-2 control-label ">Customer: </label>
+              <div class="col-sm-10 ">
+                <div>
+                  <select required *ngIf="customerList" class="form-control" (change)="getCustomer($event)">
+                    <option *ngFor="let customer of customerList" value="{{ customer._id }}">
+                      <strong> {{ customer.username }} </strong> - <em> {{ customer.fullname }} </em>
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
+        </form>
 
-          
+        <form class="form-horizontal " [formGroup]="invoiceCreateForm" (submit)="submitInvoiceCreateForm()">
+          <div class="col-md-12" *ngIf="resCustomer">
+            <!--username-->
+            <div class=" form-group ">
+              <label for="username " class="col-sm-2 control-label ">Username</label>
+              <div class="col-sm-10 ">
+                <input formControlName="username" type="text " class="form-control " id="username "
+                       placeholder="Username " readonly>
+              </div>
+            </div>
+            <!--email-->
+            <div class="form-group ">
+              <label for="email " class="col-sm-2 control-label ">Email</label>
+              <div class="col-sm-10 ">
+                <input formControlName="email" type="email " class="form-control " id="email " placeholder="Email "
+                       readonly>
+              </div>
+            </div>
+            <!--fullname-->
+            <div class="form-group ">
+              <label for="fullname " class="col-sm-2 control-label ">Fullname</label>
+              <div class="col-sm-10 ">
+                <input formControlName="fullname" type="text " class="form-control " id="fullname "
+                       placeholder="Fullname " readonly>
+              </div>
+            </div>
 
+            <!--mobile_primary-->
+            <div class="form-group ">
+              <label for="mobile_primary " class="col-sm-2 control-label ">Mobile Primary</label>
+              <div class="col-sm-10 ">
+                <input formControlName="mobile_primary" type="text " class="form-control " id="mobile_primary "
+                       placeholder="Mobile primary " readonly>
+              </div>
+            </div>
 
+            <!--mobile_secondary-->
+            <div class="form-group ">
+              <label for="mobile_secondary " class="col-sm-2 control-label ">Mobile Secondary</label>
+              <div class="col-sm-10 ">
+                <input formControlName="mobile_secondary" type="text " class="form-control " id="mobile_secondary "
+                       placeholder="Mobile secondary " readonly>
+              </div>
+            </div>
+
+            <!--location-->
+            <div class="form-group ">
+              <label for="location " class="col-sm-2 control-label ">Location</label>
+              <div class="col-sm-10">
+                <input type="text " formControlName="location" class="form-control " id="location "
+                       placeholder="location " readonly>
+              </div>
+            </div>
+
+            <!--area-->
+            <div class="form-group ">
+              <label for="area " class="col-sm-2 control-label ">Area</label>
+              <div class="col-sm-10">
+                <input type="text " formControlName="area" class="form-control " id="area " placeholder="area "
+                       readonly>
+              </div>
+            </div>
+
+            <!--city-->
+            <div class="form-group ">
+              <label for="city " class="col-sm-2 control-label ">City</label>
+              <div class="col-sm-10">
+                <input type="text " formControlName="city" class="form-control " id="city " placeholder="city "
+                       readonly>
+              </div>
+            </div>
+          </div>
+          <br>
           <div class="form-group ">
-            <div class="col-sm-offset-2 col-sm-10 ">
+            <div class="col-md-offset-1 col-md-11">
               <button type="submit" class="btn btn-success ">Save</button>
               <a type="button" class="btn btn-primary " [routerLink]="['/customer/all']">Back</a>
             </div>
           </div>
+
+
+          <!--for new additional products-->
+          <div class="form-group " *ngFor="let newProduct of additionalProducts;let i=index">
+            <label for="" class="col-sm-2 control-label ">Product [{{ i+invoice.customerData?.productData.length+1
+              }}]</label>
+            <div class="col-sm-10 ">
+              <div class="productSelectBox">
+                <select (change)="onProductChange($event,i,'add')" required *ngIf="productList" class="form-control"
+                        style="margin-bottom:10px">
+                  <option *ngFor="let product of productList" value="{{ product._id }}">
+                    {{ product.name }} - <em> {{ product.rate }} BDT/month </em></option>
+                </select>
+                <button type="button" class="pull-right btn btn-danger btn-xs"
+                        (click)="removeProduct(i)"><i class="fa fa-times" aria-hidden="true"></i></button>
+              </div>
+            </div>
+          </div>
+
         </form>
-      </div>
     </div>
-  </section>
+</div>
+</section>
 </div>

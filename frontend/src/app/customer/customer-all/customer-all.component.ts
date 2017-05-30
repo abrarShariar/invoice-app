@@ -122,59 +122,36 @@ export class CustomerAllComponent implements OnInit {
     let data = {
       text: event
     }
-    let reg = new RegExp(event, "i");
-    let resArray = [];
+
     if (this.searchMode == 'username') {
+      let reg = new RegExp(event, "i");
+      let resArray = [];
       _.each(this.customers, (item) => {
         if (reg.test(item['username'])) {
           resArray.push(item);
         }
       });
       this.customers = resArray;
-      // this.customerService.searchByUsername(data)
-      //   .subscribe(
-      //     (res) => {
-      //       this.buildSearchResult(res);
-      //     },
-      //     (err) => {
-      //       console.log(err);
-      //     }
-      //   )
     }
     else if (this.searchMode == 'mobile_number') {
-      this.customerService.searchByMobileNumber(data)
-        .subscribe(
-          (res) => {
-            this.buildSearchResult(res);
-          },
-          (err) => {
-            console.log(err);
-          }
-        )
+      let reg = new RegExp(event, "i");
+      let resArray = [];
+      _.each(this.customers, (item) => {
+        if (reg.test(item['mobile_primary'])) {
+          resArray.push(item);
+        }
+      });
+      this.customers = resArray;
     }
     else if (this.searchMode == 'area') {
-      this.customerService.searchByArea(data)
-        .subscribe(
-          (res) => {
-            _.each(res, (item) => {
-              let newData = {
-                text: item["_id"]
-              }
-              this.customerService.getCustomerByArea(newData)
-                .subscribe(
-                  (res) => {
-                    this.buildSearchResult(res);
-                  },
-                  (err) => {
-                    console.log(err);
-                  }
-                )
-            });
-          },
-          (err) => {
-            console.log(err);
-          }
-        )
+      let reg = new RegExp(event, "i");
+      let resArray = [];
+      _.each(this.customers, (item) => {
+        if (reg.test(item['areaData'].name)) {
+          resArray.push(item);
+        }
+      });
+      this.customers = resArray;
     }
   }
 

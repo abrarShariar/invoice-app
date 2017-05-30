@@ -12,13 +12,17 @@ export class CustomerController {
     constructor() {
     }
 
-
     static getFileContents(res: Response, obj: any) {
         let data = obj['content'].split(',');
+        //
+        // if (_.isEmpty(data[0]) || _.isUndefined(data[0]) || data[0] == '') {
+        //     res.send({status: false});
+        // }
+
         let isDataInserted: boolean = false;
         let timestamp = Date.now();
         let status: boolean = false;
-        if (data[15]) {
+        if (data[15] == 1) {
             status = true;
         }
 
@@ -35,7 +39,15 @@ export class CustomerController {
                 if (!err) {
                     let area_id = docs['_id'];
                     //get product id
-                    ProductModel.findOneAndUpdate({name: data[14]},
+                    let product_name = "";
+                    if (!_.isUndefined(data[14])) {
+                        product_name = data[14];
+                        product_name = product_name.trim();
+                    }
+                    if (data[14] == '1900') {
+                        product_name = '';
+                    }
+                    ProductModel.findOneAndUpdate({name: product_name},
                         {
                             $set: {
                                 name: data[14],
@@ -82,7 +94,6 @@ export class CustomerController {
     }
 
     static uploadFile(res: Response, data: any) {
-        console.log(data);
         res.send(true);
     }
 
@@ -144,19 +155,26 @@ export class CustomerController {
 
 
     //get all customers
-    static getAllCustomers(res: Response, paginationCount: number) {
-        let skip_count = (paginationCount - 1) * 30;
-        CustomerModel.find({}).sort('-created_on').skip(skip_count).limit(30).exec((err, customers) => {
-            let allCustomers = [];
-            if (!err) {
-                _.each(customers, (item) => {
-                    if (item.username != 'user_name') {
-                        allCustomers.push(item);
-                    }
-                });
-                res.send(allCustomers);
-            }
-        });
+    static getAllCustomers(res: Response, paginationCount: any) {
+
+        if (paginationCount == 'all') {
+            CustomerModel.find({}, function (err, data) {
+                res.send(data);
+            })
+        } else {
+            let skip_count = (paginationCount - 1) * 30;
+            CustomerModel.find({}).sort('-created_on').skip(skip_count).limit(30).exec((err, customers) => {
+                let allCustomers = [];
+                if (!err) {
+                    _.each(customers, (item) => {
+                        if (item.username != 'user_name') {
+                            allCustomers.push(item);
+                        }
+                    });
+                    res.send(allCustomers);
+                }
+            });
+        }
     }
 
 

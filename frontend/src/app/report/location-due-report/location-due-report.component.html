@@ -1,4 +1,4 @@
-<div class="content-wrapper" style="height: 2000px;">
+<div class="content-wrapper" style="height: 9000px">
   <section class="content-header">
     <div class="col-xs-12">
       <h1>
@@ -38,7 +38,7 @@
               <th>Previous Due (BDT)</th>
               <th>Total Due (BDT)</th>
             </tr>
-            <tr *ngFor="let report of reportList | paginate: { itemsPerPage: 10, currentPage: p }">
+            <tr *ngFor="let report of reportList">
               <td>{{ report.username }}</td>
               <td>{{ report.mobile_no }}</td>
               <td>{{ report.location }}</td>
