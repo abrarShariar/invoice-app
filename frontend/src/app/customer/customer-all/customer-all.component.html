@@ -21,7 +21,7 @@
           <br>
           <div class="box-tools">
             <div class="row">
-              <div class="col-lg-6" style="float:right">
+              <div class="col-lg-4" style="float:right">
                 <div class="input-group">
                   <div class="input-group-btn">
                     <select style="font-size: 15px;height: 34px;" (change)="filterChange($event.target.value)">
@@ -34,16 +34,19 @@
                   <input type="text" class="form-control" aria-label="..." placeholder="Search Customers List"
                          (keyup)="quickSearch($event.target.value)">
                 </div>
+                <br>
+                <button class="btn btn-primary btn-sm pull-right" (click)="generateAutoInvoice()">Generate Invoice</button>
+                <br>
                 <!-- /input-group -->
               </div>
             </div>
-            <br><br>
+            <br>
             <!-- /.row -->
             <!-- /.row -->
           </div>
         </div>
         <!-- /.box-header -->
-        <div class="box-body table-responsive no-padding">
+        <div class="box-body table-responsive no-padding" style="margin-top:100px">
           <table class="table table-hover">
             <tbody>
             <tr>

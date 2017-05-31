@@ -70,4 +70,9 @@ export class CustomerService {
     let url = this.customerUrl + 'customer-count';
     return this.http.get(url).map((res) => res.json());
   }
+
+  generateAutoInvoice(){
+    let url = this.customerUrl + 'generate-auto-invoice';
+    return this.http.get(url).map((res) => res.json());
+  }
 }

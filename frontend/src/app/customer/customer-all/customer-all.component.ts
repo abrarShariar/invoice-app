@@ -217,4 +217,15 @@ export class CustomerAllComponent implements OnInit {
     this.paginator = event;
     this.getAllCustomer(this.paginator);
   }
+
+
+//  click event triggered for auto generate invoice
+  generateAutoInvoice() {
+    this.customerService.generateAutoInvoice()
+      .subscribe(
+        (res) => {
+          console.log(res);
+        }
+      )
+  }
 }

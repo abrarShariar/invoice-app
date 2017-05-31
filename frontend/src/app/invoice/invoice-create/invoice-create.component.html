@@ -1,4 +1,4 @@
-<div class="content-wrapper" style="height: 1500px;">
+<div class="content-wrapper" style="height: 3000px;">
   <section class=" content-header ">
     <div class="col-xs-12">
       <h1>
@@ -13,7 +13,7 @@
   </section>
   <section class="content ">
     <div class="col-md-12">
-      <div class="box box-primary">
+      <div class="box box-primary" style="height:2000px">
         <div class="alert alert-success" role="alert" *ngIf="showSuccess">New Invoice Created Successfully !!</div>
         <div class="alert alert-danger" role="alert" *ngIf="showError">ERROR !! Please Try Again.</div>
         <!--  Page Content Here -->
@@ -22,7 +22,7 @@
         <form class="form-horizontal ">
           <div class="col-md-12">
             <div class=" form-group ">
-              <label class="col-sm-2 control-label ">Customer: </label>
+              <label class="col-sm-2 control-label ">Choose Customer: </label>
               <div class="col-sm-10 ">
                 <div>
                   <select required *ngIf="customerList" class="form-control" (change)="getCustomer($event)">
@@ -107,35 +107,50 @@
                        readonly>
               </div>
             </div>
-          </div>
-          <br>
-          <div class="form-group ">
-            <div class="col-md-offset-1 col-md-11">
-              <button type="submit" class="btn btn-success ">Save</button>
-              <a type="button" class="btn btn-primary " [routerLink]="['/customer/all']">Back</a>
+
+            <div class="form-group ">
+              <label for="status" class="col-sm-2 control-label ">Status</label>
+              <div class="col-sm-10">
+                <label class="label label-danger">Due</label>
+              </div>
             </div>
-          </div>
+            <br>
+            <!--product list-->
+            <div class="form-group " *ngFor="let item of createRange(allProductCounter);let i=index">
+              <label class="col-sm-2 control-label ">Product [{{ i+1 }}]</label>
+              <div class="col-sm-10 ">
+                <div class="productSelectBox">
+                  <select required *ngIf="productList" class="form-control" (change)="onProductChange($event,i)">
+                    <option *ngFor="let product of productList" value="{{ product._id }}">
+                      {{ product.name }} - <em> {{ product.rate }} BDT/month </em>
+                    </option>
+                  </select>
+                  <button *ngIf="i>0" type="button" class="pull-right btn btn-danger btn-xs" (click)="removeProduct(i)">
+                    <i
+                      class="fa fa-times" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button (click)="addProduct()" type="button" class="pull-right btn btn-success"><i class="fa fa-plus"
+                                                                                               aria-hidden="true"></i>
+              &nbsp; Add Product
+            </button>
 
+            <div class="form-group ">
+              <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-success btn-lg">Save</button>
+                <button type="button" class="btn btn-danger btn-lg">Cancel</button>
 
-          <!--for new additional products-->
-          <div class="form-group " *ngFor="let newProduct of additionalProducts;let i=index">
-            <label for="" class="col-sm-2 control-label ">Product [{{ i+invoice.customerData?.productData.length+1
-              }}]</label>
-            <div class="col-sm-10 ">
-              <div class="productSelectBox">
-                <select (change)="onProductChange($event,i,'add')" required *ngIf="productList" class="form-control"
-                        style="margin-bottom:10px">
-                  <option *ngFor="let product of productList" value="{{ product._id }}">
-                    {{ product.name }} - <em> {{ product.rate }} BDT/month </em></option>
-                </select>
-                <button type="button" class="pull-right btn btn-danger btn-xs"
-                        (click)="removeProduct(i)"><i class="fa fa-times" aria-hidden="true"></i></button>
               </div>
             </div>
           </div>
+          <br>
+          <br>
+          <hr>
 
         </form>
+      </div>
     </div>
-</div>
-</section>
+  </section>
 </div>

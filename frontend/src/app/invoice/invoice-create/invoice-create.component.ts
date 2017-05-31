@@ -11,7 +11,6 @@ import {Area} from "../../area/area";
 import {Subscription} from "rxjs";
 import {Invoice} from '../invoice';
 
-
 @Component({
   selector: 'app-invoice-create',
   templateUrl: './invoice-create.component.html',
@@ -27,18 +26,16 @@ export class InvoiceCreateComponent implements OnInit {
   public resCustomer: Customer;
   private subscription: Subscription;
   public invoice: Invoice;
-
-  public additionalProducts: any[] = [];
-  public productSuggestions: any[] = [];
-  public allProductsAdd: any[] = [];
+  public allProductCounter = 1;
+  public allProducts: any[] = [];
 
 
   constructor(private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) {
   }
 
   ngOnInit() {
-    this.getProductList();
     this.buildForm();
+    this.getProductList();
     this.getAllCustomers();
   }
 
@@ -117,46 +114,40 @@ export class InvoiceCreateComponent implements OnInit {
         },
         (err) => {
           console.log("ERROR from productList");
+        },
+        () => {
+          this.allProducts.push(this.productList[0]);
         }
       )
   }
 
-  addProduct() {
-    let newProduct = this.productList[0];
-    this.additionalProducts.push(newProduct);
-    this.allProductsAdd.push(newProduct._id);
-    this.updatePayments();
-  }
-
-  updatePayments() {
-    let total = 0;
-    _.each(this.allProductsAdd, (item) => {
-      let product = _.findWhere(this.productList, {_id: item});
-      total += product.rate;
-    });
-
-    this.invoiceCreateForm.patchValue({
-      total: total,
-      discount: 0,
-      amount_due: total
-    });
-  }
 
   removeProduct(index) {
-    let delIndex = this.allProductsAdd.indexOf(this.additionalProducts[index]);
-    this.allProductsAdd.splice(delIndex, 1);
-    this.additionalProducts.splice(index, 1);
-    this.updatePayments();
+    this.allProductCounter--;
+    this.allProducts.splice(index, 1);
   }
 
-  onProductChange(event: any, index, mode) {
-    if (mode != 'my') {
-      index = index + this.invoice.customerData.productData.length;
+  addProduct() {
+    this.allProductCounter++;
+    let newProduct = this.productList[0];
+    this.allProducts.push(newProduct);
+    console.log(this.allProducts);
+  }
+
+  onProductChange(event: any, index) {
+    let result = _.find(this.productList, function (item) {
+      return item['_id'] == event.target.value;
+    })
+    this.allProducts[index] = result;
+  }
+
+  createRange(number) {
+    let items: number[] = [];
+    for (let i = 1; i <= number; i++) {
+      items.push(i);
     }
-    this.allProductsAdd[index] = event.target.value;
-    this.updatePayments();
+    return items;
   }
-
 
   submitInvoiceCreateForm() {
 

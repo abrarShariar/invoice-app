@@ -1,10 +1,10 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder } from "@angular/forms";
-import { CustomerService } from '../customer.service';
+import {Component, OnInit, ElementRef} from '@angular/core';
+import {FormGroup, FormBuilder} from "@angular/forms";
+import {CustomerService} from '../customer.service';
 import * as _ from 'underscore';
-import { Customer } from '../customer';
-import { ProductService } from '../../product/product.service';
-import { AreaService } from '../../area/area.service';
+import {Customer} from '../customer';
+import {ProductService} from '../../product/product.service';
+import {AreaService} from '../../area/area.service';
 
 @Component({
   selector: 'app-customer-create',
@@ -23,7 +23,8 @@ export class CustomerCreateComponent implements OnInit {
   public allProducts: any[] = [];
 
 
-  constructor(private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) { }
+  constructor(private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) {
+  }
 
   ngOnInit() {
     this.buildForm();
@@ -75,18 +76,18 @@ export class CustomerCreateComponent implements OnInit {
 
     this.customerService.createNewCustomer(data)
       .subscribe(
-      (res) => {
-        if (res.status) {
-          this.showSuccess = true;
-          this.customerCreateForm.reset();
-        } else {
+        (res) => {
+          if (res.status) {
+            this.showSuccess = true;
+            this.customerCreateForm.reset();
+          } else {
+            this.showError = true;
+          }
+        },
+        (err) => {
           this.showError = true;
+          console.log("Error in createNewCustomer");
         }
-      },
-      (err) => {
-        this.showError = true;
-        console.log("Error in createNewCustomer");
-      }
       )
   }
 
@@ -94,19 +95,19 @@ export class CustomerCreateComponent implements OnInit {
     this.productList = [];
     this.productService.getAllProduct()
       .subscribe(
-      (res) => {
-        _.each(res, (item) => {
-          if (item['status']) {
-            this.productList.push(item);
-          }
-        });
-      },
-      (err) => {
-        console.log("ERROR from productList");
-      },
-      () => {
-        this.allProducts.push(this.productList[0]._id);
-      }
+        (res) => {
+          _.each(res, (item) => {
+            if (item['status']) {
+              this.productList.push(item);
+            }
+          });
+        },
+        (err) => {
+          console.log("ERROR from productList");
+        },
+        () => {
+          this.allProducts.push(this.productList[0]._id);
+        }
       )
   }
 
@@ -114,16 +115,16 @@ export class CustomerCreateComponent implements OnInit {
     this.areaList = [];
     this.areaService.getAllArea()
       .subscribe(
-      (res) => {
-        _.each(res, (item) => {
-          if (item['status']) {
-            this.areaList.push(item);
-          }
-        });
-      },
-      (err) => {
-        console.log("ERROR from getAreaList");
-      }
+        (res) => {
+          _.each(res, (item) => {
+            if (item['status']) {
+              this.areaList.push(item);
+            }
+          });
+        },
+        (err) => {
+          console.log("ERROR from getAreaList");
+        }
       )
   }
 
