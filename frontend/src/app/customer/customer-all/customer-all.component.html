@@ -35,7 +35,8 @@
                          (keyup)="quickSearch($event.target.value)">
                 </div>
                 <br>
-                <button class="btn btn-primary btn-sm pull-right" (click)="generateAutoInvoice()">Generate Invoice</button>
+                <button class="btn btn-primary btn-sm pull-right" (click)="generateAutoInvoice()">Generate Invoice
+                </button>
                 <br>
                 <!-- /input-group -->
               </div>
@@ -103,4 +104,9 @@
       </div>
     </div>
   </section>
+</div>
+
+<!--for generating invoice-->
+<div>
+  <app-invoice-html></app-invoice-html>
 </div>

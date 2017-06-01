@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, Input} from '@angular/core';
 import {InvoiceService} from '../invoice.service';
 import {Router} from "@angular/router";
 import {ActivatedRoute} from '@angular/router';
@@ -29,7 +29,6 @@ export class InvoiceHtmlComponent implements OnInit {
   private finalTotalWords;
   public currentDate: number = Date.now();
   public datePipe: DatePipe = new DatePipe('en-US');
-
 
   constructor(private productService: ProductService, private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute) {
   }
@@ -147,15 +146,11 @@ export class InvoiceHtmlComponent implements OnInit {
     if (chunksLen > scales.length) {
       return '';
     }
-
     /* Stringify each integer in each chunk */
     words = [];
     for (i = 0; i < chunksLen; i++) {
-
       chunk = parseInt(chunks[i]);
-
       if (chunk) {
-
         /* Split chunk into array of individual integers */
         ints = chunks[i].split('').reverse().map(parseFloat);
 
@@ -181,21 +176,17 @@ export class InvoiceHtmlComponent implements OnInit {
 
         /* Add 'and' string after units or tens integer if: */
         if (ints[0] || ints[1]) {
-
           /* Chunk has a hundreds integer or chunk is the first of multiple chunks */
           if (ints[2] || !i && chunksLen) {
             words.push(and);
           }
-
         }
 
         /* Add hundreds word if array item exists */
         if ((word = units[ints[2]])) {
           words.push(word + ' hundred');
         }
-
       }
-
     }
     return words.reverse().join(' ');
   }

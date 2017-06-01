@@ -15,7 +15,6 @@ import {InvoiceEditComponent} from './invoice-edit/invoice-edit.component';
 import {InvoiceHtmlComponent} from './invoice-html/invoice-html.component';
 import {CustomerService} from '../customer/customer.service';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -32,7 +31,9 @@ import {CustomerService} from '../customer/customer.service';
     InvoiceEditComponent,
     InvoiceHtmlComponent
   ],
-  exports: [],
+  exports: [
+    InvoiceHtmlComponent
+  ],
   providers: [
     InvoiceService,
     ProductService,
@@ -40,6 +41,5 @@ import {CustomerService} from '../customer/customer.service';
     CustomerService
   ]
 })
-export class InvoiceModule {
-}
+export class InvoiceModule {}
 

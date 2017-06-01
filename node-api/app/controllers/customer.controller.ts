@@ -14,10 +14,15 @@ export class CustomerController {
 
     static getFileContents(res: Response, obj: any) {
         let data = obj['content'].split(',');
-        //
-        // if (_.isEmpty(data[0]) || _.isUndefined(data[0]) || data[0] == '') {
-        //     res.send({status: false});
-        // }
+        if (_.isEmpty(data[0]) || _.isUndefined(data[0]) || data[0] == '') {
+            res.send({status: false});
+            return;
+        }
+
+        if (data[14] == '1900') {
+            res.send({status: false});
+            return;
+        }
 
         let isDataInserted: boolean = false;
         let timestamp = Date.now();
@@ -153,7 +158,6 @@ export class CustomerController {
 
     }
 
-
     //get all customers
     static getAllCustomers(res: Response, paginationCount: any) {
 
@@ -176,7 +180,6 @@ export class CustomerController {
             });
         }
     }
-
 
     //changing status - active/inactive
     static changeStatus(res: Response, data: any) {
@@ -292,6 +295,32 @@ export class CustomerController {
                 res.send({count: 0})
             ]
         })
+    }
+
+    static generateAutoInvoice(res: Response) {
+        let cursor = CustomerModel.find({isGenerateInvoiceMonthly: true}).cursor();
+        let invoiceList = [];
+        let invoice;
+        cursor.on('data', function (data) {
+            invoice = {
+                customerData: data,
+                total: 0,
+                productData: [],
+                amount_due: [],
+                status: 'Due'
+            }
+        });
+
+        cursor.on('close', function () {
+            let product_cursor = ProductModel.find({"_id": {"$in": invoice.customerData['productList']}}).cursor();
+            product_cursor.on('data', function (data) {
+                invoice.productData = data;
+            });
+
+            product_cursor.on('close', function () {
+                res.send(invoice);
+            });
+        });
     }
 
 }

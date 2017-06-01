@@ -240,6 +240,10 @@ router.post('/customer/upload-file-contents', (req: Request, res: Response) => {
 
 router.get('/customer/customer-count', (req: Request, res: Response) => {
     CustomerController.getTotalCustomerCount(res);
-})
+});
+
+router.get('/customer/generate-auto-invoice', (req: Request, res: Response) => {
+    CustomerController.generateAutoInvoice(res);
+});
 
 export const ApiRoute: Router = router;
