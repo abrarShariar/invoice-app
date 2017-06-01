@@ -10,6 +10,16 @@ export class InvoiceController {
     constructor() {
     }
 
+    static getAllInvoiceCount(res: Response) {
+        AllInvoiceModel.count((err, c) => {
+            if (!err) {
+                res.send({count: c});
+            } else {
+                res.send({count: 0});
+            }
+        })
+    }
+
     static getRecentInvoiceCustomers(res: Response) {
         CustomerModel.find({
             $and: [
@@ -384,10 +394,15 @@ export class InvoiceController {
         });
     }
 
-    static getAllInvoices(res: Response) {
-        AllInvoiceModel.find({}, (err, data) => {
-            res.send(data);
-        });
+    static getAllInvoices(res: Response, paginationCount: number) {
+        let skip_count = (paginationCount - 1) * 30;
+        AllInvoiceModel.find({}).skip(skip_count).limit(30).exec((err, data) => {
+            if (!err) {
+                res.send(data);
+            } else {
+                res.send({status: false});
+            }
+        })
     }
 
 }

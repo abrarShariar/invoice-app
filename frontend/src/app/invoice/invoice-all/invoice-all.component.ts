@@ -18,17 +18,26 @@ export class InvoiceAllComponent implements OnInit {
 
   public invoiceList: Invoice[] = [];
   public partialInvoice: Invoice;
+  totalInvoiceCount: number = 0;
+  public paginator = 1;
 
   constructor(private customerService: CustomerService, private router: Router, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) {
   }
 
   ngOnInit() {
+    this.invoiceService.getAllInvoiceCount()
+      .subscribe(
+        (res) => {
+          this.totalInvoiceCount = res.count;
+        }
+      );
     this.getAllInvoice();
+
   }
 
   getAllInvoice() {
     this.invoiceList = [];
-    this.invoiceService.getAllInvoice()
+    this.invoiceService.getAllInvoice(this.paginator)
       .subscribe(
         (res: Invoice[]) => {
           if (res.length == 0) {
@@ -104,6 +113,12 @@ export class InvoiceAllComponent implements OnInit {
 
         }
       )
+  }
+
+  //  for pagination
+  onPaginate(event: any) {
+    this.paginator = event;
+    this.getAllInvoice();
   }
 
 }

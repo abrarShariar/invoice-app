@@ -196,8 +196,8 @@ router.delete('/invoice/delete/id/:id', (req: Request, res: Response) => {
 });
 
 // get all invoices
-router.get('/invoice/all', (req: Request, res: Response) => {
-    InvoiceController.getAllInvoices(res);
+router.get('/invoice/all/page=:paginator', (req: Request, res: Response) => {
+    InvoiceController.getAllInvoices(res, req.params.paginator);
 });
 
 //pay date coounter clean
@@ -213,6 +213,11 @@ router.post('/invoice/set_paid_date_counter', (req: Request, res: Response) => {
 // get pay date counter
 router.get('/invoice/get_paid_date_counter', (req: Request, res: Response) => {
     PayDateCounterController.getPayDateCounter(res);
+});
+
+// get all invoice count
+router.get('/invoice/all_invoice_count', (req: Request, res: Response) => {
+    InvoiceController.getAllInvoiceCount(res);
 });
 
 //get customer by area

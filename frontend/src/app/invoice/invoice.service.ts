@@ -11,8 +11,8 @@ export class InvoiceService {
   constructor(private http: CustomHttpService) {
   }
 
-  getAllInvoice() {
-    let url = this.invoiceUrl + 'all';
+  getAllInvoice(paginator) {
+    let url = this.invoiceUrl + 'all/page=' + paginator;
     return this.http.get(url).map((res) => res.json());
   }
 
@@ -104,6 +104,11 @@ export class InvoiceService {
 
   getPaidDateCounter() {
     let url = this.invoiceUrl + 'get_paid_date_counter';
+    return this.http.get(url).map((res) => res.json());
+  }
+
+  getAllInvoiceCount() {
+    let url = this.invoiceUrl + 'all_invoice_count';
     return this.http.get(url).map((res) => res.json());
   }
 }
