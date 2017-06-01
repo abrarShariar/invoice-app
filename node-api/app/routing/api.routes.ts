@@ -220,6 +220,11 @@ router.get('/invoice/all_invoice_count', (req: Request, res: Response) => {
     InvoiceController.getAllInvoiceCount(res);
 });
 
+// save auto invoive
+router.post('/invoice/save-auto-invoice', (req: Request, res: Response) => {
+    InvoiceController.saveAutoInvoice(res, req.body);
+});
+
 //get customer by area
 router.get('/report/customer_by_area/:id', (req: Request, res: Response) => {
     ReportController.getCustomerByArea(res, req.params.id);

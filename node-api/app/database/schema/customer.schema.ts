@@ -19,5 +19,6 @@ export let customerSchema = new Schema({
     status: Boolean,
     isGenerateInvoiceMonthly: {type: Boolean, default: false},
     productList: [String],
-    created_on: {type: Date, default: Date.now}
+    created_on: {type: Date, default: Date.now},
+    normalized: String
 });

@@ -18,10 +18,8 @@ app.use(function (req, res, next) {
 });
 
 var bodyParser = require('body-parser')
-app.use(bodyParser.json()); // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
-    extended: true
-}));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 // api router endpoint
 app.use('/api', ApiRoute);

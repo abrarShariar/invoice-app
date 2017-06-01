@@ -11,6 +11,12 @@ export class InvoiceService {
   constructor(private http: CustomHttpService) {
   }
 
+
+  saveAutoInvoice(data) {
+    let url = this.invoiceUrl + 'save-auto-invoice';
+    return this.http.post(url,data).map((res) => res.json());
+  }
+
   getAllInvoice(paginator) {
     let url = this.invoiceUrl + 'all/page=' + paginator;
     return this.http.get(url).map((res) => res.json());

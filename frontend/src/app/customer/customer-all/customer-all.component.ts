@@ -22,6 +22,8 @@ export class CustomerAllComponent implements OnInit {
   totalCustomerCount: number = 0;
   public paginator = 1;
   public autoGenerateList: any[] = [];
+  public isAutoGenerateSuccess: boolean = false;
+  public isAutoGenerateError: boolean = false;
 
   // public tempCustomer:Customer;
 
@@ -29,6 +31,7 @@ export class CustomerAllComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isAutoGenerateSuccess = false;
     this.customerService.getTotalCustomerCount()
       .subscribe(
         (res) => {
@@ -219,23 +222,45 @@ export class CustomerAllComponent implements OnInit {
     this.getAllCustomer(this.paginator);
   }
 
-
 //  click event triggered for auto generate invoice
   generateAutoInvoice() {
+    this.isAutoGenerateSuccess = false;
+    this.isAutoGenerateError = false;
     this.autoGenerateList = [];
-    this.customerService.getAutoGenerateList()
-      .subscribe(
-        (res) => {
-          _.each(res, (customer) => {
-            this.customerService.generateAutoInvoice(customer['_id'])
-              .subscribe(
-                (res) => {
-                  this.autoGenerateList.push(res);
-                }
-              )
-          })
-        }
-      )
+    _.each(this.customers, (customer) => {
+      if (customer.isGenerateInvoiceMonthly == true) {
+        this.customerService.generateAutoInvoice(customer['_id'])
+          .subscribe(
+            (res) => {
+              this.autoGenerateList.push(res);
+            },
+            (err) => {
+              this.isAutoGenerateSuccess = false;
+              this.isAutoGenerateError = true;
+            },
+            () => {
+              this.isAutoGenerateSuccess = true;
+            }
+          );
+      }
+    })
   }
+
+  // this.customerService.getAutoGenerateList()
+  //   .subscribe(
+  //     (res) => {
+  //       _.each(res, (customer) => {
+  //
+  //       });
+  //
+  //     },
+  //     (err) => {
+  //       this.isAutoGenerateSuccess = false;
+  //       this.isAutoGenerateError = true;
+  //     },
+  //     () => {
+  //       this.isAutoGenerateSuccess = true;
+  //     }
+  //   )
 
 }

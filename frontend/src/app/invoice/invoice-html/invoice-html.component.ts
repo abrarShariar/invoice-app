@@ -8,8 +8,8 @@ import {
   OnChanges,
   AfterContentInit
 } from '@angular/core';
+
 import {InvoiceService} from '../invoice.service';
-import {Router} from "@angular/router";
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from "rxjs";
 import {Invoice} from '../invoice';
@@ -17,7 +17,6 @@ import {CustomerService} from '../../customer/customer.service';
 import {ProductService} from '../../product/product.service';
 import * as _ from 'underscore';
 import {DatePipe} from '@angular/common';
-import {current} from "codelyzer/util/syntaxKind";
 
 declare let jsPDF;
 declare let html2canvas;
@@ -86,7 +85,24 @@ export class InvoiceHtmlComponent implements OnInit {
         var imgData = canvas.toDataURL("image/jpeg", 1.0);
         var pdf = new jsPDF("p", "mm", "a4");
         pdf.addImage(imgData, 'JPEG', 0, 0, 210, 200);
-        pdf.save(this.invoice.customerData.username + "_" + this.datePipe.transform(Date.now(), 'MMMM') + ".pdf");
+        if (this.isAutoInvoice) {
+          var pdf = pdf.output('datauristring');
+          let data = {
+            pdf: pdf,
+            label: this.invoice.customerData.username + "_" + this.datePipe.transform(Date.now(), 'MMMM')
+          }
+          this.invoiceService.saveAutoInvoice(data)
+            .subscribe(
+              (res) => {
+                console.log(res);
+              },
+              (err) => {
+                console.log("Error in auto pilot");
+              }
+            )
+        } else {
+          pdf.save(this.invoice.customerData.username + "_" + this.datePipe.transform(Date.now(), 'MMMM') + ".pdf");
+        }
       }
     });
   }

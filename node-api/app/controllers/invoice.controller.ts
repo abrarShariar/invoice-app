@@ -4,10 +4,34 @@ import {CustomerModel} from '../database/models/customer.model';
 import {AllInvoiceModel, RecentInvoiceModel} from '../database/models/invoice.model';
 declare var Date: any;
 import {ProductModel} from '../database/models/product.model';
-
+var fs = require('fs');
 
 export class InvoiceController {
     constructor() {
+    }
+
+    static saveAutoInvoice(res: Response, data: any) {
+        var base64Data = data.pdf;
+        var imageBuffer = InvoiceController.decodeBase64Image(base64Data);
+        fs.writeFile('../June/' + data.label + '.pdf', imageBuffer['data'], function (err) {
+
+        });
+
+    }
+
+
+    static decodeBase64Image(dataString) {
+        var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+            response = {};
+
+        if (matches.length !== 3) {
+            return new Error('Invalid input string');
+        }
+
+        response['type'] = matches[1];
+        response['data'] = new Buffer(matches[2], 'base64');
+
+        return response;
     }
 
     static getAllInvoiceCount(res: Response) {

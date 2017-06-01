@@ -1,4 +1,12 @@
 <div class="content-wrapper" style="height: 3500px;">
+  <div *ngIf="autoGenerateList">
+    <div class="alert alert-danger" role="alert" *ngIf="isAutoGenerateError">
+      Error in saving auto invoices
+    </div>
+    <div class="alert alert-success" role="alert" *ngIf="isAutoGenerateSuccess">
+      Auto Invoices saved successfully !!
+    </div>
+  </div>
   <section class="content-header">
     <div class="col-xs-12">
       <h1>
@@ -15,6 +23,7 @@
     <!--  Page Content Here -->
 
     <div class="col-xs-12">
+
       <div class="box box-primary">
         <div class="box-header">
           <h3 class="box-title">List Of All Customers</h3>
@@ -42,6 +51,9 @@
             </div>
             <!-- /.row -->
             <!-- /.row -->
+            <div class="col-md-offset-4">
+              <pagination-controls (pageChange)="onPaginate($event);p=$event"></pagination-controls>
+            </div>
           </div>
         </div>
         <!-- /.box-header -->
@@ -62,7 +74,7 @@
               <th>Auto generate <br> invoice monthly</th>
             </tr>
             <tr
-              *ngFor="let customer of customers | paginate: { itemsPerPage: 30, currentPage: p,totalItems:totalCustomerCount }">
+              *ngFor="let customer of customers | paginate: { itemsPerPage: 50, currentPage: p,totalItems:totalCustomerCount }">
               <td>{{ customer.username }}</td>
               <td>{{ customer.email }}</td>
               <td>{{ customer.fullname }}</td>
@@ -101,10 +113,13 @@
         <pagination-controls (pageChange)="onPaginate($event);p=$event"></pagination-controls>
       </div>
     </div>
+
   </section>
+  <!--for generating invoice-->
+</div>
+<div class="col-md-12" style="margin-top:-20px">
+  <div *ngFor="let autoInvoice of autoGenerateList">
+    <app-invoice-html [autoInvoice]="autoInvoice"></app-invoice-html>
+  </div>
 </div>
 
-<!--for generating invoice-->
-<div *ngFor="let autoInvoice of autoGenerateList">
-  <app-invoice-html [autoInvoice]="autoInvoice"></app-invoice-html>
-</div>

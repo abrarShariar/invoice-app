@@ -160,14 +160,13 @@ export class CustomerController {
 
     //get all customers
     static getAllCustomers(res: Response, paginationCount: any) {
-
         if (paginationCount == 'all') {
             CustomerModel.find({}, function (err, data) {
                 res.send(data);
             })
         } else {
-            let skip_count = (paginationCount - 1) * 30;
-            CustomerModel.find({}).sort('-created_on').skip(skip_count).limit(30).exec((err, customers) => {
+            let skip_count = (paginationCount - 1) * 50;
+            CustomerModel.find({}).sort('normalize').skip(skip_count).limit(50).exec((err, customers) => {
                 let allCustomers = [];
                 if (!err) {
                     _.each(customers, (item) => {
@@ -298,41 +297,30 @@ export class CustomerController {
     }
 
     static generateAutoInvoice(res: Response, id) {
-        let cursor = CustomerModel.find({_id: id}).cursor();
-        let invoice;
-        cursor.on('data', function (data) {
-            invoice = {
-                customerData: data,
-                total: 0,
-                productData: [],
-                amount_due: [],
-                status: 'Due',
-                discount: 0
-            }
-
-        });
-
-        cursor.on('close', function (err) {
-            let product_cursor = ProductModel.find({"_id": {"$in": invoice.customerData['productList']}}).cursor();
-            product_cursor.on('data', function (data) {
-                let amount_with_vat = 0;
-                if (data['vat'] > 0) {
-                    amount_with_vat = data['rate'] + (data['rate'] * (data['vat'] / 100));
-                } else {
-                    amount_with_vat = data['rate'];
+        CustomerModel.findOne({_id: id}, (err, data) => {
+            if (!err) {
+                let invoice = {
+                    customerData: data,
+                    total: 0,
+                    productData: [],
+                    amount_due: 0,
+                    status: 'Due',
+                    discount: 0
                 }
-                data['amount_with_vat'] = amount_with_vat;
-                invoice.productData.push(data);
 
-                invoice.total = invoice.total + amount_with_vat;
-                invoice.amount_due = invoice.total;
-            });
-
-            product_cursor.on('close', function (err) {
-                res.send(invoice);
-            });
-
-        });
+                ProductModel.find({"_id": {"$in": invoice.customerData['productList']}}, (err, pdata) => {
+                    _.each(pdata, (item) => {
+                        item['amount_with_vat'] = item['rate'] + (item['rate'] * (item['vat'] / 100));
+                        invoice.productData.push(item);
+                        invoice.total = invoice.total + item['amount_with_vat'];
+                        invoice.amount_due = invoice.total;
+                    });
+                    res.send(invoice);
+                });
+            } else {
+                res.send({status: false});
+            }
+        })
     }
 
 
