@@ -247,8 +247,13 @@ router.get('/customer/customer-count', (req: Request, res: Response) => {
     CustomerController.getTotalCustomerCount(res);
 });
 
-router.get('/customer/generate-auto-invoice', (req: Request, res: Response) => {
-    CustomerController.generateAutoInvoice(res);
+router.get('/customer/generate-auto-invoice/:id', (req: Request, res: Response) => {
+    CustomerController.generateAutoInvoice(res, req.params.id);
 });
+
+router.get('/customer/get-auto-generate-list', (req: Request, res: Response) => {
+    CustomerController.getAutoGenerateCustomerList(res);
+})
+
 
 export const ApiRoute: Router = router;

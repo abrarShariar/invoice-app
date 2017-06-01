@@ -71,8 +71,14 @@ export class CustomerService {
     return this.http.get(url).map((res) => res.json());
   }
 
-  generateAutoInvoice(){
-    let url = this.customerUrl + 'generate-auto-invoice';
+  generateAutoInvoice(id){
+    let url = this.customerUrl + 'generate-auto-invoice/' + id;
     return this.http.get(url).map((res) => res.json());
   }
+
+  getAutoGenerateList(){
+    let url = this.customerUrl + 'get-auto-generate-list';
+    return this.http.get(url).map((res) => res.json());
+  }
+
 }

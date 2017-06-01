@@ -21,6 +21,7 @@ export class CustomerAllComponent implements OnInit {
   public searchMode = 'username';
   totalCustomerCount: number = 0;
   public paginator = 1;
+  public autoGenerateList: any[] = [];
 
   // public tempCustomer:Customer;
 
@@ -221,11 +222,20 @@ export class CustomerAllComponent implements OnInit {
 
 //  click event triggered for auto generate invoice
   generateAutoInvoice() {
-    this.customerService.generateAutoInvoice()
+    this.autoGenerateList = [];
+    this.customerService.getAutoGenerateList()
       .subscribe(
         (res) => {
-          console.log(res);
+          _.each(res, (customer) => {
+            this.customerService.generateAutoInvoice(customer['_id'])
+              .subscribe(
+                (res) => {
+                  this.autoGenerateList.push(res);
+                }
+              )
+          })
         }
       )
   }
+
 }

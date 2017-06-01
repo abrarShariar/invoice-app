@@ -4,9 +4,9 @@ let Schema = mongoose.Schema;
 
 export let productSchema = new Schema({
     id: String,
-    name: {type:String, unique: true,dropDups: true },
+    name: {type: String, unique: true, dropDups: true},
     rate: Number,
     description: String,
     status: Boolean,
-    vat: String
+    vat: {type: Number, default: 0}
 });

@@ -369,7 +369,7 @@ export class InvoiceController {
                     discount: data.discount,
                     productList: data.productList,
                     total: data.total,
-                    amount_partially_paid: data.amount_partially_paid
+                    amount_partially_paid: data.amount_partially_paid,
                 }
             }, function (err) {
                 if (err) {

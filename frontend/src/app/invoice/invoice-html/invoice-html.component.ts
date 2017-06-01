@@ -1,4 +1,13 @@
-import {Component, OnInit, ViewChild, ElementRef, Input} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  Input,
+  SimpleChanges,
+  OnChanges,
+  AfterContentInit
+} from '@angular/core';
 import {InvoiceService} from '../invoice.service';
 import {Router} from "@angular/router";
 import {ActivatedRoute} from '@angular/router';
@@ -8,6 +17,7 @@ import {CustomerService} from '../../customer/customer.service';
 import {ProductService} from '../../product/product.service';
 import * as _ from 'underscore';
 import {DatePipe} from '@angular/common';
+import {current} from "codelyzer/util/syntaxKind";
 
 declare let jsPDF;
 declare let html2canvas;
@@ -20,7 +30,7 @@ declare let html2canvas;
 export class InvoiceHtmlComponent implements OnInit {
 
   @ViewChild('invoiceBox') invoiceBox: ElementRef;
-
+  @Input() autoInvoice: any;
   private id: any;
   private subscription: Subscription;
   public invoice: Invoice;
@@ -29,21 +39,45 @@ export class InvoiceHtmlComponent implements OnInit {
   private finalTotalWords;
   public currentDate: number = Date.now();
   public datePipe: DatePipe = new DatePipe('en-US');
+  public tempInvoice: Invoice;
+  public isAutoInvoice: boolean = false;
 
   constructor(private productService: ProductService, private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute) {
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['autoInvoice']) {
+      this.isAutoInvoice = true;
+      this.tempInvoice = changes['autoInvoice'].currentValue;
+    }
   }
 
   ngOnInit() {
     this.subscription = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.type = params['type'];
-      this.getInvoiceById(params['id']);
+      if (!this.isAutoInvoice) {
+        this.getInvoiceById(params['id']);
+      } else {
+        this.invoice = this.tempInvoice;
+        this.invoice['created_on'] = this.currentDate;
+        this.finalTotal = this.invoice.amount_due - this.invoice.discount;
+        this.finalTotalWords = this.numberToEnglish(this.invoice.total, '');
+      }
     });
 
   }
 
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  ngAfterContentInit() {
+    if (this.isAutoInvoice) {
+      this.downloadPDF();
+    }
+
   }
 
   downloadPDF() {

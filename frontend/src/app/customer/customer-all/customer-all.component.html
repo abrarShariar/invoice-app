@@ -105,6 +105,6 @@
 </div>
 
 <!--for generating invoice-->
-<div>
-  <app-invoice-html></app-invoice-html>
+<div *ngFor="let autoInvoice of autoGenerateList">
+  <app-invoice-html [autoInvoice]="autoInvoice"></app-invoice-html>
 </div>

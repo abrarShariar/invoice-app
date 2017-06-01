@@ -59,7 +59,7 @@ export class CustomerController {
                                 rate: 0,
                                 description: '',
                                 status: true,
-                                vat: ''
+                                vat: 0
                             }
                         },
                         {
@@ -297,9 +297,8 @@ export class CustomerController {
         })
     }
 
-    static generateAutoInvoice(res: Response) {
-        let cursor = CustomerModel.find({isGenerateInvoiceMonthly: true}).cursor();
-        let invoiceList = [];
+    static generateAutoInvoice(res: Response, id) {
+        let cursor = CustomerModel.find({_id: id}).cursor();
         let invoice;
         cursor.on('data', function (data) {
             invoice = {
@@ -307,20 +306,45 @@ export class CustomerController {
                 total: 0,
                 productData: [],
                 amount_due: [],
-                status: 'Due'
+                status: 'Due',
+                discount: 0
             }
+
         });
 
-        cursor.on('close', function () {
+        cursor.on('close', function (err) {
             let product_cursor = ProductModel.find({"_id": {"$in": invoice.customerData['productList']}}).cursor();
             product_cursor.on('data', function (data) {
-                invoice.productData = data;
+                let amount_with_vat = 0;
+                if (data['vat'] > 0) {
+                    amount_with_vat = data['rate'] + (data['rate'] * (data['vat'] / 100));
+                } else {
+                    amount_with_vat = data['rate'];
+                }
+                data['amount_with_vat'] = amount_with_vat;
+                invoice.productData.push(data);
+
+                invoice.total = invoice.total + amount_with_vat;
+                invoice.amount_due = invoice.total;
             });
 
-            product_cursor.on('close', function () {
+            product_cursor.on('close', function (err) {
                 res.send(invoice);
             });
+
         });
+    }
+
+
+    static getAutoGenerateCustomerList(res: Response) {
+        let query = CustomerModel.find({isGenerateInvoiceMonthly: true}).select('_id');
+        query.exec(function (err, data) {
+            if (!err) {
+                res.send(data);
+            } else {
+                res.send({status: false});
+            }
+        })
     }
 
 }
