@@ -15,6 +15,7 @@ import {AreaModule} from '../area/area.module';
 import {InvoiceModule} from '../invoice/invoice.module';
 import {SettingsModule} from '../settings/settings.module';
 import {ReportModule} from '../report/report.module';
+import {GeneralService} from './general.service';
 
 @NgModule({
   imports: [
@@ -38,7 +39,7 @@ import {ReportModule} from '../report/report.module';
   exports: [
     DashboardComponent
   ],
-  providers: []
+  providers: [GeneralService]
 })
 export class GeneralModule {
 }

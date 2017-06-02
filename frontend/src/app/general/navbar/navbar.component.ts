@@ -19,4 +19,8 @@ export class NavbarComponent implements OnInit {
     localStorage.setItem('csbd-password', '');
     this.router.navigate(['']);
   }
+
+  reload(){
+    window.location.href = '/';
+  }
 }

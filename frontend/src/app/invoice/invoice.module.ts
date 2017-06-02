@@ -14,6 +14,7 @@ import {AreaService} from '../area/area.service';
 import {InvoiceEditComponent} from './invoice-edit/invoice-edit.component';
 import {InvoiceHtmlComponent} from './invoice-html/invoice-html.component';
 import {CustomerService} from '../customer/customer.service';
+import {GeneralService} from '../general/general.service';
 
 @NgModule({
   imports: [
@@ -38,8 +39,10 @@ import {CustomerService} from '../customer/customer.service';
     InvoiceService,
     ProductService,
     AreaService,
-    CustomerService
+    CustomerService,
+    GeneralService
   ]
 })
-export class InvoiceModule {}
+export class InvoiceModule {
+}
 

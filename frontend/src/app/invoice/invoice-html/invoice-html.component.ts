@@ -15,6 +15,7 @@ import {Subscription} from "rxjs";
 import {Invoice} from '../invoice';
 import {CustomerService} from '../../customer/customer.service';
 import {ProductService} from '../../product/product.service';
+import {GeneralService} from '../../general/general.service';
 import * as _ from 'underscore';
 import {DatePipe} from '@angular/common';
 
@@ -41,7 +42,7 @@ export class InvoiceHtmlComponent implements OnInit {
   public tempInvoice: Invoice;
   public isAutoInvoice: boolean = false;
 
-  constructor(private productService: ProductService, private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute) {
+  constructor(private generalService: GeneralService, private productService: ProductService, private customerService: CustomerService, private invoiceService: InvoiceService, private route: ActivatedRoute) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,6 +53,7 @@ export class InvoiceHtmlComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.generalService.displaySidebar(false);
     this.subscription = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.type = params['type'];
@@ -67,12 +69,12 @@ export class InvoiceHtmlComponent implements OnInit {
 
   }
 
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
   ngAfterContentInit() {
+    // document.getElementsByClassName('main-sidebar')[0].style.marginLeft = '-15vw';
     if (this.isAutoInvoice) {
       this.downloadPDF();
     }
