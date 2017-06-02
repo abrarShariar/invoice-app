@@ -1,0 +1,87 @@
+<section class="content">
+  <div class="col-xs-12">
+    <div class="box box-primary">
+      <h2 style="margin-left:10px">Search All Customers</h2>
+      <hr>
+
+      <!--search result customers show box-->
+      <div class="box-body table-responsive no-padding" style="margin-bottom:20px;margin-top:20px" *ngIf="customer && searchResults.length>0">
+        <table class="table table-hover">
+          <tbody>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Fullname</th>
+            <th>Product</th>
+            <th>Mobile</th>
+            <th>Location</th>
+            <th>Area</th>
+            <th>City</th>
+            <th>Status</th>
+            <th>Action</th>
+            <th>Auto generate <br> invoice monthly</th>
+          </tr>
+          <tr>
+            <td>{{ customer.username }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.fullname }}</td>
+            <!--<td><span *ngIf="customer.productData?.length>0"> {{ customer.productData[0]?.name }} - <em *ngIf="customer.productData[0]?.rate">{{ customer.productData[0]?.rate }} BDT/month</em> </span><small class="label bg-blue">{{ customer.productData.length }}</small></td>-->
+            <td>
+              <small class="label bg-blue">{{ customer.productData.length }}</small>
+            </td>
+            <td>{{ customer.mobile_primary }}</td>
+            <td>{{ customer.location }}</td>
+            <td>{{ customer.areaData?.name }}</td>
+            <td>{{ customer.city }}</td>
+            <td *ngIf="customer.status">
+              <button type="button" class="btn btn-success btn-xs" (click)="toggleStatus(customer)"> Active</button>
+            </td>
+            <td *ngIf="!customer.status">
+              <button type="button" class="btn btn-danger btn-xs" (click)="toggleStatus(customer)"> Inactive</button>
+            </td>
+            <td>
+              <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/customer/detail',customer._id]">
+                Edit</a>
+            </td>
+            <td>
+              <input [attr.checked]="customer.isGenerateInvoiceMonthly ? 'checked' : null"
+                     style="zoom: 1.5;margin-left: 10px;" type="checkbox"
+                     name="customer._id" value="customer._id" (click)="checkGenerateInvoice(customer)">
+            </td>
+          </tr>
+          </tbody>
+
+        </table>
+      </div>
+
+      <!--search box and functionality-->
+      <div class="container">
+        <div class="col-lg-12">
+          <form class="form-group">
+            <input (keyup)="getSearchText($event)" id="search_form" type="text" class=""
+                   placeholder="Search All Customers">
+          </form>
+
+          <!--search resultsa-->
+          <div *ngIf="searchResults.length>0">
+            <strong style="font-size: 20px"> Search results for: </strong> <span class="search_text"
+                                                                                 style="color:blue;font-size: 20px">{{ searchText }}</span>
+            <br>
+            <ul style="list-style-type:none">
+              <li *ngFor="let customer of searchResults">
+                 <span style="font-size: 20px">
+                   <a href="javascript:void(0)" (click)="getSearchDetails(customer)">
+                   <em>{{ customer['username'] }}</em> - {{ customer['fullname']}}
+                 </a>
+                 </span>
+                <br>
+              </li>
+              <hr>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
