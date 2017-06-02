@@ -14,6 +14,7 @@ import {InvoiceEditComponent} from '../invoice/invoice-edit/invoice-edit.compone
 import {InvoiceHtmlComponent} from '../invoice/invoice-html/invoice-html.component';
 import {LocationDueReportComponent} from '../report/location-due-report/location-due-report.component';
 import {InvoiceCreateComponent} from '../invoice/invoice-create/invoice-create.component';
+import {InvoiceSearchComponent} from '../invoice/invoice-search/invoice-search.component';
 const generalRoutes = [
   {
     path: '',
@@ -51,6 +52,10 @@ const generalRoutes = [
   {
     path: 'invoice/all',
     component: InvoiceAllComponent
+  },
+  {
+    path: 'invoice/search',
+    component: InvoiceSearchComponent
   },
   {
     path: 'invoice/create',

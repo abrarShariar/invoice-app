@@ -1,4 +1,4 @@
-import {Injectable, Output, EventEmitter} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {CustomHttpService} from "../custom-http.service";
 import {environment} from "../../environments/environment";
 import 'rxjs/add/operator/map';
@@ -11,10 +11,19 @@ export class InvoiceService {
   constructor(private http: CustomHttpService) {
   }
 
+  getInvoiceByCustomerId(id) {
+    let url = this.invoiceUrl + 'by-customer-id/' + id;
+    return this.http.get(url).map((res) => res.json());
+  }
+
+  globalInvoiceSearchByCustomer(query) {
+    let url = this.invoiceUrl + 'global-search-by-customer/' + query;
+    return this.http.get(url).map((res) => res.json());
+  }
 
   saveAutoInvoice(data) {
     let url = this.invoiceUrl + 'save-auto-invoice';
-    return this.http.post(url,data).map((res) => res.json());
+    return this.http.post(url, data).map((res) => res.json());
   }
 
   getAllInvoice(paginator) {

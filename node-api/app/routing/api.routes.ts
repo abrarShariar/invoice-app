@@ -225,6 +225,17 @@ router.post('/invoice/save-auto-invoice', (req: Request, res: Response) => {
     InvoiceController.saveAutoInvoice(res, req.body);
 });
 
+// global invoice search by customer
+router.get('/invoice/global-search-by-customer/:query', (req: Request, res: Response) => {
+    InvoiceController.globalSearchByCustomer(res, req.params.query);
+});
+
+//get invoice by customer id
+router.get('/invoice/by-customer-id/:id', (req: Request, res: Response) => {
+    InvoiceController.getInvoiceByCustomerId(res, req.params.id);
+})
+
+
 //get customer by area
 router.get('/report/customer_by_area/:id', (req: Request, res: Response) => {
     ReportController.getCustomerByArea(res, req.params.id);

@@ -7,7 +7,6 @@ import {Product} from '../../product/product';
 import {AreaService} from '../../area/area.service';
 import {Area} from '../../area/area';
 
-
 @Component({
   selector: 'app-customer-all',
   templateUrl: './customer-all.component.html',

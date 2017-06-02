@@ -4,7 +4,6 @@ import * as _ from 'underscore';
 import {AreaModel} from '../database/models/area.model';
 import {RecentInvoiceModel} from '../database/models/invoice.model';
 import {ProductModel} from '../database/models/product.model';
-
 /*
  * Controller to handle request to api/customer/
  */

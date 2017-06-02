@@ -10,10 +10,59 @@ export class InvoiceController {
     constructor() {
     }
 
+    static getInvoiceByCustomerId(res: Response, id) {
+        let res_data = [];
+        AllInvoiceModel.find({customer_id: id}, (err, data) => {
+            if (!err) {
+                let res_data = data;
+                RecentInvoiceModel.findOne({customer_id: id}, (err, data) => {
+                    if (!err) {
+                        data['type'] = 'recent';
+                        res_data.push(data);
+                        res.send(res_data);
+                    } else {
+                        res.send({status: false});
+                    }
+                })
+            } else {
+                res.send({status: false});
+            }
+        })
+    }
+
+    static globalSearchByCustomer(res: Response, text: any) {
+        //get customer name from ids
+        let query = CustomerModel.find(
+            {
+                $or: [
+                    {
+                        "username": {
+                            $regex: ".*" + text + ".*",
+                            $options: "i"
+                        }
+                    },
+                    {
+                        "fullname": {
+                            $regex: ".*" + text + ".*",
+                            $options: "i"
+                        }
+                    }
+                ]
+            }, ["username", "fullname"]);
+
+        query.exec((err, data) => {
+            if (!err) {
+                res.send(data);
+            } else {
+                res.send({status: false});
+            }
+        })
+    }
+
     static saveAutoInvoice(res: Response, data: any) {
         var base64Data = data.pdf;
         var imageBuffer = InvoiceController.decodeBase64Image(base64Data);
-        fs.writeFile('/home/cyber/invoiceapp/June/' + data.label + '.pdf', imageBuffer['data'], function (err) {
+        fs.writeFile('/home/abrar/invoiceapp/June/' + data.label + '.pdf', imageBuffer['data'], function (err) {
             if (!err) {
                 res.send({status: true});
             } else {

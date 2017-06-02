@@ -166,13 +166,6 @@ export class InvoiceRecentComponent implements OnInit {
     }
   }
 
-  editInvoice(invoice: Invoice) {
-    let navextras: NavigationExtras = {
-      queryParams: {"invoice": JSON.stringify(invoice)}
-    };
-    this.router.navigate(['/invoice/edit'], navextras);
-  }
-
   changeStatus(status: string, invoice: Invoice) {
     if (status == 'Paid') {
       this.setPaidDateCounter(invoice);
