@@ -12,6 +12,33 @@ export class CustomerController {
     constructor() {
     }
 
+    static searchAllCustomer(res: Response, text: any) {
+        let query = CustomerModel.find(
+            {
+                $or: [
+                    {
+                        "username": {
+                            $regex: ".*" + text + ".*",
+                            $options: "i"
+                        }
+                    },
+                    {
+                        "fullname": {
+                            $regex: ".*" + text + ".*",
+                            $options: "i"
+                        }
+                    }
+                ]
+            }, ["username", "fullname"]);
+        query.exec((err, data) => {
+            if (!err) {
+                res.send(data);
+            } else {
+                res.send({status: false});
+            }
+        })
+    }
+
     static getFileContents(res: Response, obj: any) {
         let data = obj['content'].split(',');
         if (_.isEmpty(data[0]) || _.isUndefined(data[0]) || data[0] == '') {

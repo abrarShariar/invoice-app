@@ -11,6 +11,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CustomerCreateComponent} from './customer-create/customer-create.component';
 import {ProductService} from '../product/product.service';
 import {InvoiceModule} from '../invoice/invoice.module';
+import { CustomerSearchComponent } from './customer-search/customer-search.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {InvoiceModule} from '../invoice/invoice.module';
   declarations: [
     CustomerAllComponent,
     CustomerDetailComponent,
-    CustomerCreateComponent
+    CustomerCreateComponent,
+    CustomerSearchComponent
   ],
   exports: [],
   providers: [

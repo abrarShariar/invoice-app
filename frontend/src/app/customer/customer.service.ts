@@ -11,6 +11,11 @@ export class CustomerService {
   constructor(private http: CustomHttpService) {
   }
 
+  globalSearch(data: any) {
+    let url = this.customerUrl + 'global-search/' + data;
+    return this.http.get(url).map((res) => res.json());
+  }
+
   getAllCustomers(paginator) {
     let url = this.customerUrl + 'all/' + 'page=' + paginator;
     return this.http.get(url).map((res) => res.json());
@@ -66,17 +71,17 @@ export class CustomerService {
     return this.http.post(url, data).map((res) => res.json());
   }
 
-  getTotalCustomerCount(){
+  getTotalCustomerCount() {
     let url = this.customerUrl + 'customer-count';
     return this.http.get(url).map((res) => res.json());
   }
 
-  generateAutoInvoice(id){
+  generateAutoInvoice(id) {
     let url = this.customerUrl + 'generate-auto-invoice/' + id;
     return this.http.get(url).map((res) => res.json());
   }
 
-  getAutoGenerateList(){
+  getAutoGenerateList() {
     let url = this.customerUrl + 'get-auto-generate-list';
     return this.http.get(url).map((res) => res.json());
   }

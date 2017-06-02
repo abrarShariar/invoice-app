@@ -7,6 +7,9 @@
       Auto Invoices saved successfully !!
     </div>
   </div>
+
+  <app-customer-search></app-customer-search>
+
   <section class="content-header">
     <div class="col-xs-12">
       <h1>
@@ -19,6 +22,7 @@
       </ol>
     </div>
   </section>
+
   <section class="content">
     <!--  Page Content Here -->
 
@@ -40,7 +44,8 @@
                     </select>
                   </div>
                   <!-- /btn-group -->
-                  <input type="text" class="form-control" aria-label="..." placeholder="Search Customers List"
+                  <input type="text" class="form-control" aria-label="..."
+                         placeholder="Filter Customers List in this page"
                          (keyup)="quickSearch($event.target.value)">
                 </div>
                 <br>
