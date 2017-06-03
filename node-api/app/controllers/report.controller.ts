@@ -40,43 +40,21 @@ export class ReportController {
             $and: [
                 {
                     customer_id: id
-                },
-                {
-                    $or: [
-                        {
-                            status: "Due"
-                        },
-                        {
-                            status: "Partially Paid"
-                        }
-                    ]
-
                 }
             ]
 
         }, function (err, recentInvoice) {
-            if (recentInvoice) {
+            if (!err) {
                 result['current_due'] = recentInvoice['amount_due'];
             }
             AllInvoiceModel.find({
                 $and: [
                     {
                         customer_id: id
-                    },
-                    {
-                        $or: [
-                            {
-                                status: "Due"
-                            },
-                            {
-                                status: "Partially Paid"
-                            }
-                        ]
-
                     }
                 ]
             }, function (err, allInvoice) {
-                if (allInvoice) {
+                if (!err) {
                     _.each(allInvoice, (item) => {
                         result['previous_due'] += item['amount_due'];
                     });

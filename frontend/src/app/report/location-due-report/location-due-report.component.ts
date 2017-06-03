@@ -37,7 +37,9 @@ export class LocationDueReportComponent implements OnInit {
                   report.current_due = res['current_due'];
                   report.previous_due = res['previous_due'];
                   report.total_due = res['total_due'];
-                  this.reportList.push(report);
+                  if (res['total_due'] != 0) {
+                    this.reportList.push(report);
+                  }
                 },
                 (err) => {
                   console.log("Error in getReport");
