@@ -18,8 +18,8 @@ export class PayDateChartComponent implements OnInit {
 
 
   public column_ChartOptions = {
-    width: 1000,
-    height: 500,
+    width: 1500,
+    height: 600,
     chart: {
       title: 'Payments vs Date',
       subtitle: 'Payments done this month'
