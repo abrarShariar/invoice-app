@@ -10,6 +10,28 @@ export class InvoiceController {
     constructor() {
     }
 
+    static createNewInvoice(res, data) {
+        let invoice = new AllInvoiceModel({
+            customer_id: data.customer_id,
+            payment_due_date: data.date,
+            amount_due: data.total,
+            status: data.status,
+            total: data.total,
+            discount: data.discount,
+            invoice_created_date: data.date,
+            productList: data.productList,
+            created_on: data.date
+        });
+
+        invoice.save(function (err, data) {
+            if (!err) {
+                res.send(data);
+            } else {
+                res.send({status: false});
+            }
+        });
+    }
+
     static getInvoiceByCustomerId(res: Response, id) {
         let res_data = [];
         AllInvoiceModel.find({customer_id: id}, (err, data) => {

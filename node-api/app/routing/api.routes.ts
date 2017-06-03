@@ -200,6 +200,11 @@ router.get('/invoice/all/page=:paginator', (req: Request, res: Response) => {
     InvoiceController.getAllInvoices(res, req.params.paginator);
 });
 
+// create new invoice
+router.post('/invoice/create/new', (req: Request, res: Response) => {
+    InvoiceController.createNewInvoice(res, req.body);
+});
+
 //pay date coounter clean
 router.get('/home/pay-date-counter/clean-build', (req: Request, res: Response) => {
     PayDateCounterController.checkAndCleanPayDateCounter(res);

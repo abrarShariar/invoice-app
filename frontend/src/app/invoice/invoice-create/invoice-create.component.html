@@ -34,9 +34,13 @@
               </div>
             </div>
           </div>
+          <hr>
+          <br><br>
         </form>
 
-        <form class="form-horizontal " [formGroup]="invoiceCreateForm" (submit)="submitInvoiceCreateForm()">
+
+        <form class="form-horizontal " style="margin-top:30px" [formGroup]="invoiceCreateForm"
+              (submit)="submitInvoiceCreateForm()">
           <div class="col-md-12" *ngIf="resCustomer">
             <!--username-->
             <div class=" form-group ">
@@ -115,6 +119,35 @@
               </div>
             </div>
             <br>
+
+            <!--invoice_created_date-->
+            <div class="form-group">
+              <label for="date" class="col-sm-2 control-label">Invoice Date</label>
+              <div class="col-sm-10">
+                <input type="date" formControlName="date">
+              </div>
+            </div>
+
+            <!--total amount-->
+            <div class="form-group ">
+              <label for="amount_due_minus_discount " class="col-sm-2 control-label ">Total (BDT)</label>
+              <div class="col-sm-10">
+                <input type="number " formControlName="total" class="form-control " id="amount_due_minus_discount "
+                       placeholder="total "
+                       readonly>
+              </div>
+            </div>
+
+            <!--discount-->
+            <!--<div class="form-group ">-->
+            <!--<label for="discount " class="col-sm-2 control-label ">Discount</label>-->
+            <!--<div class="col-sm-10">-->
+            <!--<input type="number " (keyup)="updateDiscount($event.target.value)" formControlName="discount"-->
+            <!--class="form-control " id="discount " placeholder="discount "-->
+            <!--&gt;-->
+            <!--</div>-->
+            <!--</div>-->
+
             <!--product list-->
             <div class="form-group " *ngFor="let item of createRange(allProductCounter);let i=index">
               <label class="col-sm-2 control-label ">Product [{{ i+1 }}]</label>
@@ -148,9 +181,14 @@
           <br>
           <br>
           <hr>
+          <div class="col-md-12" *ngIf="isSaved">
+            <div class="alert alert-success" role="alert">Invoice Created Successfully !!</div>
+            <a class="btn btn-lg btn-info" [routerLink]="['/dashboard/invoice/display/all/',resultInvoice._id]">Generate Invoice Now</a>
+          </div>
 
         </form>
       </div>
+
     </div>
   </section>
 </div>

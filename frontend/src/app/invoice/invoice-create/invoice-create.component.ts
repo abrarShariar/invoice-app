@@ -3,13 +3,13 @@ import {FormGroup, FormBuilder} from "@angular/forms";
 import {ProductService} from '../../product/product.service';
 import {AreaService} from '../../area/area.service';
 import {CustomerService} from '../../customer/customer.service';
-import {InvoiceService} from '../invoice.service';
 import {Customer} from '../../customer/customer';
 import * as _ from 'underscore';
 import {Product} from '../../product/product';
 import {Area} from "../../area/area";
 import {Subscription} from "rxjs";
 import {Invoice} from '../invoice';
+import {InvoiceService} from '../invoice.service';
 
 @Component({
   selector: 'app-invoice-create',
@@ -28,9 +28,11 @@ export class InvoiceCreateComponent implements OnInit {
   public invoice: Invoice;
   public allProductCounter = 1;
   public allProducts: any[] = [];
+  public isSaved: boolean = false;
+  public resultInvoice;
 
 
-  constructor(private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) {
+  constructor(private invoiceService: InvoiceService, private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) {
   }
 
   ngOnInit() {
@@ -40,7 +42,9 @@ export class InvoiceCreateComponent implements OnInit {
   }
 
   buildForm() {
+    let date = Date.now();
     this.invoiceCreateForm = this.fb.group({
+      customer_id: [''],
       username: [''],
       email: [''],
       fullname: [''],
@@ -51,9 +55,10 @@ export class InvoiceCreateComponent implements OnInit {
       mobile_secondary: [''],
       amount_due: [''],
       total: [''],
-      discount: [''],
-      invoice_created_date: [''],
+      discount: [0],
+      date: [date],
       status: ['Due'],
+      productList: []
     });
   }
 
@@ -117,6 +122,9 @@ export class InvoiceCreateComponent implements OnInit {
         },
         () => {
           this.allProducts.push(this.productList[0]);
+          this.invoiceCreateForm.patchValue({
+            total: this.productList[0].rate
+          })
         }
       )
   }
@@ -131,7 +139,7 @@ export class InvoiceCreateComponent implements OnInit {
     this.allProductCounter++;
     let newProduct = this.productList[0];
     this.allProducts.push(newProduct);
-    console.log(this.allProducts);
+    this.updateTotal();
   }
 
   onProductChange(event: any, index) {
@@ -139,6 +147,7 @@ export class InvoiceCreateComponent implements OnInit {
       return item['_id'] == event.target.value;
     })
     this.allProducts[index] = result;
+    this.updateTotal();
   }
 
   createRange(number) {
@@ -149,7 +158,29 @@ export class InvoiceCreateComponent implements OnInit {
     return items;
   }
 
-  submitInvoiceCreateForm() {
+  updateTotal() {
+    let total = 0;
+    _.each(this.allProducts, (product) => {
+      total += product['rate'];
+    });
+    this.invoiceCreateForm.patchValue({
+      total: total
+    })
+  }
 
+  submitInvoiceCreateForm() {
+    let product_list = _.pluck(this.allProducts, '_id');
+    this.invoiceCreateForm.patchValue({
+      productList: product_list,
+      customer_id: this.resCustomer['_id']
+    });
+
+    this.invoiceService.createNewInvoice(this.invoiceCreateForm.value)
+      .subscribe(
+        (res) => {
+          this.resultInvoice = res;
+          this.isSaved = true;
+        }
+      )
   }
 }
