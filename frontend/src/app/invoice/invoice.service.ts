@@ -126,4 +126,9 @@ export class InvoiceService {
     let url = this.invoiceUrl + 'all_invoice_count';
     return this.http.get(url).map((res) => res.json());
   }
+
+  createNewInvoice(data: any) {
+    let url = this.invoiceUrl + 'create/new';
+    return this.http.post(url, data).map((res) => res.json());
+  }
 }
