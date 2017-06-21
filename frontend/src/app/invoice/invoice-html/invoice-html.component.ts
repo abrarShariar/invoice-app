@@ -6,7 +6,8 @@ import {
   Input,
   SimpleChanges,
   OnChanges,
-  AfterContentInit
+  AfterContentInit,
+  AfterViewInit
 } from '@angular/core';
 
 import {InvoiceService} from '../invoice.service';
@@ -28,7 +29,7 @@ declare let html2canvas;
   templateUrl: './invoice-html.component.html',
   styleUrls: ['./invoice-html.component.css']
 })
-export class InvoiceHtmlComponent implements OnInit {
+export class InvoiceHtmlComponent implements OnInit, AfterViewInit {
 
   @ViewChild('invoiceBox') invoiceBox: ElementRef;
   @Input() autoInvoice: any;
@@ -75,11 +76,16 @@ export class InvoiceHtmlComponent implements OnInit {
   }
 
   ngAfterContentInit() {
+    // if (this.isAutoInvoice) {
+    //   this.downloadPDF();
+    //
+    // }
+  }
+
+  ngAfterViewInit(){
     if (this.isAutoInvoice) {
       this.downloadPDF();
-
     }
-
   }
 
   downloadPDF() {

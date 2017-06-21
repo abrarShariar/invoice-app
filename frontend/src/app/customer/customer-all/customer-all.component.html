@@ -79,7 +79,7 @@
               <th>Auto generate <br> invoice monthly</th>
             </tr>
             <tr
-              *ngFor="let customer of customers | paginate: { itemsPerPage: 50, currentPage: p,totalItems:totalCustomerCount }">
+              *ngFor="let customer of customers | paginate: { itemsPerPage: 20, currentPage: p,totalItems:totalCustomerCount }">
               <td>{{ customer.username }}</td>
               <td>{{ customer.email }}</td>
               <td>{{ customer.fullname }}</td>

@@ -21,13 +21,24 @@ export class ReportController {
     // public reportList: Report[] = [];
 
     static getCustomerByArea(res: Response, id) {
-        CustomerModel.find({'area': id}, function (err, data) {
-            if (!err) {
-                res.send(data);
-            } else {
-                res.send({status: false});
-            }
-        })
+        CustomerModel.find(
+            {
+                $and: [
+                    {
+                        'area': id
+                    },
+                    {
+                        'status': true
+                    }
+                ]
+            },
+            function (err, data) {
+                if (!err) {
+                    res.send(data);
+                } else {
+                    res.send({status: false});
+                }
+            })
     }
 
     static getReportForCustomers(res: Response, id) {

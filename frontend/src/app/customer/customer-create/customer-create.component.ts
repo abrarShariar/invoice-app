@@ -24,27 +24,11 @@ export class CustomerCreateComponent implements OnInit {
 
   public selectedObjId: any;
 
-  public objects = [
-    {id: 1, description: 'C'},
-    {id: 2, description: 'C++'},
-    {id: 3, description: 'Java'},
-    {id: 4, description: 'C#'},
-    {id: 5, description: 'JavaScript'}
-  ];
-
-  onChange(event) {
-    localStorage.setItem('selectedItem', event.target.value);
-  }
 
   constructor(private fb: FormBuilder, private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) {
   }
 
   ngOnInit() {
-
-    if(localStorage.getItem('selectedItem') !== null){
-      this.selectedObjId = localStorage.getItem('selectedItem');
-    }
-
     this.buildForm();
     this.getProductList();
     this.getAreaList();

@@ -163,7 +163,8 @@ export class CustomerController {
                     total: 0,
                     discount: 0,
                     amount_partially_paid: [],
-                    productList: newData['productList']
+                    productList: newData['productList'],
+                    type: 'recent'
                 });
 
                 ProductModel.find({"_id": {"$in": data['productList']}}, function (err, docs) {

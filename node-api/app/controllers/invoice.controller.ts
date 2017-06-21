@@ -393,9 +393,16 @@ export class InvoiceController {
 
     static buildAndSaveRecentInvoice(res: Response) {
         CustomerModel.find({
-                productList: {
-                    $exists: true, $not: {$size: 0}
-                }
+                $and: [
+                    {
+                        productList: {
+                            $exists: true, $not: {$size: 0}
+                        }
+                    },
+                    {
+                        status: true
+                    }
+                ]
             },
             function (err, data) {
                 let date = new Date();
