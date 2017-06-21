@@ -1,4 +1,17 @@
 <div class="content-wrapper" style="height: 1500px;">
+
+
+  <!--stackoverflow solve-->
+
+  <select class="form-control" (change)="onChange($event)">
+    <option
+    *ngFor="let object of objects" value="{{ object.id }}" [selected]="object.id == selectedObjId"> {{ object.description
+    }}</option>
+  </select>
+
+  <!---->
+
+
   <section class=" content-header ">
     <div class="col-xs-12">
       <h1>

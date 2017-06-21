@@ -15,5 +15,5 @@ export class Invoice {
   discount?: number;
   invoice_created_date?: any;
   amount_partially_paid?: any[] = [];
-  type?: string;
+  type?: string = '';
 }

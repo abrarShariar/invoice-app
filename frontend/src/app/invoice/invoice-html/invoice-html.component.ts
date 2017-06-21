@@ -18,6 +18,7 @@ import {ProductService} from '../../product/product.service';
 import {GeneralService} from '../../general/general.service';
 import * as _ from 'underscore';
 import {DatePipe} from '@angular/common';
+import {UploadService} from '../../upload.service';
 
 declare let jsPDF;
 declare let html2canvas;
@@ -74,9 +75,9 @@ export class InvoiceHtmlComponent implements OnInit {
   }
 
   ngAfterContentInit() {
-    // document.getElementsByClassName('main-sidebar')[0].style.marginLeft = '-15vw';
     if (this.isAutoInvoice) {
       this.downloadPDF();
+
     }
 
   }
@@ -93,6 +94,9 @@ export class InvoiceHtmlComponent implements OnInit {
             pdf: pdf,
             label: this.invoice.customerData.username + "_" + this.datePipe.transform(Date.now(), 'MMMM')
           }
+
+          console.log(data);
+
           this.invoiceService.saveAutoInvoice(data)
             .subscribe(
               (res) => {

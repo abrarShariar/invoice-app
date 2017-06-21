@@ -191,8 +191,8 @@ router.post('/invoice/pre_generate_update', (req: Request, res: Response) => {
     InvoiceController.preGenerateUpdate(res, req.body);
 });
 
-router.delete('/invoice/delete/id/:id', (req: Request, res: Response) => {
-    InvoiceController.deleteRecentInVoiceById(res, req.params.id);
+router.post('/invoice/delete', (req: Request, res: Response) => {
+    InvoiceController.deleteInvoice(res, req.body);
 });
 
 // get all invoices
@@ -227,7 +227,7 @@ router.get('/invoice/all_invoice_count', (req: Request, res: Response) => {
 
 // save auto invoive
 router.post('/invoice/save-auto-invoice', (req: Request, res: Response) => {
-    InvoiceController.saveAutoInvoice(res, req.body);
+    InvoiceController.saveAutoInvoice(res, req);
 });
 
 // global invoice search by customer
@@ -238,6 +238,12 @@ router.get('/invoice/global-search-by-customer/:query', (req: Request, res: Resp
 //get invoice by customer id
 router.get('/invoice/by-customer-id/:id', (req: Request, res: Response) => {
     InvoiceController.getInvoiceByCustomerId(res, req.params.id);
+})
+
+
+// remove Invoice
+router.post('/invoice/remove-invoice', (req: Request, res: Response) => {
+    InvoiceController.removeInvoice(res, req.body);
 })
 
 

@@ -19,7 +19,8 @@ export class InvoiceSearchComponent implements OnInit {
   public invoiceList: Invoice[] = [];
   public partialInvoice: Invoice;
   public partialPay: any;
-
+  public delInvoice: Invoice;
+  public showRemoveConfirmation: boolean = false;
 
   constructor(private customerService: CustomerService, private invoiceService: InvoiceService, private productService: ProductService, private areaService: AreaService) {
   }
@@ -53,6 +54,11 @@ export class InvoiceSearchComponent implements OnInit {
         (res) => {
           _.each(res, (invoice: Invoice) => {
             let customer: Customer;
+
+            if (invoice['type']=='') {
+              invoice['type'] = 'recent';
+            }
+
             this.customerService.getCustomerDetails(invoice.customer_id)
               .subscribe(
                 (res: Customer) => {
@@ -79,7 +85,6 @@ export class InvoiceSearchComponent implements OnInit {
                     invoice.customerData = customer;
                     this.invoiceList.push(invoice);
                   }
-
                 }
               )
           })
@@ -146,6 +151,34 @@ export class InvoiceSearchComponent implements OnInit {
 
         }
       )
+  }
+
+  remove(invoice: Invoice) {
+    this.showRemoveConfirmation = true;
+    this.delInvoice = invoice;
+  }
+
+
+  removeConfirmation(status) {
+    if (status) {
+      this.invoiceService.deleteInvoice(this.delInvoice)
+        .subscribe(
+          (res) => {
+            if (res['status']) {
+              this.invoiceList = _.without(this.invoiceList, _.findWhere(this.invoiceList, {
+                _id: this.delInvoice['_id']
+              }));
+              this.showRemoveConfirmation = false;
+            }
+          },
+          (err) => {
+
+          }
+        )
+    } else {
+      this.delInvoice = undefined;
+      this.showRemoveConfirmation = false;
+    }
   }
 
 

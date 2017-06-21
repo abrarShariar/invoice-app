@@ -4,13 +4,19 @@ import {CustomerModel} from '../database/models/customer.model';
 import {AllInvoiceModel, RecentInvoiceModel} from '../database/models/invoice.model';
 declare var Date: any;
 import {ProductModel} from '../database/models/product.model';
-var fs = require('fs');
+import * as path from "path";
+import * as fs from "fs";
+import * as BusBoy from "busboy";
 
 export class InvoiceController {
     constructor() {
     }
 
-    static createNewInvoice(res, data) {
+    static removeInvoice(res: Response, data) {
+        res.send(data);
+    }
+
+    static createNewInvoice(res: Response, data) {
         let invoice = new AllInvoiceModel({
             customer_id: data.customer_id,
             payment_due_date: data.date,
@@ -20,7 +26,8 @@ export class InvoiceController {
             discount: data.discount,
             invoice_created_date: data.date,
             productList: data.productList,
-            created_on: data.date
+            created_on: data.date,
+            type: "all"
         });
 
         invoice.save(function (err, data) {
@@ -39,7 +46,6 @@ export class InvoiceController {
                 let res_data = data;
                 RecentInvoiceModel.findOne({customer_id: id}, (err, data) => {
                     if (!err) {
-                        data['type'] = 'recent';
                         res_data.push(data);
                         res.send(res_data);
                     } else {
@@ -81,10 +87,36 @@ export class InvoiceController {
         })
     }
 
-    static saveAutoInvoice(res: Response, data: any) {
-        var base64Data = data.pdf;
+    static saveAutoInvoice(res: Response, req: Request) {
+        var base64Data = req.body.pdf;
         var imageBuffer = InvoiceController.decodeBase64Image(base64Data);
-        fs.writeFile('/home/abrar/invoiceapp/June/' + data.label + '.pdf', imageBuffer['data'], function (err) {
+        var filename = req.body.label + '.pdf';
+
+        //get current month name and make dir
+        var d = new Date();
+        var month = new Array();
+        month[0] = "January";
+        month[1] = "February";
+        month[2] = "March";
+        month[3] = "April";
+        month[4] = "May";
+        month[5] = "June";
+        month[6] = "July";
+        month[7] = "August";
+        month[8] = "September";
+        month[9] = "October";
+        month[10] = "November";
+        month[11] = "December";
+        var dirname = month[d.getMonth()];
+
+        var dir_path = path.join(__dirname, "../../../", dirname);
+
+        if (!fs.existsSync(dir_path)) {
+            fs.mkdirSync(dir_path);
+        }
+
+        var saveTo = path.join(__dirname, "../../../", dirname, filename);
+        fs.writeFile(saveTo, imageBuffer["data"], function (err) {
             if (!err) {
                 res.send({status: true});
             } else {
@@ -92,7 +124,6 @@ export class InvoiceController {
             }
         });
     }
-
 
     static decodeBase64Image(dataString) {
         var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
@@ -144,6 +175,7 @@ export class InvoiceController {
             paid_date: data.paid_date,
             amount_partially_paid: data.amount_partially_paid,
             productList: data.productList,
+            type: "all"
         });
 
         invoice.save(function (err, data) {
@@ -194,6 +226,7 @@ export class InvoiceController {
             paid_date: data.paid_date,
             amount_partially_paid: data.amount_partially_paid,
             productList: data.productList,
+            type: "recent"
         });
 
         invoice.save(function (err, data) {
@@ -345,7 +378,8 @@ export class InvoiceController {
                     invoice_created_date: data['invoice_created_date'],
                     paid_date: data['paid_date'],
                     amount_partially_paid: data['amount_partially_paid'],
-                    productList: data['productList']
+                    productList: data['productList'],
+                    type: "all"
                 }
             }, function (err) {
                 if (err) {
@@ -375,7 +409,8 @@ export class InvoiceController {
                         total: 0,
                         discount: 0,
                         amount_partially_paid: [],
-                        productList: customer['productList']
+                        productList: customer['productList'],
+                        type: 'recent'
                     });
 
                     ProductModel.find({"_id": {"$in": customer['productList']}}, function (err, docs) {
@@ -479,14 +514,24 @@ export class InvoiceController {
         }
     }
 
-    static deleteRecentInVoiceById(res: Response, id) {
-        RecentInvoiceModel.find({_id: id}).remove(function (err) {
-            if (!err) {
-                res.send({status: true});
-            } else {
-                res.send({status: false});
-            }
-        });
+    static deleteInvoice(res: Response, data) {
+        if (data['type'] === 'recent') {
+            RecentInvoiceModel.find({_id: data['_id']}).remove(function (err) {
+                if (!err) {
+                    res.send({status: true});
+                } else {
+                    res.send({status: false});
+                }
+            });
+        } else {
+            AllInvoiceModel.find({_id: data['_id']}).remove(function (err) {
+                if (!err) {
+                    res.send({status: true});
+                } else {
+                    res.send({status: false});
+                }
+            });
+        }
     }
 
     static getAllInvoices(res: Response, paginationCount: number) {

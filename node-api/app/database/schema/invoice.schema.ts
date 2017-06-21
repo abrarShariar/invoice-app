@@ -14,6 +14,7 @@ export let invoiceSchema = new Schema({
     paid_date: String,
     amount_partially_paid: [{date: Date, amount: Number}],
     productList: [String],
-    type: [String],
-    created_on: {type: Date, default: Date.now}
+    type: String,
+    created_on: {type: Date, default: Date.now},
+    normalized: String
 });

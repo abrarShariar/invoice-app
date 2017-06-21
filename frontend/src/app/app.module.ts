@@ -10,6 +10,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AuthService} from './auth.service';
 import {CustomHttpService} from "./custom-http.service";
 import {AutoCompleteModule, PickListModule, ConfirmDialogModule, SharedModule} from 'primeng/primeng';
+import {UploadService} from './upload.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {AutoCompleteModule, PickListModule, ConfirmDialogModule, SharedModule} f
   ],
   providers: [
     AuthService,
-    CustomHttpService
+    CustomHttpService,
+    UploadService
   ],
   bootstrap: [AppComponent]
 })

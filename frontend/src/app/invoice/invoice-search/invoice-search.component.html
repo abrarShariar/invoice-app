@@ -1,5 +1,15 @@
 <div class="content-wrapper" style="height:100vh">
 
+  <div class="alert alert-warning" *ngIf="showRemoveConfirmation && delInvoice">
+    <h4>
+      <strong>Delete Confirmation !!</strong> <br>
+      Delete the invoice for <em>{{ delInvoice.customerData?.username }} </em>  ?
+    </h4>
+    <br>
+    <button class="btn btn-success btn-sm" (click)="removeConfirmation(true)">YES</button>
+    <button class="btn btn-danger btn-sm" (click)="removeConfirmation(false)">NO</button>
+  </div>
+
   <section class="content">
     <div class="col-xs-12">
       <div class="box box-primary">
@@ -70,6 +80,9 @@
                 <a type="button" *ngIf="invoice?.type!='recent'" class="btn btn-primary btn-xs"
                    [routerLink]="['/dashboard/invoice/view','all',invoice?._id]">
                   View</a>
+
+                <button class="btn btn-xs btn-danger" (click)="remove(invoice)"><i class="fa fa-times"
+                                                                                   aria-hidden="true"></i></button>
               </td>
 
               <!-- Modal for Partially payment -->

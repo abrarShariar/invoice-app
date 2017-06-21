@@ -31,6 +31,7 @@
     "chart.js": "^2.5.0",
     "core-js": "^2.4.1",
     "jquery": "^3.2.1",
+    "list.js": "^1.5.0",
     "ng2-charts": "^1.5.0",
     "ng2-file-upload": "^1.2.0",
     "ng2-pagination": "^2.0.1",

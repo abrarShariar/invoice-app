@@ -1,4 +1,4 @@
-import {Router, NavigationExtras} from '@angular/router';
+import {Router} from '@angular/router';
 import {Product} from '../../product/product';
 import {Component, OnInit} from '@angular/core';
 import {InvoiceService} from '../invoice.service';
@@ -101,6 +101,14 @@ export class InvoiceRecentComponent implements OnInit {
                   }
                 )
             });
+          }
+        },
+        (err) => {
+
+        },
+        () => {
+          for (let i = 0; i < this.invoiceList.length; i++) {
+            console.log("Hello World");
           }
         }
       )
@@ -242,7 +250,7 @@ export class InvoiceRecentComponent implements OnInit {
 
   removeConfirmation(status) {
     if (status) {
-      this.invoiceService.deleteById(this.delInvoice['_id'])
+      this.invoiceService.deleteInvoice(this.delInvoice)
         .subscribe(
           (res) => {
             if (res['status']) {
@@ -253,7 +261,6 @@ export class InvoiceRecentComponent implements OnInit {
             }
           },
           (err) => {
-
           }
         )
     } else {

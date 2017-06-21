@@ -191,8 +191,8 @@ export class CustomerController {
                 res.send(data);
             })
         } else {
-            let skip_count = (paginationCount - 1) * 50;
-            CustomerModel.find({}).sort('normalize').skip(skip_count).limit(50).exec((err, customers) => {
+            let skip_count = (paginationCount - 1) * 20;
+            CustomerModel.find({}).sort('normalize').skip(skip_count).limit(20).exec((err, customers) => {
                 let allCustomers = [];
                 if (!err) {
                     _.each(customers, (item) => {

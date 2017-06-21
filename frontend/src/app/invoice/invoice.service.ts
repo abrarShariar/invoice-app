@@ -11,6 +11,11 @@ export class InvoiceService {
   constructor(private http: CustomHttpService) {
   }
 
+  removeInvoice(invoice) {
+    let url = this.invoiceUrl + 'remove-invoice';
+    return this.http.post(url, invoice).map((res) => res.json());
+  }
+
   getInvoiceByCustomerId(id) {
     let url = this.invoiceUrl + 'by-customer-id/' + id;
     return this.http.get(url).map((res) => res.json());
@@ -107,9 +112,9 @@ export class InvoiceService {
     return this.http.post(url, data).map((res) => res.json());
   }
 
-  deleteById(id) {
-    let url = this.invoiceUrl + 'delete/id/' + id;
-    return this.http.delete(url).map((res) => res.json());
+  deleteInvoice(invoice) {
+    let url = this.invoiceUrl + 'delete';
+    return this.http.post(url, invoice).map((res) => res.json());
   }
 
   setPaidDateCounter(invoice) {
