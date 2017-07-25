@@ -26,8 +26,38 @@ export class CustomerAllComponent implements OnInit {
 
   // public tempCustomer:Customer;
 
+
   constructor(private customerService: CustomerService, private productService: ProductService, private areaService: AreaService) {
   }
+
+  public options = [
+    {
+      measure: 'length',
+      display: 'Length'
+    },
+    {
+      measure: 'area',
+      display: 'Area'
+    },
+    {
+      measure: 'volume',
+      display: 'volume'
+    },
+    {
+      measure: 'time',
+      display: 'Time'
+    },
+    {
+      measure: 'current',
+      display: 'Current'
+    },
+    {
+      measure: 'energy',
+      display: 'Energy'
+    },
+
+  ]
+
 
   ngOnInit() {
     this.isAutoGenerateSuccess = false;

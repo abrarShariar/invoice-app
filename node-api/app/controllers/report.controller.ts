@@ -13,12 +13,9 @@ class Report {
     previous_due: number = 0;
     total_due: number = 0;
     location: string;
-
 }
 
 export class ReportController {
-
-    // public reportList: Report[] = [];
 
     static getCustomerByArea(res: Response, id) {
         CustomerModel.find(
@@ -38,7 +35,7 @@ export class ReportController {
                 } else {
                     res.send({status: false});
                 }
-            })
+            });
     }
 
     static getReportForCustomers(res: Response, id) {
@@ -51,24 +48,42 @@ export class ReportController {
             $and: [
                 {
                     customer_id: id
+                },
+                {
+                    status: {
+                        $ne: "Paid"
+                    }
                 }
             ]
 
         }, function (err, recentInvoice) {
             if (!err) {
-                result['current_due'] = recentInvoice['amount_due'];
+                if (!_.isNull(recentInvoice)) {
+                    result['current_due'] = recentInvoice['amount_due'];
+                }
+            } else {
+                res.send({status: false});
             }
             AllInvoiceModel.find({
                 $and: [
                     {
                         customer_id: id
+                    },
+                    {
+                        status: {
+                            $ne: "Paid"
+                        }
                     }
                 ]
             }, function (err, allInvoice) {
                 if (!err) {
                     _.each(allInvoice, (item) => {
-                        result['previous_due'] += item['amount_due'];
+                        if (!_.isNull(item)) {
+                            result['previous_due'] += item['amount_due'];
+                        }
                     });
+                } else {
+                    res.send({status: false});
                 }
                 result['total_due'] = result['previous_due'] + result['current_due'];
                 res.send(result);

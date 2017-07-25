@@ -55,7 +55,7 @@ export class InvoiceController {
             } else {
                 res.send({status: false});
             }
-        })
+        });
     }
 
     static globalSearchByCustomer(res: Response, text: any) {
@@ -267,7 +267,6 @@ export class InvoiceController {
         let isClean: boolean = false;
         let date = new Date();
         let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-
         RecentInvoiceModel.find({
                 "created_on": {
                     $lt: firstDay
@@ -305,35 +304,39 @@ export class InvoiceController {
                                                     '_id': newData['customer_id']
                                                 },
                                                 {
-                                                    'status': 'Active'
+                                                    'status': true
                                                 }
                                             ]
                                         }, function (err, customer) {
-                                            let date = new Date();
-                                            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-                                            let newInvoice = new RecentInvoiceModel({
-                                                customer_id: customer['_id'],
-                                                payment_due_date: firstDay,
-                                                amount_due: 0,
-                                                status: 'Due',
-                                                total: 0,
-                                                discount: 0,
-                                                amount_partially_paid: [],
-                                                productList: customer['productList']
-                                            });
-                                            ProductModel.find({"_id": {"$in": customer['productList']}}, function (err, docs) {
-                                                _.each(docs, (item) => {
-                                                    newInvoice['total'] += item['rate'];
+                                            if (customer) {
+                                                let date = new Date();
+                                                let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                                                let newInvoice = new RecentInvoiceModel({
+                                                    customer_id: customer['_id'],
+                                                    payment_due_date: firstDay,
+                                                    amount_due: 0,
+                                                    status: 'Due',
+                                                    total: 0,
+                                                    discount: 0,
+                                                    amount_partially_paid: [],
+                                                    productList: customer['productList']
                                                 });
-                                                newInvoice['amount_due'] = newInvoice['total'];
-                                                newInvoice.save(function () {
-                                                    // console.log(data);
+                                                ProductModel.find({"_id": {"$in": customer['productList']}}, function (err, docs) {
+                                                    _.each(docs, (item) => {
+                                                        newInvoice['total'] += item['rate'];
+                                                    });
+                                                    newInvoice['amount_due'] = newInvoice['total'];
+                                                    newInvoice.save(function () {
+                                                        // console.log(data);
+                                                    });
                                                 });
-                                            });
+                                            }
                                         }
                                     );
                                 }
                             });
+                        } else {
+                            res.send({status: 'error in invoice save'});
                         }
                     });
                 });
@@ -341,7 +344,6 @@ export class InvoiceController {
             () => {
                 res.send({"status": isClean});
             });
-
     }
 
     static changeStatus(res: Response, data: any) {
