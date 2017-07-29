@@ -12,6 +12,11 @@ import {ReportController} from '../controllers/report.controller';
 
 const router: Router = Router();
 
+const multer = require('multer');
+const upload = multer();
+let type = upload.single('csvFile');
+
+
 router.get('/', (req: Request, res: Response) => {
     res.send("Welcome to API routes");
 });
@@ -266,8 +271,8 @@ router.post('/upload-file', (req: Request, res: Response) => {
     CustomerController.uploadFile(res, req.body);
 });
 
-router.post('/customer/upload-file-contents', (req: Request, res: Response) => {
-    CustomerController.getFileContents(res, req.body);
+router.post('/customer/upload-file-contents', type, (req, res, next) => {
+    CustomerController.getFileContents(res, req);
 });
 
 router.get('/customer/customer-count', (req: Request, res: Response) => {

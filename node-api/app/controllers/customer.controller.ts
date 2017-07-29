@@ -4,6 +4,9 @@ import * as _ from 'underscore';
 import {AreaModel} from '../database/models/area.model';
 import {RecentInvoiceModel} from '../database/models/invoice.model';
 import {ProductModel} from '../database/models/product.model';
+
+const textract = require('textract');
+
 /*
  * Controller to handle request to api/customer/
  */
@@ -38,90 +41,95 @@ export class CustomerController {
         })
     }
 
-    static getFileContents(res: Response, obj: any) {
-        let data = obj['content'].split(',');
-        if (_.isEmpty(data[0]) || _.isUndefined(data[0]) || data[0] == '') {
-            res.send({status: false});
-            return;
-        }
-
-        if (data[14] == '1900') {
-            res.send({status: false});
-            return;
-        }
-
+    static getFileContents(res: Response, req: Request) {
+        let fileBuffer = req.file.buffer;
+        let allData = fileBuffer.toString('utf-8').split(/\r\n|\n/);
         let isDataInserted: boolean = false;
-        let timestamp = Date.now();
-        let status: boolean = false;
-        if (data[15] == 1) {
-            status = true;
-        }
 
-        AreaModel.findOneAndUpdate({name: data[10]},
-            {
-                $set: {
-                    name: data[10]
-                }
-            },
-            {
-                upsert: true,
-                new: true
-            }, (err, docs) => {
-                if (!err) {
-                    let area_id = docs['_id'];
-                    //get product id
-                    let product_name = "";
-                    if (!_.isUndefined(data[14])) {
-                        product_name = data[14];
-                        product_name = product_name.trim();
+
+        for (let i = 1; i < allData.length; i++) {
+            let data = allData[i].split(',');
+            if (_.isEmpty(data[0]) || _.isUndefined(data[0]) || data[0] == '') {
+                continue;
+            }
+            if (data[14] == '1900') {
+                continue;
+            }
+
+            let timestamp = Date.now();
+            let status: boolean = false;
+            if (data[15] == 1) {
+                status = true;
+            }
+            AreaModel.findOneAndUpdate({name: data[10]},
+                {
+                    $set: {
+                        name: data[10]
                     }
-                    if (data[14] == '1900') {
-                        product_name = '';
+                },
+                {
+                    upsert: true,
+                    new: true
+                }, (err, docs) => {
+                    if (!err) {
+                        let area_id = docs['_id'];
+                        //get product id
+                        let product_name = "";
+                        if (!_.isUndefined(data[14])) {
+                            product_name = data[14];
+                            product_name = product_name.trim();
+                        }
+                        if (data[14] == '1900') {
+                            product_name = '';
+                        }
+                        ProductModel.findOneAndUpdate({name: product_name},
+                            {
+                                $set: {
+                                    name: data[14],
+                                    rate: 0,
+                                    description: '',
+                                    status: true,
+                                    vat: 0
+                                }
+                            },
+                            {
+                                upsert: true,
+                                new: true
+                            }, (err, pdocs) => {
+                                if (!err) {
+                                    let product_id = pdocs['_id'];
+                                    let customer = new CustomerModel({
+                                        username: data[0],
+                                        nid: "",
+                                        email: data[1],
+                                        fullname: data[2] + " " + data[3],
+                                        customer_currency: data[4],
+                                        mobile_primary: '+880' + data[5],
+                                        mobile_secondary: '+880' + data[6],
+                                        website: data[7],
+                                        country: data[8],
+                                        location: "",
+                                        area: area_id,
+                                        city: data[12],
+                                        postal_code: data[13],
+                                        status: status,
+                                        productList: [product_id]
+                                    });
+                                    customer.save((err, cdocs) => {
+                                        if (!err) {
+                                            // generate invoice for recentDB
+                                            isDataInserted = true;
+
+                                        } else {
+                                            isDataInserted = false;
+                                        }
+                                    });
+                                }
+                            });
                     }
-                    ProductModel.findOneAndUpdate({name: product_name},
-                        {
-                            $set: {
-                                name: data[14],
-                                rate: 0,
-                                description: '',
-                                status: true,
-                                vat: 0
-                            }
-                        },
-                        {
-                            upsert: true,
-                            new: true
-                        }, (err, pdocs) => {
-                            if (!err) {
-                                let product_id = pdocs['_id'];
-                                let customer = new CustomerModel({
-                                    username: data[0],
-                                    nid: "",
-                                    email: data[1],
-                                    fullname: data[2] + " " + data[3],
-                                    customer_currency: data[4],
-                                    mobile_primary: '+880' + data[5],
-                                    mobile_secondary: '+880' + data[6],
-                                    website: data[7],
-                                    country: data[8],
-                                    location: "",
-                                    area: area_id,
-                                    city: data[12],
-                                    postal_code: data[13],
-                                    status: status,
-                                    productList: [product_id]
-                                });
-                                customer.save((err, cdocs) => {
-                                    if (!err) {
-                                        res.send({status: true});
-                                    } else {
-                                        res.send({status: false});
-                                    }
-                                })
-                            }
-                        });
-                }
-            });
+                });
+        }
+        res.send({status: isDataInserted});
     }
 
     static uploadFile(res: Response, data: any) {

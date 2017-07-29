@@ -19,11 +19,11 @@
         </div>
         <div class="form-group">
           <label for="fileInput">File input</label>
-          <input name="fileInput" type="file" id="fileInput" placeholder="Upload File" accept=".csv"
+          <input name="csvFile" type="file" ng2FileSelect [uploader]="uploader" id="fileInput" placeholder="Upload File" accept=".csv"
                  (change)="getFile($event)">
           <p class="help-block">* Uploading this file will rewrite your database of customers.</p>
         </div>
-        <button class="btn btn-success" (click)="uploadFile()">Upload</button>
+        <button class="btn btn-success" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Upload</button>
       </div>
       <div class="col-md-3"></div>
       <div class="col-md-3"></div>

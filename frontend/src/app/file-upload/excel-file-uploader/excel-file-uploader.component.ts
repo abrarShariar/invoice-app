@@ -1,12 +1,13 @@
-import {Component, OnInit, Directive} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import * as _ from 'underscore';
-import {FileUploadService} from '../file-upload.service';
-import {Customer} from '../../customer/customer';
 import {CustomerService} from '../../customer/customer.service';
+import {Headers} from '@angular/http';
+import {RequestOptions, Http} from '@angular/http';
 import {environment} from '../../../environments/environment';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
-
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import {Observable} from 'rxjs/Observable';
+import {FileUploader} from 'ng2-file-upload/ng2-file-upload';
 
 @Component({
   selector: 'app-excel-file-uploader',
@@ -17,19 +18,31 @@ export class ExcelFileUploaderComponent implements OnInit {
 
   public fileUploadForm: FormGroup;
   public isUploadSuccess: boolean = false;
-  public fileInput: any;
-  private fileName: string;
-  private fileSize: number;
   public isFileRead: boolean;
-  private allCustomerData: Customer[] = [];
-  public env = environment;
   public file: File;
 
-  constructor(private http: Http, private customerService: CustomerService, private fb: FormBuilder, private fileUploadService: FileUploadService) {
+
+  private uploadUrl = environment.api_server + 'customer/upload-file-contents';
+
+
+  public uploader: FileUploader = new FileUploader({url: this.uploadUrl, itemAlias: 'csvFile'});
+
+
+  constructor(private http: Http, private customerService: CustomerService, private fb: FormBuilder) {
   }
 
   ngOnInit() {
     this.createForm();
+    this.uploader.onAfterAddingFile = (file) => {
+      file.withCredentials = false;
+    };
+
+
+    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+      if (status == 200) {
+        this.isUploadSuccess = true;
+      }
+    }
   }
 
 
@@ -45,36 +58,6 @@ export class ExcelFileUploaderComponent implements OnInit {
   getFile(event: any) {
     let fileList: FileList = event.target.files;
     this.file = fileList[0];
-  }
-
-  uploadFile() {
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      let csv = reader.result;
-      let allTextLines = csv.split(/\r\n|\n/);
-
-      allTextLines.map((element, index, array) => {
-        if (index > 0) {
-          let data = {
-            content: element
-          };
-          this.customerService.uploadFileContents(data)
-            .subscribe(
-              (res) => {
-                if (res.status) {
-                  this.isUploadSuccess = true;
-                } else {
-                  this.isUploadSuccess = false;
-                }
-              },
-              (err) => {
-                console.log('Error in uploadFile');
-              }
-            );
-        }
-      });
-    }
-    reader.readAsText(this.file);
   }
 
   errorHandler(event) {
