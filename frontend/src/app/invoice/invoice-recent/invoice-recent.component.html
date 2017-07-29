@@ -18,7 +18,7 @@
       <div class="alert alert-warning" *ngIf="showRemoveConfirmation && delInvoice">
         <h4>
           <strong>Delete Confirmation !!</strong> <br>
-          Delete the invoice for <em>{{ delInvoice.customerData?.username }} </em>  ?
+          Delete the invoice for <em>{{ delInvoice.customerData?.username }} </em> ?
         </h4>
         <br>
         <button class="btn btn-success btn-sm" (click)="removeConfirmation(true)">YES</button>
@@ -37,6 +37,7 @@
           <h3 class="box-title">Recent Invoice List</h3>
           <br>
           <div class="box-tools">
+
             <div class="row">
               <div class="col-md-offset-2 col-lg-4">
                 Filter : &nbsp;
@@ -73,6 +74,13 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body table-responsive no-padding" *ngIf="invoiceList">
+
+          <br>
+          <div class="col-md-offset-4">
+            <pagination-controls (pageChange)="onPaginate($event);p=$event"></pagination-controls>
+          </div>
+          <br>
+
           <table class="table table-hover">
             <tbody>
             <tr>
@@ -89,7 +97,8 @@
               <th>Change Status</th>
               <th>Action</th>
             </tr>
-            <tr *ngFor="let invoice of invoiceList | paginate: { itemsPerPage: 30, currentPage: p, totalItems:totalCustomerCount }">
+            <tr
+              *ngFor="let invoice of invoiceList | paginate: { itemsPerPage: 30, currentPage: p, totalItems:totalCustomerCount }">
               <td>{{ invoice.customerData?.username }}</td>
               <td>{{ invoice.customerData?.fullname }}</td>
               <td>{{ invoice.customerData?.mobile_primary }}</td>
@@ -123,9 +132,10 @@
                 <button class="btn btn-danger btn-xs" (click)="changeStatus('Due',invoice)"> Due</button>
               </td>
               <td>
-                <a type="button" class="btn btn-primary btn-xs" [routerLink]="['/dashboard/invoice/view','recent',invoice?._id]"> View</a>
+                <a type="button" class="btn btn-primary btn-xs"
+                   [routerLink]="['/dashboard/invoice/view','recent',invoice?._id]"> View</a>
                 <!--<button class="btn btn-xs btn-danger" (click)="remove(invoice)"><i class="fa fa-times"-->
-                                                                                   <!--aria-hidden="true"></i></button>-->
+                <!--aria-hidden="true"></i></button>-->
               </td>
 
               <!-- Modal for Partially payment -->

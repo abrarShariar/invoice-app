@@ -38,9 +38,11 @@ export class InvoiceRecentComponent implements OnInit {
           this.totalCustomerCount = res.count;
         }
       )
-    this.wakeUpInvoiceDemon();
+    this.getRecentInvoiceDB();
+    // this.wakeUpInvoiceDemon();
   }
 
+  //useless shitty method
   wakeUpInvoiceDemon() {
     this.invoiceService.cleanInvoice()
       .subscribe(
@@ -54,6 +56,7 @@ export class InvoiceRecentComponent implements OnInit {
       )
   }
 
+  //useless shitty method
   generateNewInvoice() {
     this.invoiceService.dropRecentInvoice()
       .subscribe(
