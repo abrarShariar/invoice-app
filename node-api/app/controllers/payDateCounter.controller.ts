@@ -2,7 +2,6 @@ import {Router, Request, Response} from 'express';
 declare var Date: any;
 import {PayDateCounterModel} from '../database/models/payDateCounter.model';
 
-
 export class PayDateCounterController {
     constructor() {
     }

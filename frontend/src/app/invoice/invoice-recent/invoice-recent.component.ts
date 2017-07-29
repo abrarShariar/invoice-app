@@ -71,40 +71,36 @@ export class InvoiceRecentComponent implements OnInit {
     this.invoiceService.getRecentInvoiceDB(this.paginator)
       .subscribe(
         (res: Invoice[]) => {
-          if (res.length == 0) {
-            this.generateNewInvoice();
-          } else {
-            _.each(res, (invoice: Invoice) => {
-              let customer: Customer;
-              this.customerService.getCustomerDetails(invoice.customer_id)
-                .subscribe(
-                  (res: Customer) => {
-                    if (res['status']) {
-                      customer = res;
-                      customer.productData = [];
-                      if (invoice.productList.length > 0) {
-                        _.each(invoice.productList, (element) => {
-                          this.productService.getProductById(element)
-                            .subscribe(
-                              (res: Product) => {
-                                customer["productData"].push(res);
-                              }
-                            )
-                        });
-                      }
-                      this.areaService.getAreaById(customer.area)
-                        .subscribe(
-                          (res) => {
-                            customer["areaData"] = res;
-                          },
-                        )
-                      invoice.customerData = customer;
-                      this.invoiceList.push(invoice);
+          _.each(res, (invoice: Invoice) => {
+            let customer: Customer;
+            this.customerService.getCustomerDetails(invoice.customer_id)
+              .subscribe(
+                (res: Customer) => {
+                  if (res['status']) {
+                    customer = res;
+                    customer.productData = [];
+                    if (invoice.productList.length > 0) {
+                      _.each(invoice.productList, (element) => {
+                        this.productService.getProductById(element)
+                          .subscribe(
+                            (res: Product) => {
+                              customer["productData"].push(res);
+                            }
+                          )
+                      });
                     }
+                    this.areaService.getAreaById(customer.area)
+                      .subscribe(
+                        (res) => {
+                          customer["areaData"] = res;
+                        },
+                      )
+                    invoice.customerData = customer;
+                    this.invoiceList.push(invoice);
                   }
-                )
-            });
-          }
+                }
+              )
+          });
         },
         (err) => {
 

@@ -24,8 +24,15 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use('/api', ApiRoute);
 
 // handling a daemon job
-let rule = {hour: 12, minute: 26, dayOfMonth: 23, month: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]};
-schedule.scheduleJob(rule, function () {
+let date = new Date();
+let rule = {hour: 16, minute: 5, dayOfMonth: 29, month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]};
+
+// setInterval(() => {
+//     DeamonController.autoGenerateInvoice();
+//     DeamonController.cleanRecentInvoiceDB();
+// }, 10000)
+
+schedule.scheduleJob(rule, () => {
     DeamonController.autoGenerateInvoice();
 });
 

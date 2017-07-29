@@ -1,9 +1,10 @@
-import { Router, Request, Response } from 'express';
-import { AreaModel } from '../database/models/area.model';
+import {Router, Request, Response} from 'express';
+import {AreaModel} from '../database/models/area.model';
 
 
 export class AreaController {
-    constructor() { }
+    constructor() {
+    }
 
     //create new areas
     static create(res: Response, data: any) {
@@ -13,9 +14,9 @@ export class AreaController {
         });
         area.save(function (err) {
             if (err) {
-                res.send({ status: false });
+                res.send({status: false});
             } else {
-                res.send({ status: true });
+                res.send({status: true});
             }
         });
     }
@@ -32,11 +33,11 @@ export class AreaController {
 
     //changing status - active/inactive
     static changeStatus(res: Response, data: any) {
-        AreaModel.update({ _id: data.id }, { $set: { status: data.status } }, function (err) {
+        AreaModel.update({_id: data.id}, {$set: {status: data.status}}, function (err) {
             if (err) {
-                res.send({ status: false });
+                res.send({status: false});
             } else {
-                res.send({ status: true });
+                res.send({status: true});
             }
         });
     }
@@ -52,16 +53,16 @@ export class AreaController {
 
     //update area
     static update(res: Response, data: any) {
-        AreaModel.update({ _id: data.id }, {
+        AreaModel.update({_id: data.id}, {
             $set: {
                 name: data.name,
                 status: true
             }
         }, function (err) {
             if (err) {
-                res.send({ status: false });
+                res.send({status: false});
             } else {
-                res.send({ status: true });
+                res.send({status: true});
             }
         });
     }
