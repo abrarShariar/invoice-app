@@ -20,7 +20,6 @@ const packageData = {
 export class CustomerController {
 
 
-
     constructor() {
     }
 
@@ -126,33 +125,35 @@ export class CustomerController {
                                     });
                                     customer.save((err, newData) => {
                                         if (!err) {
-                                            // generate invoice for recentDB
-                                            isDataInserted = true;
-                                            let date = new Date();
-                                            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-                                            let invoice = new RecentInvoiceModel({
-                                                customer_id: newData['_id'],
-                                                payment_due_date: firstDay,
-                                                amount_due: 0,
-                                                status: 'Due',
-                                                total: 0,
-                                                discount: 0,
-                                                amount_partially_paid: [],
-                                                productList: newData['productList'],
-                                                type: 'recent'
-                                            });
+                                            if (newData['status'] == 'true') {
+                                                // generate invoice for recentDB
+                                                isDataInserted = true;
+                                                let date = new Date();
+                                                let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                                                let invoice = new RecentInvoiceModel({
+                                                    customer_id: newData['_id'],
+                                                    payment_due_date: firstDay,
+                                                    amount_due: 0,
+                                                    status: 'Due',
+                                                    total: 0,
+                                                    discount: 0,
+                                                    amount_partially_paid: [],
+                                                    productList: newData['productList'],
+                                                    type: 'recent'
+                                                });
 
-                                            ProductModel.find({"_id": {"$in": newData['productList']}}, function (err, docs) {
-                                                _.each(docs, (item) => {
-                                                    invoice['total'] += item['rate'];
+                                                ProductModel.find({"_id": {"$in": newData['productList']}}, function (err, docs) {
+                                                    _.each(docs, (item) => {
+                                                        invoice['total'] += item['rate'];
+                                                    });
+                                                    invoice['amount_due'] = invoice['total'];
+                                                    invoice.save(function (err) {
+                                                        if (!err) {
+                                                            console.log('Invoice created allright');
+                                                        }
+                                                    });
                                                 });
-                                                invoice['amount_due'] = invoice['total'];
-                                                invoice.save(function (err) {
-                                                    if (!err) {
-                                                        console.log('Invoice created allright');
-                                                    }
-                                                });
-                                            });
+                                            }
                                         } else {
                                             isDataInserted = false;
                                         }
@@ -194,32 +195,33 @@ export class CustomerController {
             if (err) {
                 res.send({status: false});
             } else {
-                let date = new Date();
-                let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-                let invoice = new RecentInvoiceModel({
-                    customer_id: newData['_id'],
-                    payment_due_date: firstDay,
-                    amount_due: 0,
-                    status: 'Due',
-                    total: 0,
-                    discount: 0,
-                    amount_partially_paid: [],
-                    productList: newData['productList'],
-                    type: 'recent'
-                });
-
-                ProductModel.find({"_id": {"$in": data['productList']}}, function (err, docs) {
-                    _.each(docs, (item) => {
-                        invoice['total'] += item['rate'];
+                if (newData['status'] == 'true') {
+                    let date = new Date();
+                    let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                    let invoice = new RecentInvoiceModel({
+                        customer_id: newData['_id'],
+                        payment_due_date: firstDay,
+                        amount_due: 0,
+                        status: 'Due',
+                        total: 0,
+                        discount: 0,
+                        amount_partially_paid: [],
+                        productList: newData['productList'],
+                        type: 'recent'
                     });
-                    invoice['amount_due'] = invoice['total'];
-                    invoice.save(function (err) {
-                        if (!err) {
-                            console.log('Invoice created allright');
-                        }
-                    });
-                });
 
+                    ProductModel.find({"_id": {"$in": data['productList']}}, function (err, docs) {
+                        _.each(docs, (item) => {
+                            invoice['total'] += item['rate'];
+                        });
+                        invoice['amount_due'] = invoice['total'];
+                        invoice.save(function (err) {
+                            if (!err) {
+                                console.log('Invoice created allright');
+                            }
+                        });
+                    });
+                }
             }
             res.send({status: true});
         });
