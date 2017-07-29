@@ -1,3 +1,5 @@
 /.vscode
 /.idea/*
 /files/*
+
+/frontend/src/app/auth.service.ts
